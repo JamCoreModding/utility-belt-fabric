@@ -22,15 +22,15 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.templatemod;
+package io.github.jamalam360.toolbelt;
 
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class TemplateModInit implements ModInitializer {
-    public static final String MOD_ID = "templatemod";
-    public static final String MOD_NAME = "Template Mod";
+public class ToolBeltInit implements ModInitializer {
+    public static final String MOD_ID = "toolbelt";
+    public static final String MOD_NAME = "ToolBelt";
     private static final Logger LOGGER = getLogger("Initializer");
 
     @Override

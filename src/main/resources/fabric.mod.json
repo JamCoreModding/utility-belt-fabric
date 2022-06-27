@@ -1,33 +1,33 @@
 {
   "schemaVersion": 1,
-  "id": "templatemod",
+  "id": "toolbelt",
   "version": "${version}",
-  "name": "Template Mod",
-  "description": "A Fabric mod template",
+  "name": "ToolBelt",
+  "description": "A mod that adds a tool belt.",
   "authors": [
     "Jamalam"
   ],
   "contact": {
-    "sources": "https://github.com/JamCoreModding/FabricTemplateMod",
-    "issues": "https://github.com/JamCoreModding/FabricTemplateMod/issues"
+    "sources": "https://github.com/JamCoreModding/ToolBelt",
+    "issues": "https://github.com/JamCoreModding/ToolBelt/issues"
   },
   "license": "MIT",
-  "icon": "assets/templatemod/icon.png",
+  "icon": "assets/toolbelt/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.jamalam360.templatemod.TemplateModInit"
+      "io.github.jamalam360.toolbelt.ToolBeltInit"
     ]
   },
   "mixins": [
-    "templatemod.mixins.json"
+    "toolbelt.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.12.5",
     "fabric": "*"
   },
   "custom": {
-    "notify_gradle_properties_url": "https://raw.githubusercontent.com/JamCoreModding/FabricTemplateMod/main/gradle.properties",
+    "notify_gradle_properties_url": "https://raw.githubusercontent.com/JamCoreModding/ToolBelt/main/gradle.properties",
     "notify_gradle_properties_key": "mod_version"
   }
 }

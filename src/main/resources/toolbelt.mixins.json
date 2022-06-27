@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "io.github.jamalam360.templatemod.mixin",
+  "package": "io.github.jamalam360.toolbelt.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [],
   "client": [],

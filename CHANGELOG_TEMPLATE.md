@@ -6,4 +6,4 @@
 
 Closed issues: None.
 
-[Full Changelog](https://github.com/JamCoreModding/FabricTemplateMod/compare/...)
+[Full Changelog](https://github.com/JamCoreModding/ToolBelt/compare/...)
