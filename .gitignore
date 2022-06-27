@@ -1,0 +1,24 @@
+#Gradle
+.gradle/
+build/
+out/
+classes/
+
+#IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+#VSCode
+.settings/
+.vscode/
+bin/
+.classpath
+.project
+
+#Fabric
+run/
+
+#Use this file to store any access tokens (e.g. CurseForge API tokens)
+local.properties
