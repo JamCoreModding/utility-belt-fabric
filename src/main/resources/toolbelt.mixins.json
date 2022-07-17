@@ -1,9 +1,11 @@
 {
   "required": true,
-  "package": "io.github.jamalam360.toolbelt.mixin",
+  "package": "io.github.jamalam360.tool.belt.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [],
-  "client": [],
+  "client": [
+    "KeyBindMixin"
+  ],
   "server": [],
   "injectors": {
     "defaultRequire": 1

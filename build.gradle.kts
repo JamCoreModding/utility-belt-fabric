@@ -2,7 +2,7 @@ plugins {
     id("fabric-loom") version "0.12-SNAPSHOT"
     id("org.quiltmc.quilt-mappings-on-loom") version "4.2.0"
     id("io.github.juuxel.loom-quiltflower") version "1.7.2"
-    id("io.github.p03w.machete") version "1.1.2"
+    id("io.github.p03w.machete") version "1.+"
     id("org.cadixdev.licenser") version "0.6.1"
 }
 
@@ -16,8 +16,10 @@ version = mod_version
 
 repositories {
     val mavenUrls = mapOf(
-        Pair("https://maven.terraformersmc.com/releases", listOf("com.terraformersmc")),
-        Pair("https://api.modrinth.com/maven", listOf("maven.modrinth"))
+        Pair("https://maven.terraformersmc.com/releases", listOf("com.terraformersmc", "dev.emi")),
+        Pair("https://api.modrinth.com/maven", listOf("maven.modrinth")),
+        Pair("https://maven.jamalam.tech/releases", listOf("io.github.jamalam360")),
+        Pair("https://ladysnake.jfrog.io/artifactory/mods", listOf("dev.onyxstudios.cardinal-components-api")),
     )
 
     for (mavenPair in mavenUrls) {
@@ -41,7 +43,10 @@ dependencies {
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
 
-    modApi(libs.optional.mod.menu)
+    modImplementation(libs.required.jam.lib)
+    modImplementation(libs.required.trinkets)
+
+    modImplementation(libs.optional.mod.menu)
 
     modLocalRuntime(libs.runtime.lazy.dfu)
 }

@@ -16,7 +16,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.jamalam360.toolbelt.ToolBeltInit"
+      "io.github.jamalam360.tool.belt.ToolBeltInit"
+    ],
+    "client": [
+      "io.github.jamalam360.tool.belt.ToolBeltClientInit"
+    ],
+    "modmenu": [
+      "io.github.jamalam360.tool.belt.config.ModMenuScreen"
     ]
   },
   "mixins": [
@@ -24,7 +30,9 @@
   ],
   "depends": {
     "fabricloader": ">=0.12.5",
-    "fabric": "*"
+    "fabric": "*",
+    "jamlib": "*",
+    "trinkets": "*"
   },
   "custom": {
     "notify_gradle_properties_url": "https://raw.githubusercontent.com/JamCoreModding/ToolBelt/main/gradle.properties",
