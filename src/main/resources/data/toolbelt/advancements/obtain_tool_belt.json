@@ -1,0 +1,40 @@
+{
+  "parent": "minecraft:story/smelt_iron",
+  "display": {
+    "icon": {
+      "item": "toolbelt:tool_belt"
+    },
+    "title": {
+      "translate": "toolbelt.advancements.tool_belt.title"
+    },
+    "description": {
+      "translate": "toolbelt.advancements.tool_belt.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 25
+  },
+  "criteria": {
+    "tool_belt": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "toolbelt:tool_belt"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "tool_belt"
+    ]
+  ]
+}
