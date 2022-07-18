@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.tool.belt.mixin;
+package io.github.jamalam360.tool.belt.mixin.input;
 
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.jamalam360.tool.belt.util.Ducks;

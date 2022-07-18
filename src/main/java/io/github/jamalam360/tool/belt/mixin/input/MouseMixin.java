@@ -1,4 +1,4 @@
-package io.github.jamalam360.tool.belt.mixin;
+package io.github.jamalam360.tool.belt.mixin.input;
 
 import io.github.jamalam360.tool.belt.ToolBeltClientInit;
 import io.github.jamalam360.tool.belt.ToolBeltNetworking;

@@ -1,4 +1,4 @@
-package io.github.jamalam360.tool.belt.mixin;
+package io.github.jamalam360.tool.belt.mixin.client;
 
 import io.github.jamalam360.tool.belt.ToolBeltClientInit;
 import net.minecraft.client.MinecraftClient;

@@ -7,10 +7,10 @@
     "PlayerInventoryMixin"
   ],
   "client": [
-    "InGameHudMixin",
-    "KeyBindMixin",
-    "MinecraftClientMixin",
-    "MouseMixin"
+    "client.render.InGameHudMixin",
+    "input.KeyBindMixin",
+    "client.MinecraftClientMixin",
+    "input.MouseMixin"
   ],
   "server": [],
   "injectors": {
