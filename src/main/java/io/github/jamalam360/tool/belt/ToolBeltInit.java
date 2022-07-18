@@ -36,7 +36,6 @@ import io.github.jamalam360.tool.belt.util.TrinketsUtil;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -51,9 +50,6 @@ public class ToolBeltInit implements ModInitializer {
     public static final String MOD_ID = "toolbelt";
     private static final JamLibLogger LOGGER = JamLibLogger.getLogger(MOD_ID);
 
-    public static final Identifier SYNC_SELECTED_TOOL_BELT = idOf("sync_selected_tool_belt");
-    public static final Identifier SYNC_SELECTED_SLOT = idOf("sync_selected_slot");
-
     public static final Map<PlayerEntity, Boolean> TOOL_BELT_SELECTED = new Object2BooleanArrayMap<>();
     public static final Map<PlayerEntity, Integer> TOOL_BELT_SELECTED_SLOTS = new Object2IntArrayMap<>();
 
@@ -61,9 +57,9 @@ public class ToolBeltInit implements ModInitializer {
     public void onInitialize() {
         JamLibRegistry.register(ItemRegistry.class);
 
-        ServerPlayNetworking.registerGlobalReceiver(SYNC_SELECTED_SLOT, (server, player, handler, buf, responseSender) -> TOOL_BELT_SELECTED_SLOTS.put(player, buf.readInt()));
+        ToolBeltNetworking.SET_TOOL_BELT_SELECTED_SLOT.registerHandler((server, player, handler, buf, responseSender) -> TOOL_BELT_SELECTED_SLOTS.put(player, buf.readInt()));
 
-        ServerPlayNetworking.registerGlobalReceiver(SYNC_SELECTED_TOOL_BELT, (server, player, handler, buf, responseSender) -> {
+        ToolBeltNetworking.SET_TOOL_BELT_SELECTED.registerHandler((server, player, handler, buf, responseSender) -> {
             boolean hasSwappedToToolBelt = buf.readBoolean();
 
             if (player.isSneaking()) {

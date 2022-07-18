@@ -1,11 +1,8 @@
 package io.github.jamalam360.tool.belt.mixin;
 
 import io.github.jamalam360.tool.belt.ToolBeltClientInit;
-import io.github.jamalam360.tool.belt.ToolBeltInit;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import io.github.jamalam360.tool.belt.ToolBeltNetworking;
 import net.minecraft.client.Mouse;
-import net.minecraft.network.PacketByteBuf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -43,9 +40,7 @@ public class MouseMixin {
             }
 
             if (amount != 0) {
-                PacketByteBuf buf = PacketByteBufs.create();
-                buf.writeInt(ToolBeltClientInit.toolBeltSelectedSlot);
-                ClientPlayNetworking.send(ToolBeltInit.SYNC_SELECTED_SLOT, buf);
+                ToolBeltNetworking.SET_TOOL_BELT_SELECTED_SLOT.send((buf) -> buf.writeInt(ToolBeltClientInit.toolBeltSelectedSlot));
             }
 
             ci.cancel();

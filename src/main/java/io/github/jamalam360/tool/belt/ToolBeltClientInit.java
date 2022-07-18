@@ -12,9 +12,7 @@ import io.github.jamalam360.tool.belt.util.TrinketsUtil;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -23,7 +21,6 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
@@ -53,9 +50,8 @@ public class ToolBeltClientInit implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (TOOL_BELT_KEYBIND.wasPressed()) {
                 hasSwappedToToolBelt = !hasSwappedToToolBelt;
-                PacketByteBuf buf = PacketByteBufs.create();
-                buf.writeBoolean(hasSwappedToToolBelt);
-                ClientPlayNetworking.send(ToolBeltInit.SYNC_SELECTED_TOOL_BELT, buf);
+
+                ToolBeltNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
             }
         });
     }
