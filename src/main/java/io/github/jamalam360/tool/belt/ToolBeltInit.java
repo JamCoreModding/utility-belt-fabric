@@ -24,85 +24,112 @@
 
 package io.github.jamalam360.tool.belt;
 
-import dev.emi.trinkets.api.TrinketComponent;
+import dev.emi.trinkets.api.TrinketEnums;
 import dev.emi.trinkets.api.TrinketsApi;
+import dev.emi.trinkets.api.event.TrinketDropCallback;
 import io.github.jamalam360.jamlib.log.JamLibLogger;
+import io.github.jamalam360.jamlib.registry.JamLibRegistry;
 import io.github.jamalam360.tool.belt.item.ToolBeltItem;
-import io.github.jamalam360.tool.belt.screen.ToolBeltScreenHandler;
+import io.github.jamalam360.tool.belt.registry.ItemRegistry;
+import io.github.jamalam360.tool.belt.util.SimplerInventory;
+import io.github.jamalam360.tool.belt.util.TrinketsUtil;
+import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.fabricmc.fabric.api.util.TriState;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
-import java.util.Optional;
+import java.util.Map;
 
 public class ToolBeltInit implements ModInitializer {
     public static final String MOD_ID = "toolbelt";
     private static final JamLibLogger LOGGER = JamLibLogger.getLogger(MOD_ID);
 
-    public static final ScreenHandlerType<ToolBeltScreenHandler> TOOL_BELT_SCREEN_HANDLER = new ExtendedScreenHandlerType<>(ToolBeltScreenHandler::new);
-    public static final Identifier TOOL_BELT_SCREEN_NETWORK_ID = idOf("tool_belt_screen");
-    public static final Identifier TOOL_BELT_SELECTED_SLOT = idOf("selected_slot");
-    public static final Item TOOL_BELT = new ToolBeltItem(new Item.Settings().group(ItemGroup.TOOLS));
+    public static final Identifier SYNC_SELECTED_TOOL_BELT = idOf("sync_selected_tool_belt");
+    public static final Identifier SYNC_SELECTED_SLOT = idOf("sync_selected_slot");
+
+    public static final Map<PlayerEntity, Boolean> TOOL_BELT_SELECTED = new Object2BooleanArrayMap<>();
+    public static final Map<PlayerEntity, Integer> TOOL_BELT_SELECTED_SLOTS = new Object2IntArrayMap<>();
 
     @Override
     public void onInitialize() {
-        LOGGER.logInitialize();
+        JamLibRegistry.register(ItemRegistry.class);
 
-        Registry.register(Registry.SCREEN_HANDLER, idOf("tool_belt"), TOOL_BELT_SCREEN_HANDLER);
-        Registry.register(Registry.ITEM, idOf("tool_belt"), TOOL_BELT);
+        ServerPlayNetworking.registerGlobalReceiver(SYNC_SELECTED_SLOT, (server, player, handler, buf, responseSender) -> TOOL_BELT_SELECTED_SLOTS.put(player, buf.readInt()));
 
-        ServerPlayNetworking.registerGlobalReceiver(TOOL_BELT_SELECTED_SLOT, (((server, player, handler, buf, responseSender) -> {
-            if (player.currentScreenHandler instanceof ToolBeltScreenHandler toolBeltScreenHandler) {
-                toolBeltScreenHandler.selectedSlot = buf.readInt();
-            }
-        })));
+        ServerPlayNetworking.registerGlobalReceiver(SYNC_SELECTED_TOOL_BELT, (server, player, handler, buf, responseSender) -> {
+            boolean hasSwappedToToolBelt = buf.readBoolean();
 
-        ServerPlayNetworking.registerGlobalReceiver(TOOL_BELT_SCREEN_NETWORK_ID, ((server, player, handler, buf, responseSender) -> {
-            Optional<TrinketComponent> trinket = TrinketsApi.getTrinketComponent(player);
+            if (player.isSneaking()) {
+                if (TrinketsUtil.hasToolBelt(player)) {
+                    ItemStack toolBelt = TrinketsUtil.getToolBelt(player);
+                    SimplerInventory inventory = ToolBeltItem.getInventory(toolBelt);
 
-            if (trinket.isPresent() && trinket.get().isEquipped(TOOL_BELT)) {
-                if (buf.readBoolean()) {
-                    ItemStack stack = trinket.get().getEquipped(TOOL_BELT).get(0).getRight();
+                    ItemStack playerStack = player.getEquippedStack(EquipmentSlot.MAINHAND);
 
-                    player.openHandledScreen(new ExtendedScreenHandlerFactory() {
-                        @Override
-                        public Text getDisplayName() {
-                            return stack.hasCustomName() ? stack.getName() : Text.literal("Tool Belt");
+                    if (!ToolBeltItem.isValidItem(playerStack)) return;
+
+                    int index = TOOL_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
+
+                    if (hasSwappedToToolBelt && !inventory.getStack(index).isEmpty()) {
+                        for (int i = 0; i < inventory.size(); i++) {
+                            if (inventory.getStack(i).isEmpty()) {
+                                index = i;
+                                break;
+                            }
                         }
+                    }
 
-                        @Override
-                        public ScreenHandler createMenu(int i, PlayerInventory playerInventory, PlayerEntity player) {
-                            return new ToolBeltScreenHandler(
-                                    i,
-                                    playerInventory,
-                                    ToolBeltItem.getInventory(stack),
-                                    ToolBeltItem.getSelectedSlot(stack)
-                            );
-                        }
+                    ItemStack toolBeltStack = inventory.getStack(index);
 
-                        @Override
-                        public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
-                            buf.writeInt(ToolBeltItem.getSelectedSlot(stack));
-                        }
-                    });
-                } else {
-                    player.closeHandledScreen();
+                    inventory.setStack(index, playerStack);
+                    player.getInventory().main.set(player.getInventory().selectedSlot, toolBeltStack);
+
+                    ToolBeltItem.update(toolBelt, inventory);
                 }
+
             }
-        }));
+
+            TOOL_BELT_SELECTED.put(player, hasSwappedToToolBelt);
+        });
+
+        TrinketsApi.registerTrinketPredicate(idOf("only_one_tool_belt"), (stack, slot, entity) -> {
+            if (stack.getItem() instanceof ToolBeltItem && entity instanceof PlayerEntity player) {
+                return TrinketsUtil.hasToolBelt(player) ? TriState.FALSE : TriState.TRUE;
+            } else {
+                return TriState.DEFAULT;
+            }
+        });
+
+        TrinketDropCallback.EVENT.register((rule, stack, ref, entity) -> {
+            if (stack.getItem() instanceof ToolBeltItem) {
+                SimplerInventory inv = ToolBeltItem.getInventory(stack);
+
+                for (int i = 0; i < inv.size(); i++) {
+                    if (inv.getStack(i).isEmpty()) {
+                        ItemEntity item = EntityType.ITEM.create(entity.world);
+                        item.refreshPositionAfterTeleport(entity.getPos());
+                        item.setStack(inv.getStack(i));
+                        entity.world.spawnEntity(item);
+                    }
+                }
+
+                inv.clear();
+                ToolBeltItem.update(stack, inv);
+
+                return TrinketEnums.DropRule.DROP;
+            } else {
+                return TrinketEnums.DropRule.DEFAULT;
+            }
+        });
+
+        LOGGER.logInitialize();
     }
 
     public static Identifier idOf(String path) {
