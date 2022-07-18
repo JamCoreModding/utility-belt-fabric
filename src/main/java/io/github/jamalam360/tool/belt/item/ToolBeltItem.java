@@ -29,10 +29,16 @@ import io.github.jamalam360.tool.belt.ToolBeltInit;
 import io.github.jamalam360.tool.belt.util.SimplerInventory;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.text.Text;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * @author Jamalam
@@ -40,6 +46,18 @@ import net.minecraft.network.PacketByteBuf;
 public class ToolBeltItem extends TrinketItem {
     public ToolBeltItem(Settings settings) {
         super(settings);
+    }
+
+    @Override
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        SimplerInventory inv = getInventory(stack);
+
+        for (int i = 0; i < inv.size(); i++) {
+            ItemStack stack1 = inv.getStack(i);
+            if (!stack1.isEmpty()) {
+                tooltip.add(Text.literal("- ").append(stack1.getName()));
+            }
+        }
     }
 
     public static void update(ItemStack stack, SimplerInventory inventory) {
