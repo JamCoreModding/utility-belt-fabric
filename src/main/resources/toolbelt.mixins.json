@@ -8,7 +8,6 @@
   ],
   "client": [
     "client.render.InGameHudMixin",
-    "input.KeyBindMixin",
     "client.MinecraftClientMixin",
     "input.MouseMixin"
   ],
