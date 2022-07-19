@@ -81,21 +81,6 @@ public abstract class LivingEntityMixin implements Ducks.LivingEntity {
     }
 
     @Inject(
-            method = "getStackInHandSlot",
-            at = @At("HEAD"),
-            cancellable = true
-    )
-    private void toolbelt$useToolBeltStack3(EquipmentSlot slot, CallbackInfoReturnable<ItemStack> cir) {
-//        if (slot == EquipmentSlot.MAINHAND && ((LivingEntity) (Object) this) instanceof PlayerEntity player) {
-//            ItemStack stack = ToolBeltItem.getSelectedToolBeltStack(player);
-//
-//            if (stack != null) {
-//                cir.setReturnValue(stack);
-//            }
-//        }
-    }
-
-    @Inject(
             method = "setStackInHand",
             at = @At("HEAD"),
             cancellable = true
