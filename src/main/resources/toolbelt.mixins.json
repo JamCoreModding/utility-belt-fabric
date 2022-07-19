@@ -7,8 +7,8 @@
     "PlayerInventoryMixin"
   ],
   "client": [
-    "client.render.InGameHudMixin",
     "client.MinecraftClientMixin",
+    "client.render.InGameHudMixin",
     "input.MouseMixin"
   ],
   "server": [],

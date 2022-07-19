@@ -25,15 +25,15 @@
 package io.github.jamalam360.tool.belt.item;
 
 import dev.emi.trinkets.api.TrinketItem;
+import io.github.jamalam360.tool.belt.ToolBeltClientInit;
 import io.github.jamalam360.tool.belt.ToolBeltInit;
 import io.github.jamalam360.tool.belt.util.SimplerInventory;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import io.github.jamalam360.tool.belt.util.TrinketsUtil;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -82,5 +82,29 @@ public class ToolBeltItem extends TrinketItem {
 
     public static boolean isValidItem(ItemStack stack) {
         return stack.getItem() instanceof ToolItem || stack.isEmpty();
+    }
+
+    public static ItemStack getSelectedToolBeltStack(PlayerEntity player) {
+        boolean selected = false;
+        int selectedSlot = 0;
+
+        if (player.world.isClient) {
+            if (ToolBeltClientInit.hasSwappedToToolBelt) {
+                selected = true;
+                selectedSlot = ToolBeltClientInit.toolBeltSelectedSlot;
+            }
+        } else {
+            if (ToolBeltInit.TOOL_BELT_SELECTED.getOrDefault(player, false)) {
+                selected = true;
+                selectedSlot = ToolBeltInit.TOOL_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
+            }
+        }
+
+        if (selected && TrinketsUtil.hasToolBelt(player)) {
+            ItemStack stack = TrinketsUtil.getToolBelt(player);
+            return ToolBeltItem.getInventory(stack).getStack(selectedSlot);
+        }
+
+        return null;
     }
 }

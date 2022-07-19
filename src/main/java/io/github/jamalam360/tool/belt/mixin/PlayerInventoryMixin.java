@@ -45,7 +45,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerInventory.class)
 public class PlayerInventoryMixin {
-    @Shadow @Final public PlayerEntity player;
+    @Shadow
+    @Final
+    public PlayerEntity player;
 
     @Inject(
             method = "getBlockBreakingSpeed",
@@ -71,6 +73,19 @@ public class PlayerInventoryMixin {
         if (selected && TrinketsUtil.hasToolBelt(player)) {
             ItemStack stack = TrinketsUtil.getToolBelt(player);
             cir.setReturnValue(ToolBeltItem.getInventory(stack).getStack(selectedSlot).getMiningSpeedMultiplier(state));
+        }
+    }
+
+    @Inject(
+            method = "getMainHandStack",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void toolbelt$useToolBeltStack(CallbackInfoReturnable<ItemStack> cir) {
+        ItemStack stack = ToolBeltItem.getSelectedToolBeltStack(player);
+
+        if (stack != null) {
+            cir.setReturnValue(stack);
         }
     }
 }

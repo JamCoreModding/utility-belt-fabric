@@ -25,6 +25,7 @@
 package io.github.jamalam360.tool.belt;
 
 import com.mojang.blaze3d.platform.InputUtil;
+import io.github.jamalam360.jamlib.keybind.JamLibKeybinds;
 import io.github.jamalam360.tool.belt.render.ToolBeltHotbarRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -37,15 +38,6 @@ import org.lwjgl.glfw.GLFW;
  * @author Jamalam
  */
 public class ToolBeltClientInit implements ClientModInitializer {
-    public static final KeyBind TOOL_BELT_KEYBIND = KeyBindingHelper.registerKeyBinding(
-            new KeyBind(
-                    "key.toolbelt.tool_belt",
-                    InputUtil.Type.KEYSYM,
-                    GLFW.GLFW_KEY_T,
-                    "category.toolbelt.tool_belt"
-            )
-    );
-
     public static boolean hasSwappedToToolBelt = false;
     public static int toolBeltSelectedSlot = 0;
 
@@ -53,11 +45,14 @@ public class ToolBeltClientInit implements ClientModInitializer {
     public void onInitializeClient() {
         HudRenderCallback.EVENT.register(ToolBeltHotbarRenderer::render);
 
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (TOOL_BELT_KEYBIND.wasPressed()) {
-                hasSwappedToToolBelt = !hasSwappedToToolBelt;
-                ToolBeltNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
-            }
-        });
+        JamLibKeybinds.register(new JamLibKeybinds.JamLibKeybind(
+                ToolBeltInit.MOD_ID,
+                "tool_belt",
+                InputUtil.KEY_T_CODE,
+                (client) -> {
+                    hasSwappedToToolBelt = !hasSwappedToToolBelt;
+                    ToolBeltNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
+                }
+        ));
     }
 }

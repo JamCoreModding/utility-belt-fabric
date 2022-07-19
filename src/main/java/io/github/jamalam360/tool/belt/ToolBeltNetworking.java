@@ -39,7 +39,10 @@ public class ToolBeltNetworking {
     public static final JamLibC2SNetworkChannel SET_TOOL_BELT_SELECTED_SLOT = new JamLibC2SNetworkChannel(ToolBeltInit.idOf("set_tool_belt_selected_slot"));
 
     public static void registerHandlers() {
-        ToolBeltNetworking.SET_TOOL_BELT_SELECTED_SLOT.registerHandler((server, player, handler, buf, responseSender) -> ToolBeltInit.TOOL_BELT_SELECTED_SLOTS.put(player, buf.readInt()));
+        ToolBeltNetworking.SET_TOOL_BELT_SELECTED_SLOT.registerHandler((server, player, handler, buf, responseSender) -> {
+            ToolBeltInit.TOOL_BELT_SELECTED_SLOTS.put(player, buf.readInt());
+            ((Ducks.LivingEntity) player).updateEquipment();
+        });
 
         ToolBeltNetworking.SET_TOOL_BELT_SELECTED.registerHandler((server, player, handler, buf, responseSender) -> {
             boolean hasSwappedToToolBelt = buf.readBoolean();
@@ -75,6 +78,7 @@ public class ToolBeltNetworking {
             }
 
             ToolBeltInit.TOOL_BELT_SELECTED.put(player, hasSwappedToToolBelt);
+            ((Ducks.LivingEntity) player).updateEquipment();
         });
     }
 }
