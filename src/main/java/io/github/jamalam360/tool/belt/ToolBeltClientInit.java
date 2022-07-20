@@ -28,11 +28,8 @@ import com.mojang.blaze3d.platform.InputUtil;
 import io.github.jamalam360.jamlib.keybind.JamLibKeybinds;
 import io.github.jamalam360.tool.belt.render.ToolBeltHotbarRenderer;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.option.KeyBind;
-import org.lwjgl.glfw.GLFW;
 
 /**
  * @author Jamalam
@@ -40,12 +37,13 @@ import org.lwjgl.glfw.GLFW;
 public class ToolBeltClientInit implements ClientModInitializer {
     public static boolean hasSwappedToToolBelt = false;
     public static int toolBeltSelectedSlot = 0;
+    public static KeyBind SWAP_KEYBIND;
 
     @Override
     public void onInitializeClient() {
         HudRenderCallback.EVENT.register(ToolBeltHotbarRenderer::render);
 
-        JamLibKeybinds.register(new JamLibKeybinds.JamLibKeybind(
+        SWAP_KEYBIND = JamLibKeybinds.register(new JamLibKeybinds.JamLibKeybind(
                 ToolBeltInit.MOD_ID,
                 "tool_belt",
                 InputUtil.KEY_T_CODE,

@@ -11,6 +11,7 @@
   "environment": "*",
   "entrypoints": {
     "fabric-gametest": [
+      "io.github.jamalam360.tool.belt.gametest.SlotSwapTests"
     ]
   }
 }
