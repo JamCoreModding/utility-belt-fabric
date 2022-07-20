@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "toolbelt-gametest",
+  "version": "NOT-VERSIONED",
+  "name": "ToolBelt Gametest",
+  "description": "Tests using the gametest framework for ToolBelt.",
+  "authors": [
+    "Jamalam"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+    ]
+  }
+}

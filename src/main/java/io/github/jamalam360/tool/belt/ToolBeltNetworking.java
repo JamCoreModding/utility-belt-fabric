@@ -87,8 +87,7 @@ public class ToolBeltNetworking {
 
             ToolBeltInit.TOOL_BELT_SELECTED.put(player, hasSwappedToToolBelt);
             ((Ducks.LivingEntity) player).updateEquipment();
-            SWING_HAND.send(player, (resBuf) -> {
-            });
+            SWING_HAND.send(player);
         });
 
         SWING_HAND.registerHandler(((client, handler, buf, responseSender) -> client.player.swingHand(Hand.MAIN_HAND)));
