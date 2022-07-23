@@ -27,6 +27,7 @@ package io.github.jamalam360.tool.belt;
 import io.github.jamalam360.jamlib.log.JamLibLogger;
 import io.github.jamalam360.jamlib.registry.JamLibRegistry;
 import io.github.jamalam360.tool.belt.registry.ItemRegistry;
+import io.github.jamalam360.tool.belt.registry.ToolBeltNetworking;
 import io.github.jamalam360.tool.belt.registry.TrinketsBehaviours;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;

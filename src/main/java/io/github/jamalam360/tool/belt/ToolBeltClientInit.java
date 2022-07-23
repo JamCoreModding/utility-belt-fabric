@@ -26,6 +26,7 @@ package io.github.jamalam360.tool.belt;
 
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.jamalam360.jamlib.keybind.JamLibKeybinds;
+import io.github.jamalam360.tool.belt.registry.ToolBeltNetworking;
 import io.github.jamalam360.tool.belt.render.ToolBeltHotbarRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;

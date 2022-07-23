@@ -25,7 +25,7 @@
 package io.github.jamalam360.tool.belt.mixin.input;
 
 import io.github.jamalam360.tool.belt.ToolBeltClientInit;
-import io.github.jamalam360.tool.belt.ToolBeltNetworking;
+import io.github.jamalam360.tool.belt.registry.ToolBeltNetworking;
 import net.minecraft.client.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

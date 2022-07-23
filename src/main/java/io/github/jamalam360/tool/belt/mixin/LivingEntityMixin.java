@@ -48,7 +48,29 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin implements Ducks.LivingEntity {
-    @Shadow protected abstract void detectEquipmentUpdates();
+    @Shadow
+    protected abstract void detectEquipmentUpdates();
+
+    @Inject(
+            method = "sendEquipmentBreakStatus",
+            at = @At("HEAD")
+    )
+    private void toolbelt$updateToolBeltNbt(EquipmentSlot slot, CallbackInfo ci) {
+        if (((LivingEntity) (Object) this) instanceof PlayerEntity player) {
+            if (TrinketsUtil.hasToolBelt(player)) {
+                ItemStack toolBelt = TrinketsUtil.getToolBelt(player);
+                SimplerInventory inv = ToolBeltItem.getInventory(toolBelt);
+
+                if (player.world.isClient) {
+                    inv.setStack(ToolBeltClientInit.toolBeltSelectedSlot, ItemStack.EMPTY);
+                } else {
+                    inv.setStack(ToolBeltInit.TOOL_BELT_SELECTED_SLOTS.getOrDefault(player, 0), ItemStack.EMPTY);
+                }
+
+                ToolBeltItem.update(toolBelt, inv);
+            }
+        }
+    }
 
     @Inject(
             method = "getStackInHand",

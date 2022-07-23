@@ -22,10 +22,12 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.tool.belt;
+package io.github.jamalam360.tool.belt.registry;
 
 import io.github.jamalam360.jamlib.network.JamLibC2SNetworkChannel;
 import io.github.jamalam360.jamlib.network.JamLibS2CNetworkChannel;
+import io.github.jamalam360.tool.belt.Ducks;
+import io.github.jamalam360.tool.belt.ToolBeltInit;
 import io.github.jamalam360.tool.belt.item.ToolBeltItem;
 import io.github.jamalam360.tool.belt.util.SimplerInventory;
 import io.github.jamalam360.tool.belt.util.TrinketsUtil;
@@ -53,35 +55,40 @@ public class ToolBeltNetworking {
             if (player.isSneaking()) {
                 if (TrinketsUtil.hasToolBelt(player)) {
                     ItemStack toolBelt = TrinketsUtil.getToolBelt(player);
-                    SimplerInventory inventory = ToolBeltItem.getInventory(toolBelt);
+                    SimplerInventory toolBeltInventory = ToolBeltItem.getInventory(toolBelt);
 
-                    ItemStack playerStack = player.getInventory().main.get(player.getInventory().selectedSlot);
+                    if (hasSwappedToToolBelt) {
+                        ItemStack heldItem = player.getStackInHand(Hand.MAIN_HAND);
 
-                    if (!ToolBeltItem.isValidItem(playerStack)) return;
+                        if (!heldItem.isEmpty() && ToolBeltItem.isValidItem(heldItem)) {
+                            int toolBeltSlot = 0;
 
-                    int index = ToolBeltInit.TOOL_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
-
-                    if (hasSwappedToToolBelt && !inventory.getStack(index).isEmpty()) {
-                        for (int i = 0; i < inventory.size(); i++) {
-                            if (inventory.getStack(i).isEmpty()) {
-                                index = i;
-                                break;
+                            for (int i = 0; i < toolBeltInventory.size(); i++) {
+                                if (toolBeltInventory.getStack(i).isEmpty()) {
+                                    toolBeltSlot = i;
+                                    break;
+                                }
                             }
+
+                            toolBeltInventory.setStack(toolBeltSlot, heldItem);
+                            player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+                            ToolBeltItem.update(toolBelt, toolBeltInventory);
+                        }
+                    } else {
+                        int toolBeltSlot = ToolBeltInit.TOOL_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
+
+                        if (!toolBeltInventory.getStack(toolBeltSlot).isEmpty()) {
+                            int playerSlot = player.getInventory().selectedSlot;
+
+                            if (!player.getInventory().getStack(playerSlot).isEmpty()) {
+                                playerSlot = player.getInventory().getEmptySlot();
+                            }
+
+                            player.getInventory().setStack(playerSlot, toolBeltInventory.getStack(toolBeltSlot));
+                            toolBeltInventory.setStack(toolBeltSlot, ItemStack.EMPTY);
+                            ToolBeltItem.update(toolBelt, toolBeltInventory);
                         }
                     }
-
-                    ItemStack toolBeltStack = inventory.getStack(index);
-                    inventory.setStack(index, playerStack);
-
-                    int playerSlot = player.getInventory().selectedSlot;
-
-                    if (!player.getInventory().main.get(playerSlot).isEmpty()) {
-                        player.getInventory().selectedSlot = player.getInventory().getEmptySlot();
-                    }
-
-                    player.getInventory().main.set(playerSlot, toolBeltStack);
-
-                    ToolBeltItem.update(toolBelt, inventory);
                 }
             }
 

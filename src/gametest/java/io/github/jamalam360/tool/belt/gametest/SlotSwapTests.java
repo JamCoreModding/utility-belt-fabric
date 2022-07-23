@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 /**
  * @author Jamalam
  */
+@SuppressWarnings("unused")
 public class SlotSwapTests implements FabricGameTest {
     private PlayerEntity player;
 
