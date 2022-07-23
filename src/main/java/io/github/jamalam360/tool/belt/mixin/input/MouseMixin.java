@@ -38,7 +38,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
  */
 
 @Mixin(Mouse.class)
-public class MouseMixin {
+public abstract class MouseMixin {
     @Inject(
             method = "onMouseScroll",
             at = @At(

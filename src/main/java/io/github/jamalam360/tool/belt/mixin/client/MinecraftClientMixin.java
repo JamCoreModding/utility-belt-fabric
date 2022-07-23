@@ -36,13 +36,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 
 @Mixin(MinecraftClient.class)
-public class MinecraftClientMixin {
+public abstract class MinecraftClientMixin {
     @Inject(
             method = "doItemPick",
             at = @At("HEAD"),
             cancellable = true
     )
-    public void toolbelt$disableMiddleClick(CallbackInfo ci) {
+    private void toolbelt$disableMiddleClick(CallbackInfo ci) {
         if (ToolBeltClientInit.hasSwappedToToolBelt) {
             ci.cancel();
         }

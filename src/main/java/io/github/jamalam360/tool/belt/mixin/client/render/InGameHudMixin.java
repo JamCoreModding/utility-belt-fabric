@@ -36,7 +36,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
  */
 
 @Mixin(InGameHud.class)
-public class InGameHudMixin {
+public abstract class InGameHudMixin {
     @Redirect(
             method = "renderHotbar",
             at = @At(
@@ -45,7 +45,7 @@ public class InGameHudMixin {
                     ordinal = 1
             )
     )
-    public void toolbelt$disableHotbarHighlight(InGameHud instance, MatrixStack matrixStack, int a, int b, int c, int d, int e, int f) {
+    private void toolbelt$disableHotbarHighlight(InGameHud instance, MatrixStack matrixStack, int a, int b, int c, int d, int e, int f) {
         if (!ToolBeltClientInit.hasSwappedToToolBelt) {
             instance.drawTexture(matrixStack, a, b, c, d, e, f);
         }

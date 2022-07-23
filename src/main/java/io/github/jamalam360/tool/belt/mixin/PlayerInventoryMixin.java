@@ -44,7 +44,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 
 @Mixin(PlayerInventory.class)
-public class PlayerInventoryMixin {
+public abstract class PlayerInventoryMixin {
     @Shadow
     @Final
     public PlayerEntity player;
