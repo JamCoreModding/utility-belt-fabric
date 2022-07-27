@@ -43,8 +43,12 @@ dependencies {
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
 
-    include(modImplementation(libs.required.jamlib))
-    include(modImplementation(libs.required.trinkets))
+    modImplementation(libs.required.jamlib)
+    modImplementation(libs.required.trinkets)
+
+    //TODO: Remove on public release
+    include(libs.required.jamlib)
+    include(libs.required.trinkets)
 
     modImplementation(libs.optional.mod.menu)
 
