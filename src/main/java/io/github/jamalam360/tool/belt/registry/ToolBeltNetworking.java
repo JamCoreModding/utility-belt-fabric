@@ -24,7 +24,6 @@
 
 package io.github.jamalam360.tool.belt.registry;
 
-import io.github.jamalam360.jamlib.network.JamLibC2SNetworkChannel;
 import io.github.jamalam360.jamlib.network.JamLibS2CNetworkChannel;
 import io.github.jamalam360.tool.belt.Ducks;
 import io.github.jamalam360.tool.belt.ToolBeltInit;
@@ -38,18 +37,16 @@ import net.minecraft.util.Hand;
  * @author Jamalam
  */
 public class ToolBeltNetworking {
-    public static final JamLibC2SNetworkChannel SET_TOOL_BELT_SELECTED = new JamLibC2SNetworkChannel(ToolBeltInit.idOf("set_tool_belt_selected"));
-    public static final JamLibC2SNetworkChannel SET_TOOL_BELT_SELECTED_SLOT = new JamLibC2SNetworkChannel(ToolBeltInit.idOf("set_tool_belt_selected_slot"));
 
     public static final JamLibS2CNetworkChannel SWING_HAND = new JamLibS2CNetworkChannel(ToolBeltInit.idOf("swing_hand"));
 
-    public static void registerHandlers() {
-        SET_TOOL_BELT_SELECTED_SLOT.registerHandler((server, player, handler, buf, responseSender) -> {
+    public static void setHandlers() {
+        ToolBeltClientNetworking.SET_TOOL_BELT_SELECTED_SLOT.setHandler((server, player, handler, buf, responseSender) -> {
             ToolBeltInit.TOOL_BELT_SELECTED_SLOTS.put(player, buf.readInt());
             ((Ducks.LivingEntity) player).updateEquipment();
         });
 
-        SET_TOOL_BELT_SELECTED.registerHandler((server, player, handler, buf, responseSender) -> {
+        ToolBeltClientNetworking.SET_TOOL_BELT_SELECTED.setHandler((server, player, handler, buf, responseSender) -> {
             boolean hasSwappedToToolBelt = buf.readBoolean();
 
             if (player.isSneaking()) {
@@ -96,7 +93,5 @@ public class ToolBeltNetworking {
             ((Ducks.LivingEntity) player).updateEquipment();
             SWING_HAND.send(player);
         });
-
-        SWING_HAND.registerHandler(((client, handler, buf, responseSender) -> client.player.swingHand(Hand.MAIN_HAND)));
     }
 }

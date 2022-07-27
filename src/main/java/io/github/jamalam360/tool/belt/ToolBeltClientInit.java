@@ -26,7 +26,8 @@ package io.github.jamalam360.tool.belt;
 
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.jamalam360.jamlib.keybind.JamLibKeybinds;
-import io.github.jamalam360.tool.belt.registry.ToolBeltNetworking;
+import io.github.jamalam360.jamlib.network.JamLibClientNetworking;
+import io.github.jamalam360.tool.belt.registry.ToolBeltClientNetworking;
 import io.github.jamalam360.tool.belt.render.ToolBeltHotbarRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -50,8 +51,11 @@ public class ToolBeltClientInit implements ClientModInitializer {
                 InputUtil.KEY_T_CODE,
                 (client) -> {
                     hasSwappedToToolBelt = !hasSwappedToToolBelt;
-                    ToolBeltNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
+                    ToolBeltClientNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
                 }
         ));
+
+        ToolBeltClientNetworking.setHandlers();
+        JamLibClientNetworking.registerHandlers(ToolBeltInit.MOD_ID);
     }
 }

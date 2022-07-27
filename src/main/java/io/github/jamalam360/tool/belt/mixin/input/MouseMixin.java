@@ -25,7 +25,7 @@
 package io.github.jamalam360.tool.belt.mixin.input;
 
 import io.github.jamalam360.tool.belt.ToolBeltClientInit;
-import io.github.jamalam360.tool.belt.registry.ToolBeltNetworking;
+import io.github.jamalam360.tool.belt.registry.ToolBeltClientNetworking;
 import net.minecraft.client.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -64,7 +64,7 @@ public abstract class MouseMixin {
             }
 
             if (amount != 0) {
-                ToolBeltNetworking.SET_TOOL_BELT_SELECTED_SLOT.send((buf) -> buf.writeInt(ToolBeltClientInit.toolBeltSelectedSlot));
+                ToolBeltClientNetworking.SET_TOOL_BELT_SELECTED_SLOT.send((buf) -> buf.writeInt(ToolBeltClientInit.toolBeltSelectedSlot));
             }
 
             ci.cancel();
