@@ -12,7 +12,7 @@
     "issues": "https://github.com/JamCoreModding/ToolBelt/issues"
   },
   "license": "MIT",
-  "icon": "assets/toolbelt/icon.png",
+  "icon": "assets/toolbelt/textures/item/tool_belt.png",
   "environment": "*",
   "entrypoints": {
     "main": [
