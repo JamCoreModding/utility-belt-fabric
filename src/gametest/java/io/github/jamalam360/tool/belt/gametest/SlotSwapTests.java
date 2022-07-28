@@ -92,7 +92,7 @@ public class SlotSwapTests implements FabricGameTest {
 
         inv.setStack(0, stack);
 
-        TestUtil.pressKeyBind(ToolBeltClientInit.SWAP_KEYBIND);
+        TestUtil.pressKeyBind(ToolBeltClientInit.SWAP_KEYBIND_TOGGLE);
 
         context.addInstantFinalTask(() -> {
             TestUtil.assertEquals(ItemStack.EMPTY, inv.getStack(0));

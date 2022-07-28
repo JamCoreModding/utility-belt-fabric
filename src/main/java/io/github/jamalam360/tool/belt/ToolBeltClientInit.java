@@ -39,16 +39,31 @@ import net.minecraft.client.option.KeyBind;
 public class ToolBeltClientInit implements ClientModInitializer {
     public static boolean hasSwappedToToolBelt = false;
     public static int toolBeltSelectedSlot = 0;
-    public static KeyBind SWAP_KEYBIND;
+    public static KeyBind SWAP_KEYBIND_TOGGLE;
+    public static KeyBind SWAP_KEYBIND_HOLD;
 
     @Override
     public void onInitializeClient() {
         HudRenderCallback.EVENT.register(ToolBeltHotbarRenderer::render);
 
-        SWAP_KEYBIND = JamLibKeybinds.register(new JamLibKeybinds.JamLibKeybind(
+        SWAP_KEYBIND_TOGGLE = JamLibKeybinds.register(new JamLibKeybinds.JamLibKeybind(
                 ToolBeltInit.MOD_ID,
-                "tool_belt",
+                "tool_belt_toggle",
                 InputUtil.KEY_B_CODE,
+                (client) -> {
+                    hasSwappedToToolBelt = !hasSwappedToToolBelt;
+                    ToolBeltClientNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
+                }
+        ));
+
+        SWAP_KEYBIND_HOLD = JamLibKeybinds.register(new JamLibKeybinds.JamLibHoldKeybind(
+                ToolBeltInit.MOD_ID,
+                "tool_belt_hold",
+                InputUtil.KEY_N_CODE,
+                (client) -> {
+                    hasSwappedToToolBelt = !hasSwappedToToolBelt;
+                    ToolBeltClientNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
+                },
                 (client) -> {
                     hasSwappedToToolBelt = !hasSwappedToToolBelt;
                     ToolBeltClientNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
