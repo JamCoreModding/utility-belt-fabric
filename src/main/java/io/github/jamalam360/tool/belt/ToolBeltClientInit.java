@@ -48,7 +48,7 @@ public class ToolBeltClientInit implements ClientModInitializer {
         SWAP_KEYBIND = JamLibKeybinds.register(new JamLibKeybinds.JamLibKeybind(
                 ToolBeltInit.MOD_ID,
                 "tool_belt",
-                InputUtil.KEY_T_CODE,
+                InputUtil.KEY_B_CODE,
                 (client) -> {
                     hasSwappedToToolBelt = !hasSwappedToToolBelt;
                     ToolBeltClientNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
