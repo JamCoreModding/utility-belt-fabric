@@ -25,9 +25,11 @@
 package io.github.jamalam360.tool.belt.mixin.input;
 
 import io.github.jamalam360.tool.belt.ToolBeltClientInit;
+import io.github.jamalam360.tool.belt.config.ToolBeltConfig;
 import io.github.jamalam360.tool.belt.registry.ToolBeltClientNetworking;
 import net.minecraft.client.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -52,14 +54,16 @@ public abstract class MouseMixin {
     private void toolbelt$beforeMouseScrollEvent(long window, double scrollDeltaX, double scrollDeltaY, CallbackInfo ci, double amount) {
         if (ToolBeltClientInit.hasSwappedToToolBelt) {
             if (amount > 0) {
-                ToolBeltClientInit.toolBeltSelectedSlot--;
-                if (ToolBeltClientInit.toolBeltSelectedSlot < 0) {
-                    ToolBeltClientInit.toolBeltSelectedSlot = 3;
+                if (!ToolBeltConfig.isScrollingInverted) {
+                    toolbelt$onMouseScrollInToolBelt(1);
+                } else {
+                    toolbelt$onMouseScrollInToolBelt(-1);
                 }
             } else if (amount < 0) {
-                ToolBeltClientInit.toolBeltSelectedSlot++;
-                if (ToolBeltClientInit.toolBeltSelectedSlot >= 4) {
-                    ToolBeltClientInit.toolBeltSelectedSlot = 0;
+                if (!ToolBeltConfig.isScrollingInverted) {
+                    toolbelt$onMouseScrollInToolBelt(-1);
+                } else {
+                    toolbelt$onMouseScrollInToolBelt(1);
                 }
             }
 
@@ -68,6 +72,21 @@ public abstract class MouseMixin {
             }
 
             ci.cancel();
+        }
+    }
+
+    @Unique
+    private static void toolbelt$onMouseScrollInToolBelt(int direction) {
+        if (direction == 1) {
+            ToolBeltClientInit.toolBeltSelectedSlot--;
+            if (ToolBeltClientInit.toolBeltSelectedSlot < 0) {
+                ToolBeltClientInit.toolBeltSelectedSlot = 3;
+            }
+        } else if (direction == -1) {
+            ToolBeltClientInit.toolBeltSelectedSlot++;
+            if (ToolBeltClientInit.toolBeltSelectedSlot >= 4) {
+                ToolBeltClientInit.toolBeltSelectedSlot = 0;
+            }
         }
     }
 }

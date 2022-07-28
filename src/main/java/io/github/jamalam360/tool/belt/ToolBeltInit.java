@@ -24,9 +24,11 @@
 
 package io.github.jamalam360.tool.belt;
 
+import io.github.jamalam360.jamlib.config.JamLibConfig;
 import io.github.jamalam360.jamlib.log.JamLibLogger;
 import io.github.jamalam360.jamlib.network.JamLibServerNetworking;
 import io.github.jamalam360.jamlib.registry.JamLibRegistry;
+import io.github.jamalam360.tool.belt.config.ToolBeltConfig;
 import io.github.jamalam360.tool.belt.registry.ItemRegistry;
 import io.github.jamalam360.tool.belt.registry.ToolBeltNetworking;
 import io.github.jamalam360.tool.belt.registry.TrinketsBehaviours;
@@ -52,6 +54,7 @@ public class ToolBeltInit implements ModInitializer {
     @Override
     public void onInitialize() {
         JamLibRegistry.register(ItemRegistry.class);
+        JamLibConfig.init(MOD_ID, ToolBeltConfig.class);
         ToolBeltNetworking.setHandlers();
         TrinketsBehaviours.registerEvents();
         JamLibServerNetworking.registerHandlers(MOD_ID);

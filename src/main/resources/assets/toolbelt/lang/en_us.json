@@ -2,6 +2,7 @@
   "item.toolbelt.tool_belt": "Tool Belt",
   "key.category.toolbelt": "Tool Belt",
   "key.toolbelt.tool_belt": "Swap to Tool Belt",
+  "toolbelt.jamlibconfig.isScrollingInverted": "Invert Scrolling",
   "toolbelt.advancements.tool_belt.title": "Tool Time",
   "toolbelt.advancements.tool_belt.description": "Craft a tool belt to store your weapons and tools."
 }
