@@ -81,7 +81,7 @@ public class ToolBeltItem extends TrinketItem {
     }
 
     public static boolean isValidItem(ItemStack stack) {
-        return stack.getItem() instanceof ToolItem || stack.isEmpty();
+        return stack.getItem() instanceof ToolItem || stack.isEmpty() || stack.isIn(ToolBeltInit.ALLOWED_IN_TOOL_BELT);
     }
 
     public static ItemStack getSelectedToolBeltStack(PlayerEntity player) {

@@ -34,7 +34,10 @@ import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import java.util.Map;
 
@@ -44,6 +47,7 @@ public class ToolBeltInit implements ModInitializer {
 
     public static final Map<PlayerEntity, Boolean> TOOL_BELT_SELECTED = new Object2BooleanArrayMap<>();
     public static final Map<PlayerEntity, Integer> TOOL_BELT_SELECTED_SLOTS = new Object2IntArrayMap<>();
+    public static final TagKey<Item> ALLOWED_IN_TOOL_BELT = TagKey.of(Registry.ITEM_KEY, idOf("allowed_in_tool_belt"));
 
     @Override
     public void onInitialize() {
