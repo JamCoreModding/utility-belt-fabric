@@ -5,7 +5,7 @@
   "key.toolbelt.quick_switch_hold": "Quick Switch (Hold)",
   "key.toolbelt.open_screen": "Open Tool Belt GUI",
   "toolbelt.jamlibconfig.isScrollingInverted": "Invert Scrolling",
-  "toolbelt.jamlibconfig.displayToolBeltWhenNotSelected": "Display Tool Belt Hotbar when not Selected",
+  "toolbelt.jamlibconfig.displayToolBeltWhenNotSelected": "Show Tool Belt Hotbar when not Selected",
   "toolbelt.advancements.tool_belt.title": "NAME TBD",
   "toolbelt.advancements.tool_belt.description": "Craft a tool belt to store your weapons and tools."
 }

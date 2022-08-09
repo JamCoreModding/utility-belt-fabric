@@ -32,4 +32,7 @@ import io.github.jamalam360.jamlib.config.JamLibConfig;
 public class ToolBeltConfig extends JamLibConfig {
     @Entry
     public static boolean isScrollingInverted = false;
+
+    @Entry
+    public static boolean displayToolBeltWhenNotSelected = true;
 }

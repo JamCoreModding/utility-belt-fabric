@@ -28,6 +28,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import dev.emi.trinkets.api.TrinketsApi;
 import io.github.jamalam360.tool.belt.ToolBeltClientInit;
 import io.github.jamalam360.tool.belt.ToolBeltInit;
+import io.github.jamalam360.tool.belt.config.ToolBeltConfig;
 import io.github.jamalam360.tool.belt.item.ToolBeltItem;
 import io.github.jamalam360.tool.belt.registry.ItemRegistry;
 import io.github.jamalam360.tool.belt.util.SimplerInventory;
@@ -50,7 +51,7 @@ public class ToolBeltHotbarRenderer {
     public static void render(MatrixStack matrices, float tickDelta){
         PlayerEntity player = MinecraftClient.getInstance().player;
 
-        if (player != null && TrinketsUtil.hasToolBelt(player)) {
+        if (player != null && TrinketsUtil.hasToolBelt(player) && (ToolBeltClientInit.hasSwappedToToolBelt || ToolBeltConfig.displayToolBeltWhenNotSelected)) {
             InGameHud hud = MinecraftClient.getInstance().inGameHud;
             int scaledHeight = MinecraftClient.getInstance().getWindow().getScaledHeight();
 
