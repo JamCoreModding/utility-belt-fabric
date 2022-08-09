@@ -28,25 +28,32 @@ import io.github.jamalam360.jamlib.network.JamLibS2CNetworkChannel;
 import io.github.jamalam360.tool.belt.Ducks;
 import io.github.jamalam360.tool.belt.ToolBeltInit;
 import io.github.jamalam360.tool.belt.item.ToolBeltItem;
+import io.github.jamalam360.tool.belt.screen.ToolBeltScreenHandler;
 import io.github.jamalam360.tool.belt.util.SimplerInventory;
 import io.github.jamalam360.tool.belt.util.TrinketsUtil;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 
 /**
  * @author Jamalam
  */
-public class ToolBeltNetworking {
+public class Networking {
 
     public static final JamLibS2CNetworkChannel SWING_HAND = new JamLibS2CNetworkChannel(ToolBeltInit.idOf("swing_hand"));
+    public static final JamLibS2CNetworkChannel SET_TOOL_BELT_SELECTED_SLOT = new JamLibS2CNetworkChannel(ToolBeltInit.idOf("set_tool_belt_selected_slot"));
 
     public static void setHandlers() {
-        ToolBeltClientNetworking.SET_TOOL_BELT_SELECTED_SLOT.setHandler((server, player, handler, buf, responseSender) -> {
+        ClientNetworking.SET_TOOL_BELT_SELECTED_SLOT.setHandler((server, player, handler, buf, responseSender) -> {
             ToolBeltInit.TOOL_BELT_SELECTED_SLOTS.put(player, buf.readInt());
             ((Ducks.LivingEntity) player).updateEquipment();
         });
 
-        ToolBeltClientNetworking.SET_TOOL_BELT_SELECTED.setHandler((server, player, handler, buf, responseSender) -> {
+        ClientNetworking.SET_TOOL_BELT_SELECTED.setHandler((server, player, handler, buf, responseSender) -> {
             boolean hasSwappedToToolBelt = buf.readBoolean();
 
             if (player.isSneaking()) {
@@ -67,9 +74,14 @@ public class ToolBeltNetworking {
                                 }
                             }
 
-                            toolBeltInventory.setStack(toolBeltSlot, heldItem);
-                            player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
-                            ToolBeltItem.update(toolBelt, toolBeltInventory);
+                            if (toolBeltInventory.getStack(toolBeltSlot).isEmpty()) {
+                                toolBeltInventory.setStack(toolBeltSlot, heldItem);
+                                player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+                                ToolBeltItem.update(toolBelt, toolBeltInventory);
+                                ToolBeltInit.TOOL_BELT_SELECTED_SLOTS.put(player, toolBeltSlot);
+                                final int finalToolBeltSlot = toolBeltSlot;
+                                SET_TOOL_BELT_SELECTED_SLOT.send(player, (resBuf) -> resBuf.writeInt(finalToolBeltSlot));
+                            }
                         }
                     } else {
                         int toolBeltSlot = ToolBeltInit.TOOL_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
@@ -81,9 +93,11 @@ public class ToolBeltNetworking {
                                 playerSlot = player.getInventory().getEmptySlot();
                             }
 
-                            player.getInventory().setStack(playerSlot, toolBeltInventory.getStack(toolBeltSlot));
-                            toolBeltInventory.setStack(toolBeltSlot, ItemStack.EMPTY);
-                            ToolBeltItem.update(toolBelt, toolBeltInventory);
+                            if (player.getInventory().getStack(playerSlot).isEmpty()) {
+                                player.getInventory().setStack(playerSlot, toolBeltInventory.getStack(toolBeltSlot));
+                                toolBeltInventory.setStack(toolBeltSlot, ItemStack.EMPTY);
+                                ToolBeltItem.update(toolBelt, toolBeltInventory);
+                            }
                         }
                     }
                 }
@@ -92,6 +106,22 @@ public class ToolBeltNetworking {
             ToolBeltInit.TOOL_BELT_SELECTED.put(player, hasSwappedToToolBelt);
             ((Ducks.LivingEntity) player).updateEquipment();
             SWING_HAND.send(player);
+        });
+
+        ClientNetworking.OPEN_SCREEN.setHandler((server, player, handler, buf, responseSender) -> {
+            if (TrinketsUtil.hasToolBelt(player)) {
+                player.openHandledScreen(new NamedScreenHandlerFactory() {
+                    @Override
+                    public Text getDisplayName() {
+                        return Text.translatable("item.toolbelt.tool_belt");
+                    }
+
+                    @Override
+                    public ScreenHandler createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+                        return new ToolBeltScreenHandler(i, playerInventory, ToolBeltItem.getInventory(TrinketsUtil.getToolBelt(player)));
+                    }
+                });
+            }
         });
     }
 }

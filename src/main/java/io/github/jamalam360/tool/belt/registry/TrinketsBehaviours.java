@@ -50,11 +50,11 @@ public class TrinketsBehaviours {
         });
 
         TrinketDropCallback.EVENT.register((rule, stack, ref, entity) -> {
-            if (stack.getItem() instanceof ToolBeltItem) {
+            if (stack.getItem() instanceof ToolBeltItem && entity instanceof PlayerEntity player && !player.getAbilities().creativeMode) {
                 SimplerInventory inv = ToolBeltItem.getInventory(stack);
 
                 for (int i = 0; i < inv.size(); i++) {
-                    if (inv.getStack(i).isEmpty()) {
+                    if (!inv.getStack(i).isEmpty()) {
                         ItemEntity item = EntityType.ITEM.create(entity.world);
                         item.refreshPositionAfterTeleport(entity.getPos());
                         item.setStack(inv.getStack(i));

@@ -1,9 +1,11 @@
 {
   "item.toolbelt.tool_belt": "Tool Belt",
   "key.category.toolbelt": "Tool Belt",
-  "key.toolbelt.tool_belt_toggle": "Swap to Tool Belt (Toggle)",
-  "key.toolbelt.tool_belt_hold": "Swap to Tool Belt (Hold)",
+  "key.toolbelt.quick_switch_toggle": "Quick Switch (Toggle)",
+  "key.toolbelt.quick_switch_hold": "Quick Switch (Hold)",
+  "key.toolbelt.open_screen": "Open Tool Belt GUI",
   "toolbelt.jamlibconfig.isScrollingInverted": "Invert Scrolling",
-  "toolbelt.advancements.tool_belt.title": "Tool Time",
+  "toolbelt.jamlibconfig.displayToolBeltWhenNotSelected": "Display Tool Belt Hotbar when not Selected",
+  "toolbelt.advancements.tool_belt.title": "NAME TBD",
   "toolbelt.advancements.tool_belt.description": "Craft a tool belt to store your weapons and tools."
 }

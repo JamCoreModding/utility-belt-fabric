@@ -1,2 +1,0 @@
-- Make the tool belt usable from the inventory.
-- Allow configuring the position of the hotbar.

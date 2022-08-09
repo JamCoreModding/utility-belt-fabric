@@ -27,10 +27,14 @@ package io.github.jamalam360.tool.belt;
 import com.mojang.blaze3d.platform.InputUtil;
 import io.github.jamalam360.jamlib.keybind.JamLibKeybinds;
 import io.github.jamalam360.jamlib.network.JamLibClientNetworking;
-import io.github.jamalam360.tool.belt.registry.ToolBeltClientNetworking;
+import io.github.jamalam360.tool.belt.registry.ClientNetworking;
+import io.github.jamalam360.tool.belt.registry.ScreenHandlerRegistry;
 import io.github.jamalam360.tool.belt.render.ToolBeltHotbarRenderer;
+import io.github.jamalam360.tool.belt.screen.ToolBeltScreen;
+import io.github.jamalam360.tool.belt.util.TrinketsUtil;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBind;
 
 /**
@@ -41,36 +45,51 @@ public class ToolBeltClientInit implements ClientModInitializer {
     public static int toolBeltSelectedSlot = 0;
     public static KeyBind SWAP_KEYBIND_TOGGLE;
     public static KeyBind SWAP_KEYBIND_HOLD;
+    public static KeyBind OPEN_SCREEN_KEYBIND;
 
     @Override
     public void onInitializeClient() {
         HudRenderCallback.EVENT.register(ToolBeltHotbarRenderer::render);
+        HandledScreens.register(ScreenHandlerRegistry.SCREEN_HANDLER, ToolBeltScreen::new);
 
         SWAP_KEYBIND_TOGGLE = JamLibKeybinds.register(new JamLibKeybinds.JamLibKeybind(
                 ToolBeltInit.MOD_ID,
-                "tool_belt_toggle",
+                "quick_switch_toggle",
                 InputUtil.KEY_B_CODE,
                 (client) -> {
-                    hasSwappedToToolBelt = !hasSwappedToToolBelt;
-                    ToolBeltClientNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
+                    if (TrinketsUtil.hasToolBelt(client.player)) {
+                        hasSwappedToToolBelt = !hasSwappedToToolBelt;
+                        ClientNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
+                    }
                 }
         ));
 
         SWAP_KEYBIND_HOLD = JamLibKeybinds.register(new JamLibKeybinds.JamLibHoldKeybind(
                 ToolBeltInit.MOD_ID,
-                "tool_belt_hold",
+                "quick_switch_hold",
                 InputUtil.KEY_N_CODE,
                 (client) -> {
-                    hasSwappedToToolBelt = !hasSwappedToToolBelt;
-                    ToolBeltClientNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
+                    if (TrinketsUtil.hasToolBelt(client.player)) {
+                        hasSwappedToToolBelt = !hasSwappedToToolBelt;
+                        ClientNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
+                    }
                 },
                 (client) -> {
-                    hasSwappedToToolBelt = !hasSwappedToToolBelt;
-                    ToolBeltClientNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
+                    if (TrinketsUtil.hasToolBelt(client.player)) {
+                        hasSwappedToToolBelt = !hasSwappedToToolBelt;
+                        ClientNetworking.SET_TOOL_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToToolBelt));
+                    }
                 }
         ));
 
-        ToolBeltClientNetworking.setHandlers();
+        OPEN_SCREEN_KEYBIND = JamLibKeybinds.register(new JamLibKeybinds.JamLibKeybind(
+                ToolBeltInit.MOD_ID,
+                "open_screen",
+                InputUtil.KEY_APOSTROPHE_CODE,
+                (client) -> ClientNetworking.OPEN_SCREEN.send()
+        ));
+
+        ClientNetworking.setHandlers();
         JamLibClientNetworking.registerHandlers(ToolBeltInit.MOD_ID);
     }
 }

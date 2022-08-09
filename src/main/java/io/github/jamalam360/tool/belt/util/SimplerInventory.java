@@ -32,6 +32,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.collection.DefaultedList;
 
+import java.util.function.Predicate;
+
 /**
  * @author Jamalam
  */
