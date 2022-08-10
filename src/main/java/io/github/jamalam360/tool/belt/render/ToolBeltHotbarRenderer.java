@@ -97,7 +97,7 @@ public class ToolBeltHotbarRenderer {
                 RenderSystem.applyModelViewMatrix();
             }
 
-            MinecraftClient.getInstance().getItemRenderer().renderInGuiWithOverrides(player, stack, 4, y, seed);
+            MinecraftClient.getInstance().getItemRenderer().renderInGuiWithOverrides(player, stack, 5, y, seed);
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             if (f > 0.0F) {
                 matrixStack.pop();
