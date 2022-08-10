@@ -66,7 +66,7 @@ public class SimplerInventory implements Inventory {
 
     @Override
     public ItemStack removeStack(int slot) {
-        return this.stacks.remove(slot);
+        return this.stacks.set(slot, ItemStack.EMPTY);
     }
 
     @Override

@@ -30,10 +30,15 @@ import io.github.jamalam360.tool.belt.ToolBeltInit;
 import io.github.jamalam360.tool.belt.util.SimplerInventory;
 import io.github.jamalam360.tool.belt.util.TrinketsUtil;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.ClickType;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,6 +62,97 @@ public class ToolBeltItem extends TrinketItem {
                 tooltip.add(Text.literal("- ").append(stack1.getName()));
             }
         }
+    }
+
+    @Override
+    public boolean onStackClicked(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity player) {
+        if (clickType != ClickType.RIGHT) {
+            return false;
+        } else {
+            ItemStack slotStack = slot.getStack();
+            SimplerInventory inv = getInventory(stack);
+
+            if (slotStack.isEmpty()) {
+                playInsertSound(player);
+
+                boolean inserted = false;
+
+                for (int i = 0; i < inv.size(); i++) {
+                    if (!inv.getStack(i).isEmpty()) {
+                        ItemStack removed = inv.removeStack(i);
+                        slot.insertStack(removed);
+                        inserted = true;
+                        break;
+                    }
+                }
+
+                if (!inserted) return false;
+            } else if (isValidItem(slotStack)) {
+                boolean inserted = false;
+
+                for (int i = 0; i < inv.size(); i++) {
+                    if (inv.getStack(i).isEmpty()) {
+                        inv.setStack(i, slotStack);
+                        slot.setStack(ItemStack.EMPTY);
+                        inserted = true;
+                        break;
+                    }
+                }
+
+                if (!inserted) return false;
+            }
+
+            playInsertSound(player);
+            update(stack, inv);
+            return true;
+        }
+    }
+
+    @Override
+    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference) {
+        if (clickType == ClickType.RIGHT && slot.canTakePartial(player)) {
+            SimplerInventory inv = getInventory(stack);
+
+            if (otherStack.isEmpty()) {
+                boolean inserted = false;
+
+                for (int i = 0; i < inv.size(); i++) {
+                    if (!inv.getStack(i).isEmpty()) {
+                        ItemStack removed = inv.removeStack(i);
+                        cursorStackReference.set(removed);
+                        inserted = true;
+                        break;
+                    }
+                }
+
+                if (!inserted) return false;
+            } else {
+                if (!isValidItem(otherStack)) return false;
+
+                boolean inserted = false;
+
+                for (int i = 0; i < inv.size(); i++) {
+                    if (inv.getStack(i).isEmpty()) {
+                        inv.setStack(i, otherStack);
+                        cursorStackReference.set(ItemStack.EMPTY);
+                        inserted = true;
+                        break;
+                    }
+                }
+
+                if (!inserted) return false;
+            }
+
+            playInsertSound(player);
+            update(stack, inv);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static void playInsertSound(Entity entity) {
+        entity.playSound(SoundEvents.ITEM_BUNDLE_INSERT, 0.8F, 0.8F + entity.getWorld().getRandom().nextFloat() * 0.4F);
     }
 
     public static void update(ItemStack stack, SimplerInventory inventory) {
