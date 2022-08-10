@@ -55,7 +55,12 @@ public class ToolBeltScreenHandler extends ScreenHandler {
         int l;
 
         for (l = 0; l < 4; ++l) {
-            this.addSlot(new Slot(inventory, l, 53 + l * 18, 17));
+            this.addSlot(new Slot(inventory, l, 53 + l * 18, 17) {
+                @Override
+                public boolean canInsert(ItemStack stack) {
+                    return ToolBeltItem.isValidItem(stack);
+                }
+            });
         }
 
         for (m = 0; m < 3; ++m) {
@@ -67,6 +72,15 @@ public class ToolBeltScreenHandler extends ScreenHandler {
         for (m = 0; m < 9; ++m) {
             this.addSlot(new Slot(playerInventory, m, 8 + m * 18, 106));
         }
+    }
+
+    @Override
+    public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
+        if (slot.getIndex() < this.inventory.size()) {
+            return ToolBeltItem.isValidItem(stack);
+        }
+
+        return super.canInsertIntoSlot(stack, slot);
     }
 
     @Override
