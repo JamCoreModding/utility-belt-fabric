@@ -1,9 +1,8 @@
 name: Update Licenses and Build
 
-on: [
-  push,
-  pull_request
-]
+on:
+  - push
+  - pull_request
 
 jobs:
   update-license:
@@ -115,9 +114,3 @@ jobs:
         with:
           name: Artifacts
           path: build/libs/
-
-      - name: Capture Development Build Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: Artifacts (Dev)
-          path: build/devlibs/

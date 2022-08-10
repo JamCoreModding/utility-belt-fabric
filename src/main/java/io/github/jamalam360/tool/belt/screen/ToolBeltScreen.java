@@ -1,6 +1,7 @@
 package io.github.jamalam360.tool.belt.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.jamalam360.tool.belt.ToolBeltInit;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -12,7 +13,7 @@ import net.minecraft.util.Identifier;
  * @author Jamalam
  */
 public class ToolBeltScreen extends HandledScreen<ToolBeltScreenHandler> {
-    private static final Identifier TEXTURE = new Identifier("minecraft", "textures/gui/container/dispenser.png");
+    private static final Identifier TEXTURE = ToolBeltInit.idOf("textures/gui/tool_belt_gui.png");
 
     public ToolBeltScreen(ToolBeltScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
@@ -39,5 +40,6 @@ public class ToolBeltScreen extends HandledScreen<ToolBeltScreenHandler> {
     protected void init() {
         super.init();
         titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
+        playerInventoryTitleY = backgroundHeight - 130;
     }
 }

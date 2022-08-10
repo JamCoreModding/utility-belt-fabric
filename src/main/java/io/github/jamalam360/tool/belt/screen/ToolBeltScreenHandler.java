@@ -31,17 +31,17 @@ public class ToolBeltScreenHandler extends ScreenHandler {
         int l;
 
         for (l = 0; l < 4; ++l) {
-            this.addSlot(new Slot(inventory, l, 62 + l * 18, 17));
+            this.addSlot(new Slot(inventory, l, 53 + l * 18, 17));
         }
 
         for (m = 0; m < 3; ++m) {
             for (l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(playerInventory, l + m * 9 + 9, 8 + l * 18, 84 + m * 18));
+                this.addSlot(new Slot(playerInventory, l + m * 9 + 9, 8 + l * 18, 48 + m * 18));
             }
         }
 
         for (m = 0; m < 9; ++m) {
-            this.addSlot(new Slot(playerInventory, m, 8 + m * 18, 142));
+            this.addSlot(new Slot(playerInventory, m, 8 + m * 18, 106));
         }
     }
 
