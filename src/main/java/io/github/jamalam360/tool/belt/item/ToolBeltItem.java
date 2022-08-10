@@ -24,13 +24,16 @@
 
 package io.github.jamalam360.tool.belt.item;
 
+import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketItem;
 import io.github.jamalam360.tool.belt.ToolBeltClientInit;
 import io.github.jamalam360.tool.belt.ToolBeltInit;
 import io.github.jamalam360.tool.belt.util.SimplerInventory;
 import io.github.jamalam360.tool.belt.util.TrinketsUtil;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.*;
@@ -201,5 +204,14 @@ public class ToolBeltItem extends TrinketItem {
         }
 
         return null;
+    }
+
+    @Override
+    public void onUnequip(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        if (entity instanceof ClientPlayerEntity) {
+            ToolBeltClientInit.hasSwappedToToolBelt = false;
+        } else if (entity instanceof PlayerEntity player) {
+            ToolBeltInit.TOOL_BELT_SELECTED.put(player, false);
+        }
     }
 }
