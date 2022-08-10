@@ -176,7 +176,7 @@ public class ToolBeltItem extends TrinketItem {
     }
 
     public static boolean isValidItem(ItemStack stack) {
-        return stack.getItem() instanceof ToolItem || stack.getItem() instanceof RangedWeaponItem || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem || stack.isEmpty() || stack.isIn(ToolBeltInit.ALLOWED_IN_TOOL_BELT);
+        return stack.getItem() instanceof ToolItem || stack.getItem() instanceof RangedWeaponItem || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof ShearsItem || stack.isEmpty() || stack.isIn(ToolBeltInit.ALLOWED_IN_TOOL_BELT);
     }
 
     public static ItemStack getSelectedToolBeltStack(PlayerEntity player) {
