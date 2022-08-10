@@ -32,8 +32,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.collection.DefaultedList;
 
-import java.util.function.Predicate;
-
 /**
  * @author Jamalam
  */
@@ -57,6 +55,10 @@ public class SimplerInventory implements Inventory {
     @Override
     public ItemStack getStack(int slot) {
         return this.stacks.get(slot);
+    }
+
+    public DefaultedList<ItemStack> getStacks() {
+        return this.stacks;
     }
 
     @Override

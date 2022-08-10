@@ -33,6 +33,7 @@ import io.github.jamalam360.tool.belt.util.TrinketsUtil;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
@@ -42,6 +43,7 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,6 +53,8 @@ import java.util.List;
  * @author Jamalam
  */
 public class ToolBeltItem extends TrinketItem {
+    private static final int ITEM_BAR_COLOR = MathHelper.packRgb(0.4F, 0.4F, 1.0F);
+
     public ToolBeltItem(Settings settings) {
         super(settings);
     }
@@ -154,6 +158,40 @@ public class ToolBeltItem extends TrinketItem {
         }
     }
 
+
+    @Override
+    public void onUnequip(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        if (entity instanceof ClientPlayerEntity) {
+            ToolBeltClientInit.hasSwappedToToolBelt = false;
+        } else if (entity instanceof PlayerEntity player) {
+            ToolBeltInit.TOOL_BELT_SELECTED.put(player, false);
+        }
+    }
+
+
+
+    @Override
+    public void onItemEntityDestroyed(ItemEntity entity) {
+        ItemUsage.spawnItemContents(entity, getInventory(entity.getStack()).getStacks().stream());
+    }
+
+    @Override
+    public boolean isItemBarVisible(ItemStack stack) {
+        return getInventory(stack).size() > 0;
+    }
+
+    @Override
+    public int getItemBarStep(ItemStack stack) {
+        int size = getInventory(stack).size();
+
+        return size == 4 ? 13 : size * 4;
+    }
+
+    @Override
+    public int getItemBarColor(ItemStack stack) {
+        return ITEM_BAR_COLOR;
+    }
+
     public static void playInsertSound(Entity entity) {
         entity.playSound(SoundEvents.ITEM_BUNDLE_INSERT, 0.8F, 0.8F + entity.getWorld().getRandom().nextFloat() * 0.4F);
     }
@@ -204,14 +242,5 @@ public class ToolBeltItem extends TrinketItem {
         }
 
         return null;
-    }
-
-    @Override
-    public void onUnequip(ItemStack stack, SlotReference slot, LivingEntity entity) {
-        if (entity instanceof ClientPlayerEntity) {
-            ToolBeltClientInit.hasSwappedToToolBelt = false;
-        } else if (entity instanceof PlayerEntity player) {
-            ToolBeltInit.TOOL_BELT_SELECTED.put(player, false);
-        }
     }
 }
