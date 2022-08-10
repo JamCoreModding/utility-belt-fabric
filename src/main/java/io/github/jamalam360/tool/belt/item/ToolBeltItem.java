@@ -169,7 +169,6 @@ public class ToolBeltItem extends TrinketItem {
     }
 
 
-
     @Override
     public void onItemEntityDestroyed(ItemEntity entity) {
         ItemUsage.spawnItemContents(entity, getInventory(entity.getStack()).getStacks().stream());
@@ -177,14 +176,14 @@ public class ToolBeltItem extends TrinketItem {
 
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
-        return getInventory(stack).size() > 0;
+        return getInventory(stack).getStacks().stream().anyMatch((s) -> !s.isEmpty());
     }
 
     @Override
     public int getItemBarStep(ItemStack stack) {
-        int size = getInventory(stack).size();
+        long size = getInventory(stack).getStacks().stream().filter((s) -> !s.isEmpty()).count();
 
-        return size == 4 ? 13 : size * 4;
+        return size == 4L ? 13 : (int) (size * 3);
     }
 
     @Override
