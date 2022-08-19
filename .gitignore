@@ -19,6 +19,3 @@ bin/
 
 #Fabric
 run/
-
-#Use this file to store any access tokens (e.g. CurseForge API tokens)
-local.properties

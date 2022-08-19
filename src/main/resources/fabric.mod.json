@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "toolbelt",
   "version": "${version}",
-  "name": "ToolBelt",
+  "name": "Tool Belt",
   "description": "A mod that adds a tool belt.",
   "authors": [
     "Jamalam"
@@ -13,6 +13,7 @@
   },
   "license": "MIT",
   "icon": "assets/toolbelt/textures/item/tool_belt.png",
+  "accessWidener": "toolbelt.accesswidener",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -29,13 +30,9 @@
     "toolbelt.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.12.5",
+    "fabricloader": "*",
     "fabric": "*",
     "jamlib": "*",
     "trinkets": "*"
-  },
-  "custom": {
-    "notify_gradle_properties_url": "https://raw.githubusercontent.com/JamCoreModding/ToolBelt/main/gradle.properties",
-    "notify_gradle_properties_key": "mod_version"
   }
 }

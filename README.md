@@ -1,4 +1,44 @@
-# ToolBelt
+# Tool Belt
 
-A mod that adds a tool belt.
-        
+_Free your hotbar._
+
+Tool Belt is a mod for the Fabric & Quilt mod loaders that allows you to clean up valuable hotbar space.
+
+![Demo GIF](/readme-assets/demo_one.gif)
+
+![Environment: Both](https://img.shields.io/badge/environment-both-4caf50?style=flat-square)
+![Mod Loader: Fabric](https://img.shields.io/badge/mod%20loader-fabric-d64541?style=flat-square)
+![Mod Loader: Quilt](https://img.shields.io/badge/mod%20loader-quilt-1967d5?style=flat-square)
+
+## Obtaining
+
+Tool belts must be crafted and placed into the belt [trinket slot](https://github.com/emilyploszaj/trinkets) in order to be used.
+
+![Tool Belt Crafting Recipe](/readme-assets/crafting.png)
+
+## Controls
+
+- `B`: Swap to tool belt (toggle)
+- `N`: Swap to tool belt (hold)
+- `'`: Open tool belt GUI
+
+To insert items into the tool belt, use one of the following methods:
+
+- Right-click on the tool belt with other items (like the bundle)
+- Hold shift with a tool in your hand and use one of the swap keys
+- Open the GUI
+
+## Download
+
+- [Curseforge](https://curseforge.com/mc-mods/tool-belt)
+- [Modrinth](https://modrinth.com/mod/tool-belt)
+- [GitHub](https://github.com/JamCoreModding/ToolBelt/releases/latest)
+
+## Discuss
+
+- [Discord](https://discord.jamalam.tech)
+- [GitHub Issue Tracker](https://github.com/JamCoreModding/ToolBelt/issues)
+
+## Modpack Creators
+
+If you are a modpack creator wishing to modify the list of tools that can be inserted into the tool belt, you may use the `allow_in_tool_belt` item tag. Hopefully this will be a rare case, as compatibility with other mods should be automatic ([report it](https://github.com/JamCoreModding/ToolBelt/issues/new) if you think something's missing!).

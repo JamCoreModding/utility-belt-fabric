@@ -14,6 +14,10 @@ val mod_version: String by project
 group = "io.github.jamalam360"
 version = mod_version
 
+loom {
+    accessWidenerPath.set(project.file("src/main/resources/toolbelt.accesswidener"))
+}
+
 repositories {
     val mavenUrls = mapOf(
         Pair("https://maven.terraformersmc.com/releases", listOf("com.terraformersmc", "dev.emi")),

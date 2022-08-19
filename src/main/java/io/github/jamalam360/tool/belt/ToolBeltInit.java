@@ -35,6 +35,7 @@ import io.github.jamalam360.tool.belt.registry.TrinketsBehaviours;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.tag.TagKey;
@@ -45,7 +46,7 @@ import java.util.Map;
 
 public class ToolBeltInit implements ModInitializer {
     public static final String MOD_ID = "toolbelt";
-    private static final JamLibLogger LOGGER = JamLibLogger.getLogger(MOD_ID);
+    private static final JamLibLogger LOGGER = JamLibLogger.getLogger("Tool Belt");
 
     public static final Map<PlayerEntity, Boolean> TOOL_BELT_SELECTED = new Object2BooleanArrayMap<>();
     public static final Map<PlayerEntity, Integer> TOOL_BELT_SELECTED_SLOTS = new Object2IntArrayMap<>();

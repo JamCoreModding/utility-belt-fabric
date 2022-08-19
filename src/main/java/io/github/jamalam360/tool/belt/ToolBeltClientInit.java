@@ -31,9 +31,12 @@ import io.github.jamalam360.tool.belt.registry.ClientNetworking;
 import io.github.jamalam360.tool.belt.registry.ScreenHandlerRegistry;
 import io.github.jamalam360.tool.belt.render.ToolBeltHotbarRenderer;
 import io.github.jamalam360.tool.belt.screen.ToolBeltScreen;
+import io.github.jamalam360.tool.belt.tutorial.Tutorial;
 import io.github.jamalam360.tool.belt.util.TrinketsUtil;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBind;
 
@@ -91,5 +94,7 @@ public class ToolBeltClientInit implements ClientModInitializer {
 
         ClientNetworking.setHandlers();
         JamLibClientNetworking.registerHandlers(ToolBeltInit.MOD_ID);
+
+        ClientTickEvents.END_WORLD_TICK.register((world) -> Tutorial.tick(MinecraftClient.getInstance()));
     }
 }
