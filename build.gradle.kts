@@ -1,12 +1,12 @@
 plugins {
     id("fabric-loom") version "0.12-SNAPSHOT"
     id("org.quiltmc.quilt-mappings-on-loom") version "4.2.0"
-    id("io.github.juuxel.loom-quiltflower") version "1.7.2"
+    id("io.github.juuxel.loom-quiltflower") version "1.7.+"
     id("io.github.p03w.machete") version "1.+"
     id("org.cadixdev.licenser") version "0.6.1"
 }
 
-apply(from = "https://raw.githubusercontent.com/JamCoreModding/Gronk/4eb7f60e89c272e1f00090a68d4e90c2f3498aae/publishing.gradle.kts")
+apply(from = "https://raw.githubusercontent.com/JamCoreModding/Gronk/main/publishing.gradle.kts")
 apply(from = "https://raw.githubusercontent.com/JamCoreModding/Gronk/main/misc.gradle.kts")
 
 val mod_version: String by project
@@ -15,7 +15,7 @@ group = "io.github.jamalam360"
 version = mod_version
 
 loom {
-    accessWidenerPath.set(project.file("src/main/resources/toolbelt.accesswidener"))
+    accessWidenerPath.set(project.file("src/main/resources/utilitybelt.accesswidener"))
 }
 
 repositories {
@@ -49,10 +49,6 @@ dependencies {
 
     modImplementation(libs.required.jamlib)
     modImplementation(libs.required.trinkets)
-
-    //TODO: Remove on public release
-    include(libs.required.jamlib)
-    include(libs.required.trinkets)
 
     modImplementation(libs.optional.mod.menu)
 

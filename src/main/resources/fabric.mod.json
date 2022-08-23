@@ -1,33 +1,33 @@
 {
   "schemaVersion": 1,
-  "id": "toolbelt",
+  "id": "utilitybelt",
   "version": "${version}",
-  "name": "Tool Belt",
+  "name": "Utility Belt",
   "description": "Free your hotbar",
   "authors": [
     "Jamalam"
   ],
   "contact": {
-    "sources": "https://github.com/JamCoreModding/ToolBelt",
-    "issues": "https://github.com/JamCoreModding/ToolBelt/issues"
+    "sources": "https://github.com/JamCoreModding/UtilityBelt",
+    "issues": "https://github.com/JamCoreModding/UtilityBelt/issues"
   },
   "license": "MIT",
-  "icon": "assets/toolbelt/textures/item/tool_belt.png",
-  "accessWidener": "toolbelt.accesswidener",
+  "icon": "assets/utilitybelt/textures/item/utility_belt.png",
+  "accessWidener": "utilitybelt.accesswidener",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.jamalam360.tool.belt.ToolBeltInit"
+      "io.github.jamalam360.utility.belt.UtilityBeltInit"
     ],
     "client": [
-      "io.github.jamalam360.tool.belt.ToolBeltClientInit"
+      "io.github.jamalam360.utility.belt.UtilityBeltClientInit"
     ],
     "modmenu": [
-      "io.github.jamalam360.tool.belt.config.ModMenuScreen"
+      "io.github.jamalam360.utility.belt.config.ModMenuScreen"
     ]
   },
   "mixins": [
-    "toolbelt.mixins.json"
+    "utilitybelt.mixins.json"
   ],
   "depends": {
     "fabricloader": "*",

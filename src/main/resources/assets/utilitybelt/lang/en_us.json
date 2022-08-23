@@ -1,0 +1,11 @@
+{
+  "item.utilitybelt.utility_belt": "Utility Belt",
+  "key.category.utilitybelt": "Utility Belt",
+  "key.utilitybelt.quick_switch_toggle": "Quick Switch (Toggle)",
+  "key.utilitybelt.quick_switch_hold": "Quick Switch (Hold)",
+  "key.utilitybelt.open_screen": "Open Utility Belt GUI",
+  "utilitybelt.jamlibconfig.isScrollingInverted": "Invert Scrolling",
+  "utilitybelt.jamlibconfig.displayUtilityBeltWhenNotSelected": "Show Utility Belt Hotbar when not Selected",
+  "utilitybelt.advancements.utility_belt.title": "Utility Belt",
+  "utilitybelt.advancements.utility_belt.description": "Craft a utility belt to store your weapons and tools."
+}

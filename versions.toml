@@ -1,9 +1,9 @@
 [versions]
 minecraft = "1.19.2"
-mappings-build = "1"
+mappings-build = "6"
 fabric-loader = "0.14.9"
-fabric-api = "0.59.0+1.19.2"
-jamlib = "0.4.2"
+fabric-api = "0.60.0+1.19.2"
+jamlib = "0.4.4"
 trinkets = "3.4.0"
 mod-menu = "4.0.6"
 lazy-dfu = "0.1.3"
