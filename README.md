@@ -4,7 +4,7 @@ _Free your hotbar._
 
 Tool Belt is a mod for the Fabric & Quilt mod loaders that allows you to clean up valuable hotbar space.
 
-![Demo GIF](/readme-assets/demo_one.gif)
+![Demo GIF](https://github.com/JamCoreModding/ToolBelt/blob/main/readme-assets/demo_one.gif?raw=true)
 
 ![Environment: Both](https://img.shields.io/badge/environment-both-4caf50?style=flat-square)
 ![Mod Loader: Fabric](https://img.shields.io/badge/mod%20loader-fabric-d64541?style=flat-square)
@@ -14,7 +14,7 @@ Tool Belt is a mod for the Fabric & Quilt mod loaders that allows you to clean u
 
 Tool belts must be crafted and placed into the belt [trinket slot](https://github.com/emilyploszaj/trinkets) in order to be used.
 
-![Tool Belt Crafting Recipe](/readme-assets/crafting.png)
+![Tool Belt Crafting Recipe](https://github.com/JamCoreModding/ToolBelt/blob/main/readme-assets/crafting.png?raw=true)
 
 ## Controls
 
