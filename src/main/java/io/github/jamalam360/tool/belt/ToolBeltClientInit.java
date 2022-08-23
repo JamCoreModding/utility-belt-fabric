@@ -94,7 +94,5 @@ public class ToolBeltClientInit implements ClientModInitializer {
 
         ClientNetworking.setHandlers();
         JamLibClientNetworking.registerHandlers(ToolBeltInit.MOD_ID);
-
-        ClientTickEvents.END_WORLD_TICK.register((world) -> Tutorial.tick(MinecraftClient.getInstance()));
     }
 }
