@@ -4,16 +4,18 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "LivingEntityMixin",
+    "PlayerEntityAccessor",
     "PlayerEntityMixin",
     "PlayerInventoryMixin"
   ],
   "client": [
     "client.ClientPlayerEntityMixin",
     "client.MinecraftClientMixin",
-    "client.render.InGameHudMixin",
-    "client.input.MouseMixin"
+    "client.input.MouseMixin",
+    "client.render.InGameHudMixin"
   ],
   "server": [],
+  "plugin": "io.github.jamalam360.utility.belt.mixin.Plugin",
   "injectors": {
     "defaultRequire": 1
   }
