@@ -1,6 +1,6 @@
 [versions]
 minecraft = "1.19.2"
-mappings-build = "6"
+mappings-build = "10"
 fabric-loader = "0.14.9"
 fabric-api = "0.60.0+1.19.2"
 jamlib = "0.4.4"

@@ -75,7 +75,7 @@ public class UtilityBeltItem extends TrinketItem {
     }
 
     @Override
-    public boolean onStackClicked(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity player) {
+    public boolean onClickedOnOther(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity player) {
         if (clickType != ClickType.RIGHT) {
             return false;
         } else {
@@ -201,8 +201,6 @@ public class UtilityBeltItem extends TrinketItem {
     public static void update(ItemStack stack, SimplerInventory inventory) {
         NbtCompound nbt = stack.getOrCreateNbt();
         nbt.put("Inventory", inventory.toNbtList());
-        stack.setNbt(nbt);
-
         INVENTORY_CACHE.put(stack, inventory);
     }
 
