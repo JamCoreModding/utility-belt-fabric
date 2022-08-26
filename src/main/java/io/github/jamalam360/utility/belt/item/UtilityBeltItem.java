@@ -201,7 +201,7 @@ public class UtilityBeltItem extends TrinketItem {
     public static void update(ItemStack stack, SimplerInventory inventory) {
         NbtCompound nbt = stack.getOrCreateNbt();
         nbt.put("Inventory", inventory.toNbtList());
-        INVENTORY_CACHE.put(stack, inventory);
+        stack.setNbt(nbt);
     }
 
     public static SimplerInventory getInventory(ItemStack stack) {
