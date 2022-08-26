@@ -28,6 +28,7 @@ import io.github.jamalam360.jamlib.network.JamLibS2CNetworkChannel;
 import io.github.jamalam360.utility.belt.Ducks;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
+import io.github.jamalam360.utility.belt.mixin.PlayerEntityAccessor;
 import io.github.jamalam360.utility.belt.screen.UtilityBeltScreenHandler;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
@@ -95,6 +96,8 @@ public class Networking {
                             }
                         }
                     }
+
+                    ((PlayerEntityAccessor) player).setSelectedItem(player.getMainHandStack());
                 }
             }
 

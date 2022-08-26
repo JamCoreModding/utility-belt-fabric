@@ -45,7 +45,7 @@ import java.util.Map;
 
 public class UtilityBeltInit implements ModInitializer {
     public static final String MOD_ID = "utilitybelt";
-    private static final JamLibLogger LOGGER = JamLibLogger.getLogger(MOD_ID);
+    public static final JamLibLogger LOGGER = JamLibLogger.getLogger(MOD_ID);
 
     public static final Map<PlayerEntity, Boolean> UTILITY_BELT_SELECTED = new Object2BooleanArrayMap<>();
     public static final Map<PlayerEntity, Integer> UTILITY_BELT_SELECTED_SLOTS = new Object2IntArrayMap<>();

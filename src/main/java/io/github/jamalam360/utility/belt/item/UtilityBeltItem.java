@@ -47,13 +47,16 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Jamalam
  */
 public class UtilityBeltItem extends TrinketItem {
     private static final int ITEM_BAR_COLOR = MathHelper.packRgb(0.4F, 0.4F, 1.0F);
+    private static final Map<ItemStack, SimplerInventory> INVENTORY_CACHE = new HashMap<>();
 
     public UtilityBeltItem(Settings settings) {
         super(settings);
@@ -199,9 +202,15 @@ public class UtilityBeltItem extends TrinketItem {
         NbtCompound nbt = stack.getOrCreateNbt();
         nbt.put("Inventory", inventory.toNbtList());
         stack.setNbt(nbt);
+
+        INVENTORY_CACHE.put(stack, inventory);
     }
 
     public static SimplerInventory getInventory(ItemStack stack) {
+        if (INVENTORY_CACHE.containsKey(stack)) {
+            return INVENTORY_CACHE.get(stack);
+        }
+
         NbtCompound nbt = stack.getOrCreateNbt();
         SimplerInventory inventory = new SimplerInventory(4);
 
@@ -211,6 +220,8 @@ public class UtilityBeltItem extends TrinketItem {
             nbt.put("Inventory", inventory.toNbtList());
             stack.setNbt(nbt);
         }
+
+        INVENTORY_CACHE.put(stack, inventory);
 
         return inventory;
     }
@@ -237,7 +248,12 @@ public class UtilityBeltItem extends TrinketItem {
 
         if (selected && TrinketsUtil.hasUtilityBelt(player)) {
             ItemStack stack = TrinketsUtil.getUtilityBelt(player);
-            return UtilityBeltItem.getInventory(stack).getStack(selectedSlot);
+
+            if (INVENTORY_CACHE.containsKey(stack)) {
+                return INVENTORY_CACHE.get(TrinketsUtil.getUtilityBelt(player)).getStack(selectedSlot);
+            } else {
+                return getInventory(TrinketsUtil.getUtilityBelt(player)).getStack(selectedSlot);
+            }
         }
 
         return null;
