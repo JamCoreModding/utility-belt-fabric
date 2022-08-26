@@ -58,16 +58,30 @@ public abstract class LivingEntityMixin implements Ducks.LivingEntity {
     private void utilitybelt$updateUtilityBeltNbtOnToolBreak(EquipmentSlot slot, CallbackInfo ci) {
         if (((LivingEntity) (Object) this) instanceof PlayerEntity player) {
             if (TrinketsUtil.hasUtilityBelt(player)) {
-                ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);
-                SimplerInventory inv = UtilityBeltItem.getInventory(utilityBelt);
+                boolean selected = false;
 
                 if (player.world.isClient) {
-                    inv.setStack(UtilityBeltClientInit.utilityBeltSelectedSlot, ItemStack.EMPTY);
+                    if (UtilityBeltClientInit.hasSwappedToUtilityBelt) {
+                        selected = true;
+                    }
                 } else {
-                    inv.setStack(UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0), ItemStack.EMPTY);
+                    if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
+                        selected = true;
+                    }
                 }
 
-                UtilityBeltItem.update(utilityBelt, inv);
+                if (selected) {
+                    ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);
+                    SimplerInventory inv = UtilityBeltItem.getInventory(utilityBelt);
+
+                    if (player.world.isClient) {
+                        inv.setStack(UtilityBeltClientInit.utilityBeltSelectedSlot, ItemStack.EMPTY);
+                    } else {
+                        inv.setStack(UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0), ItemStack.EMPTY);
+                    }
+
+                    UtilityBeltItem.update(utilityBelt, inv);
+                }
             }
         }
     }
