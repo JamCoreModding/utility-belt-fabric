@@ -50,7 +50,7 @@ public class TrinketsBehaviours {
         });
 
         TrinketDropCallback.EVENT.register((rule, stack, ref, entity) -> {
-            if (stack.getItem() instanceof UtilityBeltItem && entity instanceof PlayerEntity player && !player.getAbilities().creativeMode) {
+            if (rule == TrinketEnums.DropRule.DROP) {
                 SimplerInventory inv = UtilityBeltItem.getInventory(stack);
 
                 for (int i = 0; i < inv.size(); i++) {
@@ -64,11 +64,9 @@ public class TrinketsBehaviours {
 
                 inv.clear();
                 UtilityBeltItem.update(stack, inv);
-
-                return TrinketEnums.DropRule.DROP;
-            } else {
-                return TrinketEnums.DropRule.DEFAULT;
             }
+
+            return rule;
         });
     }
 }
