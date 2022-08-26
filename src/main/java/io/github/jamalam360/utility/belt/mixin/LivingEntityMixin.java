@@ -55,7 +55,7 @@ public abstract class LivingEntityMixin implements Ducks.LivingEntity {
             method = "sendEquipmentBreakStatus",
             at = @At("HEAD")
     )
-    private void utilitybelt$updateUtilityBeltNbt(EquipmentSlot slot, CallbackInfo ci) {
+    private void utilitybelt$updateUtilityBeltNbtOnToolBreak(EquipmentSlot slot, CallbackInfo ci) {
         if (((LivingEntity) (Object) this) instanceof PlayerEntity player) {
             if (TrinketsUtil.hasUtilityBelt(player)) {
                 ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);
