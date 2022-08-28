@@ -24,20 +24,21 @@
 
 package io.github.jamalam360.utility.belt.mixin.client.render;
 
+import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 /**
  * @author Jamalam
  */
 
+@SuppressWarnings("unused")
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
-    @Redirect(
+    @WrapWithCondition(
             method = "renderHotbar",
             at = @At(
                     value = "INVOKE",
@@ -45,9 +46,7 @@ public abstract class InGameHudMixin {
                     ordinal = 1
             )
     )
-    private void utilitybelt$disableHotbarHighlight(InGameHud instance, MatrixStack matrixStack, int a, int b, int c, int d, int e, int f) {
-        if (!UtilityBeltClientInit.hasSwappedToUtilityBelt) {
-            instance.drawTexture(matrixStack, a, b, c, d, e, f);
-        }
+    private boolean utilitybelt$disableHotbarHighlight(InGameHud instance, MatrixStack matrixStack, int a, int b, int c, int d, int e, int f) {
+        return !UtilityBeltClientInit.hasSwappedToUtilityBelt;
     }
 }

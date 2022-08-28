@@ -23,6 +23,7 @@ repositories {
         Pair("https://maven.terraformersmc.com/releases", listOf("com.terraformersmc", "dev.emi")),
         Pair("https://api.modrinth.com/maven", listOf("maven.modrinth")),
         Pair("https://maven.jamalam.tech/releases", listOf("io.github.jamalam360")),
+        Pair("https://jitpack.io/", listOf("com.github.LlamaLad7")),
         Pair("https://ladysnake.jfrog.io/artifactory/mods", listOf("dev.onyxstudios.cardinal-components-api")),
     )
 
@@ -44,15 +45,13 @@ dependencies {
         addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:${libs.versions.minecraft.get()}+build.${libs.versions.mappings.build.get()}:v2"))
     })
 
-    modImplementation(libs.fabric.loader)
-    modImplementation(libs.fabric.api)
+    modImplementation(libs.bundles.fabric)
+    modImplementation(libs.bundles.required)
+    modImplementation(libs.bundles.optional)
+    modImplementation(libs.bundles.runtime)
 
-    modImplementation(libs.required.jamlib)
-    modImplementation(libs.required.trinkets)
-
-    modImplementation(libs.optional.mod.menu)
-
-    modLocalRuntime(libs.runtime.lazy.dfu)
+    include(libs.required.mixin.extras)
+    annotationProcessor(libs.required.mixin.extras)
 }
 
 sourceSets {
