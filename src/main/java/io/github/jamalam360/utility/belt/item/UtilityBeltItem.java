@@ -28,6 +28,7 @@ import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketItem;
 import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
+import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.minecraft.client.item.TooltipContext;
@@ -40,6 +41,7 @@ import net.minecraft.inventory.StackReference;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
@@ -201,7 +203,13 @@ public class UtilityBeltItem extends TrinketItem {
     public static void update(ItemStack stack, SimplerInventory inventory) {
         NbtCompound nbt = stack.getOrCreateNbt();
         nbt.put("Inventory", inventory.toNbtList());
-        stack.setNbt(nbt);
+        INVENTORY_CACHE.put(stack, inventory);
+
+        Entity holder = stack.getEntityHolder();
+
+        if (holder instanceof PlayerEntity && !holder.world.isClient) {
+            Networking.SYNC_UTILITY_BELT_INVENTORY.send((ServerPlayerEntity) stack.getEntityHolder(), (buf) -> buf.writeNbt(nbt));
+        }
     }
 
     public static SimplerInventory getInventory(ItemStack stack) {
@@ -216,7 +224,6 @@ public class UtilityBeltItem extends TrinketItem {
             inventory.readNbtList(nbt.getList("Inventory", 10));
         } else {
             nbt.put("Inventory", inventory.toNbtList());
-            stack.setNbt(nbt);
         }
 
         INVENTORY_CACHE.put(stack, inventory);

@@ -41,6 +41,7 @@ public class Networking {
 
     public static final JamLibS2CNetworkChannel SWING_HAND = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("swing_hand"));
     public static final JamLibS2CNetworkChannel SET_UTILITY_BELT_SELECTED_SLOT = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected_slot"));
+    public static final JamLibS2CNetworkChannel SYNC_UTILITY_BELT_INVENTORY = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("sync_utility_belt_inventory"));
 
     public static void setHandlers() {
         ClientNetworking.SET_UTILITY_BELT_SELECTED_SLOT.setHandler((server, player, handler, buf, responseSender) -> {

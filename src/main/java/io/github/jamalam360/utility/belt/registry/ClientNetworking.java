@@ -27,6 +27,11 @@ package io.github.jamalam360.utility.belt.registry;
 import io.github.jamalam360.jamlib.network.JamLibC2SNetworkChannel;
 import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
+import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
+import io.github.jamalam360.utility.belt.util.SimplerInventory;
+import io.github.jamalam360.utility.belt.util.TrinketsUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
 
 /**
@@ -40,5 +45,15 @@ public class ClientNetworking {
     public static void setHandlers() {
         Networking.SWING_HAND.setHandler((client, handler, buf, responseSender) -> client.player.swingHand(Hand.MAIN_HAND));
         Networking.SET_UTILITY_BELT_SELECTED_SLOT.setHandler((client, handler, buf, responseSender) -> UtilityBeltClientInit.utilityBeltSelectedSlot = buf.readInt());
+        Networking.SYNC_UTILITY_BELT_INVENTORY.setHandler((client, handler, buf, responseSender) -> {
+            ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(client.player);
+
+            if (utilityBelt != null) {
+                SimplerInventory inv = new SimplerInventory(4);
+                NbtCompound comp = buf.readNbt();
+                inv.readNbtList(comp.getList("Inventory", 10));
+                UtilityBeltItem.update(utilityBelt, inv);
+            }
+        });
     }
 }
