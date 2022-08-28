@@ -2,14 +2,11 @@
 
 ### Features
 
-- Inventory lookups are now cached and synced S2C.
-
 ### Fixes
 
-- Tools breaking no longer causes other tools to break (#4).
-- `keepInventory` is now respected upon death (#5).
-- BetterCombat is now compatible with UB (#6).
+- Depend on a specific version (or greater) of JamLib (#9).
+- Fix an incompatibility with Bedrockify (#8).
+ 
+Closed issues: #8, #9.
 
-Closed issues: #4, #5, #6.
-
-[Full Changelog](https://github.com/JamCoreModding/UtilityBelt/compare/1.0.0...1.0.1)
+[Full Changelog](https://github.com/JamCoreModding/UtilityBelt/compare/1.0.1...1.0.2)

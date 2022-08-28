@@ -37,7 +37,7 @@
   "depends": {
     "fabricloader": "*",
     "fabric": "*",
-    "jamlib": "*",
+    "jamlib": ">=0.4.3",
     "trinkets": "*"
   }
 }
