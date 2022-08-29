@@ -68,7 +68,10 @@ public class Networking {
                     SimplerInventory utilityBeltInventory = UtilityBeltItem.getInventory(utilityBelt);
 
                     if (hasSwappedToUtilityBelt) {
-                        ItemStack heldItem = player.getStackInHand(Hand.MAIN_HAND);
+                        // We use this rather than getStackInHand since at this point, the map already
+                        // states that the player is swapped to the utility belt, so getStackInHand returns
+                        // whatever is in there.
+                        ItemStack heldItem = player.getInventory().getStack(player.getInventory().selectedSlot);
 
                         if (!heldItem.isEmpty() && UtilityBeltItem.isValidItem(heldItem)) {
                             int utilityBeltSlot = 0;
@@ -82,7 +85,8 @@ public class Networking {
 
                             if (utilityBeltInventory.getStack(utilityBeltSlot).isEmpty()) {
                                 utilityBeltInventory.setStack(utilityBeltSlot, heldItem);
-                                player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+                                // Same reason as above.
+                                player.getInventory().setStack(player.getInventory().selectedSlot, ItemStack.EMPTY);
                                 UtilityBeltItem.update(utilityBelt, utilityBeltInventory);
                                 UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player, utilityBeltSlot);
                                 final int finalUtilityBeltSlot = utilityBeltSlot;
