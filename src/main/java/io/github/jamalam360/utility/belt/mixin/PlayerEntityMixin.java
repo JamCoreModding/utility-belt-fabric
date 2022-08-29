@@ -26,6 +26,7 @@ package io.github.jamalam360.utility.belt.mixin;
 
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.item.ItemInventoryComponent;
+import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -46,7 +47,10 @@ public abstract class PlayerEntityMixin {
             at = @At("HEAD")
     )
     private void utilitybelt$switchBackToHotbar(CallbackInfo ci) {
-        UtilityBeltInit.UTILITY_BELT_SELECTED.put((PlayerEntity) (Object) this, false);
+        if (!((PlayerEntity) (Object) this).world.isClient) {
+            UtilityBeltInit.UTILITY_BELT_SELECTED.put((PlayerEntity) (Object) this, false);
+            Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) (Object) this, (buf) -> buf.writeBoolean(false));
+        }
     }
 
     @Inject(

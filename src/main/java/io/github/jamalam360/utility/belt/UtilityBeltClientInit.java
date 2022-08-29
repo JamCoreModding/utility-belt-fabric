@@ -60,7 +60,8 @@ public class UtilityBeltClientInit implements ClientModInitializer {
                 (client) -> {
                     if (TrinketsUtil.hasUtilityBelt(client.player)) {
                         hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
-                        Networking.SET_UTILITY_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
+                        UtilityBeltInit.UTILITY_BELT_SELECTED.put(client.player, hasSwappedToUtilityBelt);
+                        Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
                     }
                 }
         ));
@@ -72,13 +73,15 @@ public class UtilityBeltClientInit implements ClientModInitializer {
                 (client) -> {
                     if (TrinketsUtil.hasUtilityBelt(client.player)) {
                         hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
-                        Networking.SET_UTILITY_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
+                        UtilityBeltInit.UTILITY_BELT_SELECTED.put(client.player, hasSwappedToUtilityBelt);
+                        Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
                     }
                 },
                 (client) -> {
                     if (TrinketsUtil.hasUtilityBelt(client.player)) {
                         hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
-                        Networking.SET_UTILITY_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
+                        UtilityBeltInit.UTILITY_BELT_SELECTED.put(client.player, hasSwappedToUtilityBelt);
+                        Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
                     }
                 }
         ));

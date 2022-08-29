@@ -26,12 +26,11 @@ package io.github.jamalam360.utility.belt.item;
 
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketItem;
-import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
+import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -39,6 +38,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.*;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
@@ -75,23 +75,14 @@ public class UtilityBeltItem extends TrinketItem {
     }
 
     public static ItemStack getSelectedUtilityBeltStack(PlayerEntity player) {
-        boolean selected = false;
-        int selectedSlot = 0;
+        int slot;
 
-        if (player.world.isClient) {
-            if (UtilityBeltClientInit.hasSwappedToUtilityBelt) {
-                selected = true;
-                selectedSlot = UtilityBeltClientInit.utilityBeltSelectedSlot;
-            }
-        } else {
-            if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
-                selected = true;
-                selectedSlot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
-            }
-        }
+        if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
+            slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
 
-        if (selected && TrinketsUtil.hasUtilityBelt(player)) {
-            return getInventory(TrinketsUtil.getUtilityBelt(player)).getStack(selectedSlot);
+            if (TrinketsUtil.hasUtilityBelt(player)) {
+                return getInventory(TrinketsUtil.getUtilityBelt(player)).getStack(slot);
+            }
         }
 
         return null;
@@ -198,10 +189,9 @@ public class UtilityBeltItem extends TrinketItem {
 
     @Override
     public void onUnequip(ItemStack stack, SlotReference slot, LivingEntity entity) {
-        if (entity instanceof ClientPlayerEntity) {
-            UtilityBeltClientInit.hasSwappedToUtilityBelt = false;
-        } else if (entity instanceof PlayerEntity player) {
+        if (!entity.world.isClient && entity instanceof PlayerEntity player) {
             UtilityBeltInit.UTILITY_BELT_SELECTED.put(player, false);
+            Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) player, (buf) -> buf.writeBoolean(false));
         }
     }
 

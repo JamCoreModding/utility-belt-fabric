@@ -41,9 +41,12 @@ import net.minecraft.util.Hand;
 public class Networking {
 
     public static final JamLibS2CNetworkChannel SWING_HAND = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("swing_hand"));
+    public static final JamLibS2CNetworkChannel SET_UTILITY_BELT_SELECTED_S2C = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected_s2c"));
+
     public static final JamLibS2CNetworkChannel SET_UTILITY_BELT_SELECTED_SLOT_S2C = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected_slot_s2c"));
     public static final JamLibS2CNetworkChannel SYNC_UTILITY_BELT_INVENTORY = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("sync_utility_belt_inventory"));
-    public static final JamLibC2SNetworkChannel SET_UTILITY_BELT_SELECTED = new JamLibC2SNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected"));
+
+    public static final JamLibC2SNetworkChannel SET_UTILITY_BELT_SELECTED_C2S = new JamLibC2SNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected_c2s"));
     public static final JamLibC2SNetworkChannel SET_UTILITY_BELT_SELECTED_SLOT_C2S = new JamLibC2SNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected_slot_c2s"));
     public static final JamLibC2SNetworkChannel OPEN_SCREEN = new JamLibC2SNetworkChannel(UtilityBeltInit.idOf("open_screen"));
 
@@ -56,7 +59,7 @@ public class Networking {
             ((Ducks.LivingEntity) player).updateEquipment();
         });
 
-        SET_UTILITY_BELT_SELECTED.setHandler((server, player, handler, buf, responseSender) -> {
+        SET_UTILITY_BELT_SELECTED_C2S.setHandler((server, player, handler, buf, responseSender) -> {
             boolean hasSwappedToUtilityBelt = buf.readBoolean();
 
             if (player.isSneaking()) {

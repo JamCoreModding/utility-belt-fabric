@@ -24,7 +24,6 @@
 
 package io.github.jamalam360.utility.belt.mixin;
 
-import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
@@ -55,24 +54,15 @@ public abstract class PlayerInventoryMixin {
             cancellable = true
     )
     private void utilitybelt$getBlockBreakingSpeedWithUtilityBeltItem(BlockState state, CallbackInfoReturnable<Float> cir) {
-        boolean selected = false;
-        int selectedSlot = 0;
+        int slot;
 
-        if (this.player.world.isClient) {
-            if (UtilityBeltClientInit.hasSwappedToUtilityBelt) {
-                selected = true;
-                selectedSlot = UtilityBeltClientInit.utilityBeltSelectedSlot;
-            }
-        } else {
-            if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(this.player, false)) {
-                selected = true;
-                selectedSlot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(this.player, 0);
-            }
-        }
+        if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
+            slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
 
-        if (selected && TrinketsUtil.hasUtilityBelt(player)) {
-            ItemStack stack = TrinketsUtil.getUtilityBelt(player);
-            cir.setReturnValue(UtilityBeltItem.getInventory(stack).getStack(selectedSlot).getMiningSpeedMultiplier(state));
+            if (TrinketsUtil.hasUtilityBelt(player)) {
+                ItemStack stack = TrinketsUtil.getUtilityBelt(player);
+                cir.setReturnValue(UtilityBeltItem.getInventory(stack).getStack(slot).getMiningSpeedMultiplier(state));
+            }
         }
     }
 

@@ -25,8 +25,10 @@
 package io.github.jamalam360.utility.belt.mixin.client.input;
 
 import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
+import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.config.UtilityBeltConfig;
 import io.github.jamalam360.utility.belt.registry.Networking;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -84,6 +86,7 @@ public abstract class MouseMixin {
 
             if (amount != 0) {
                 Networking.SET_UTILITY_BELT_SELECTED_SLOT_C2S.send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));
+                UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(MinecraftClient.getInstance().player, UtilityBeltClientInit.utilityBeltSelectedSlot);
             }
 
             ci.cancel();

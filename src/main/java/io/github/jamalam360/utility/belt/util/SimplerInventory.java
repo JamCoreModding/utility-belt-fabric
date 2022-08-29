@@ -138,7 +138,7 @@ public class SimplerInventory implements Inventory, Cloneable {
     public SimplerInventory clone() {
         try {
             SimplerInventory clone = (SimplerInventory) super.clone();
-            clone.stacks = DefaultedList.copyOf(ItemStack.EMPTY, this.stacks.toArray(new ItemStack[0]));
+            clone.stacks = DefaultedList.copyOf(ItemStack.EMPTY, this.stacks.stream().map(ItemStack::copy).toList().toArray(new ItemStack[0]));
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

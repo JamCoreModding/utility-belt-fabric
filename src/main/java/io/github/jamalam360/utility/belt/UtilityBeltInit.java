@@ -37,10 +37,12 @@ import io.github.jamalam360.utility.belt.item.InventoryComponent;
 import io.github.jamalam360.utility.belt.item.ItemInventoryComponent;
 import io.github.jamalam360.utility.belt.registry.ItemRegistry;
 import io.github.jamalam360.utility.belt.registry.Networking;
+import io.github.jamalam360.utility.belt.registry.ScreenHandlerRegistry;
 import io.github.jamalam360.utility.belt.registry.TrinketsBehaviours;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.tag.TagKey;
@@ -66,7 +68,7 @@ public class UtilityBeltInit implements ModInitializer, ItemComponentInitializer
 
     @Override
     public void onInitialize() {
-        JamLibRegistry.register(ItemRegistry.class);
+        JamLibRegistry.register(ItemRegistry.class, ScreenHandlerRegistry.class);
         JamLibConfig.init(MOD_ID, UtilityBeltConfig.class);
         Networking.setHandlers();
         TrinketsBehaviours.registerEvents();

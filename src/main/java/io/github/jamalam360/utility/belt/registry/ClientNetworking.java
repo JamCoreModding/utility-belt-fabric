@@ -42,6 +42,7 @@ public class ClientNetworking {
 
     public static void setHandlers() {
         Networking.SWING_HAND.setHandler((client, handler, buf, responseSender) -> client.player.swingHand(Hand.MAIN_HAND));
+        Networking.SET_UTILITY_BELT_SELECTED_S2C.setHandler((client, handler, buf, responseSender) -> UtilityBeltClientInit.hasSwappedToUtilityBelt = buf.readBoolean());
         Networking.SET_UTILITY_BELT_SELECTED_SLOT_S2C.setHandler((client, handler, buf, responseSender) -> UtilityBeltClientInit.utilityBeltSelectedSlot = buf.readInt());
         Networking.SYNC_UTILITY_BELT_INVENTORY.setHandler((client, handler, buf, responseSender) -> {
             ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(client.player);

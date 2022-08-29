@@ -25,7 +25,6 @@
 package io.github.jamalam360.utility.belt.mixin;
 
 import io.github.jamalam360.utility.belt.Ducks;
-import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
@@ -61,25 +60,8 @@ public abstract class LivingEntityMixin implements Ducks.LivingEntity {
                 ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);
                 SimplerInventory inv = UtilityBeltItem.getInventory(utilityBelt);
 
-                boolean selected = false;
-
-                if (player.world.isClient) {
-                    if (UtilityBeltClientInit.hasSwappedToUtilityBelt) {
-                        selected = true;
-                    }
-                } else {
-                    if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
-                        selected = true;
-                    }
-                }
-
-                if (selected) {
-                    if (player.world.isClient) {
-                        inv.setStack(UtilityBeltClientInit.utilityBeltSelectedSlot, ItemStack.EMPTY);
-                    } else {
-                        inv.setStack(UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0), ItemStack.EMPTY);
-                    }
-
+                if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
+                    inv.setStack(UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0), ItemStack.EMPTY);
                     UtilityBeltItem.update(utilityBelt, inv);
                 }
             }
@@ -123,27 +105,18 @@ public abstract class LivingEntityMixin implements Ducks.LivingEntity {
     )
     private void utilitybelt$setStackInHandUtilityBelt(Hand hand, ItemStack stack, CallbackInfo ci) {
         if (hand == Hand.MAIN_HAND && ((LivingEntity) (Object) this) instanceof PlayerEntity player) {
-            boolean selected = false;
-            int selectedSlot = 0;
+            int slot;
 
-            if (player.world.isClient) {
-                if (UtilityBeltClientInit.hasSwappedToUtilityBelt) {
-                    selected = true;
-                    selectedSlot = UtilityBeltClientInit.utilityBeltSelectedSlot;
-                }
-            } else {
-                if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
-                    selected = true;
-                    selectedSlot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
-                }
-            }
+            if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
+                slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
 
-            if (selected) {
-                ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);
-                SimplerInventory inv = UtilityBeltItem.getInventory(utilityBelt);
-                inv.setStack(selectedSlot, stack);
-                UtilityBeltItem.update(utilityBelt, inv);
-                ci.cancel();
+                if (TrinketsUtil.hasUtilityBelt(player)) {
+                    ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);
+                    SimplerInventory inv = UtilityBeltItem.getInventory(utilityBelt);
+                    inv.setStack(slot, stack);
+                    UtilityBeltItem.update(utilityBelt, inv);
+                    ci.cancel();
+                }
             }
         }
     }
