@@ -25,7 +25,11 @@
 package io.github.jamalam360.utility.belt.mixin;
 
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
+import io.github.jamalam360.utility.belt.item.ItemInventoryComponent;
+import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -43,5 +47,18 @@ public abstract class PlayerEntityMixin {
     )
     private void utilitybelt$switchBackToHotbar(CallbackInfo ci) {
         UtilityBeltInit.UTILITY_BELT_SELECTED.put((PlayerEntity) (Object) this, false);
+    }
+
+    @Inject(
+            method = "tick",
+            at = @At("HEAD")
+    )
+    private void utilitybelt$syncInventoryIfNeeded(CallbackInfo ci) {
+        if (((PlayerEntity) (Object) this) instanceof ServerPlayerEntity serverPlayerEntity) {
+            if (TrinketsUtil.hasUtilityBelt(serverPlayerEntity)) {
+                ItemStack stack = TrinketsUtil.getUtilityBelt(serverPlayerEntity);
+                ((ItemInventoryComponent) UtilityBeltInit.INVENTORY.get(stack)).syncToClientIfDirty(serverPlayerEntity);
+            }
+        }
     }
 }

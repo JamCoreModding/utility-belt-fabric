@@ -24,6 +24,7 @@
 
 package io.github.jamalam360.utility.belt.registry;
 
+import io.github.jamalam360.jamlib.network.JamLibC2SNetworkChannel;
 import io.github.jamalam360.jamlib.network.JamLibS2CNetworkChannel;
 import io.github.jamalam360.utility.belt.Ducks;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
@@ -40,16 +41,22 @@ import net.minecraft.util.Hand;
 public class Networking {
 
     public static final JamLibS2CNetworkChannel SWING_HAND = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("swing_hand"));
-    public static final JamLibS2CNetworkChannel SET_UTILITY_BELT_SELECTED_SLOT = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected_slot"));
+    public static final JamLibS2CNetworkChannel SET_UTILITY_BELT_SELECTED_SLOT_S2C = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected_slot_s2c"));
     public static final JamLibS2CNetworkChannel SYNC_UTILITY_BELT_INVENTORY = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("sync_utility_belt_inventory"));
+    public static final JamLibC2SNetworkChannel SET_UTILITY_BELT_SELECTED = new JamLibC2SNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected"));
+    public static final JamLibC2SNetworkChannel SET_UTILITY_BELT_SELECTED_SLOT_C2S = new JamLibC2SNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected_slot_c2s"));
+    public static final JamLibC2SNetworkChannel OPEN_SCREEN = new JamLibC2SNetworkChannel(UtilityBeltInit.idOf("open_screen"));
 
+    /*
+     * Called server side
+     * */
     public static void setHandlers() {
-        ClientNetworking.SET_UTILITY_BELT_SELECTED_SLOT.setHandler((server, player, handler, buf, responseSender) -> {
+        SET_UTILITY_BELT_SELECTED_SLOT_C2S.setHandler((server, player, handler, buf, responseSender) -> {
             UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player, buf.readInt());
             ((Ducks.LivingEntity) player).updateEquipment();
         });
 
-        ClientNetworking.SET_UTILITY_BELT_SELECTED.setHandler((server, player, handler, buf, responseSender) -> {
+        SET_UTILITY_BELT_SELECTED.setHandler((server, player, handler, buf, responseSender) -> {
             boolean hasSwappedToUtilityBelt = buf.readBoolean();
 
             if (player.isSneaking()) {
@@ -76,7 +83,7 @@ public class Networking {
                                 UtilityBeltItem.update(utilityBelt, utilityBeltInventory);
                                 UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player, utilityBeltSlot);
                                 final int finalUtilityBeltSlot = utilityBeltSlot;
-                                SET_UTILITY_BELT_SELECTED_SLOT.send(player, (resBuf) -> resBuf.writeInt(finalUtilityBeltSlot));
+                                SET_UTILITY_BELT_SELECTED_SLOT_S2C.send(player, (resBuf) -> resBuf.writeInt(finalUtilityBeltSlot));
                             }
                         }
                     } else {
@@ -104,7 +111,7 @@ public class Networking {
             SWING_HAND.send(player);
         });
 
-        ClientNetworking.OPEN_SCREEN.setHandler((server, player, handler, buf, responseSender) -> {
+        OPEN_SCREEN.setHandler((server, player, handler, buf, responseSender) -> {
             if (TrinketsUtil.hasUtilityBelt(player)) {
                 player.openHandledScreen(UtilityBeltScreenHandler.Factory.INSTANCE);
             }

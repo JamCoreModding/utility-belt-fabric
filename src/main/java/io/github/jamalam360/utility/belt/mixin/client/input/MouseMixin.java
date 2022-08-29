@@ -26,7 +26,7 @@ package io.github.jamalam360.utility.belt.mixin.client.input;
 
 import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
 import io.github.jamalam360.utility.belt.config.UtilityBeltConfig;
-import io.github.jamalam360.utility.belt.registry.ClientNetworking;
+import io.github.jamalam360.utility.belt.registry.Networking;
 import net.minecraft.client.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -41,6 +41,21 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(Mouse.class)
 public abstract class MouseMixin {
+    @Unique
+    private static void utilitybelt$onMouseScrollInUtilityBelt(int direction) {
+        if (direction == 1) {
+            UtilityBeltClientInit.utilityBeltSelectedSlot--;
+            if (UtilityBeltClientInit.utilityBeltSelectedSlot < 0) {
+                UtilityBeltClientInit.utilityBeltSelectedSlot = 3;
+            }
+        } else if (direction == -1) {
+            UtilityBeltClientInit.utilityBeltSelectedSlot++;
+            if (UtilityBeltClientInit.utilityBeltSelectedSlot >= 4) {
+                UtilityBeltClientInit.utilityBeltSelectedSlot = 0;
+            }
+        }
+    }
+
     @Inject(
             method = "onMouseScroll",
             at = @At(
@@ -68,25 +83,10 @@ public abstract class MouseMixin {
             }
 
             if (amount != 0) {
-                ClientNetworking.SET_UTILITY_BELT_SELECTED_SLOT.send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));
+                Networking.SET_UTILITY_BELT_SELECTED_SLOT_C2S.send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));
             }
 
             ci.cancel();
-        }
-    }
-
-    @Unique
-    private static void utilitybelt$onMouseScrollInUtilityBelt(int direction) {
-        if (direction == 1) {
-            UtilityBeltClientInit.utilityBeltSelectedSlot--;
-            if (UtilityBeltClientInit.utilityBeltSelectedSlot < 0) {
-                UtilityBeltClientInit.utilityBeltSelectedSlot = 3;
-            }
-        } else if (direction == -1) {
-            UtilityBeltClientInit.utilityBeltSelectedSlot++;
-            if (UtilityBeltClientInit.utilityBeltSelectedSlot >= 4) {
-                UtilityBeltClientInit.utilityBeltSelectedSlot = 0;
-            }
         }
     }
 }

@@ -27,6 +27,7 @@ package io.github.jamalam360.utility.belt.util;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.InventoryChangedListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -35,11 +36,22 @@ import net.minecraft.util.collection.DefaultedList;
 /**
  * @author Jamalam
  */
-public class SimplerInventory implements Inventory {
-    private final DefaultedList<ItemStack> stacks;
+public class SimplerInventory implements Inventory, Cloneable {
+    private DefaultedList<ItemStack> stacks;
+    private InventoryChangedListener listener;
 
     public SimplerInventory(int size) {
         this.stacks = DefaultedList.ofSize(size, ItemStack.EMPTY);
+    }
+
+    public void registerListener(InventoryChangedListener listener) {
+        this.listener = listener;
+    }
+
+    private void updateListener() {
+        if (this.listener != null) {
+            this.listener.onInventoryChanged(this);
+        }
     }
 
     @Override
@@ -63,17 +75,22 @@ public class SimplerInventory implements Inventory {
 
     @Override
     public ItemStack removeStack(int slot, int amount) {
-        return Inventories.splitStack(this.stacks, slot, amount);
+        ItemStack stack = Inventories.splitStack(this.stacks, slot, amount);
+        updateListener();
+        return stack;
     }
 
     @Override
     public ItemStack removeStack(int slot) {
-        return this.stacks.set(slot, ItemStack.EMPTY);
+        ItemStack stack = this.stacks.set(slot, ItemStack.EMPTY);
+        updateListener();
+        return stack;
     }
 
     @Override
     public void setStack(int slot, ItemStack stack) {
         this.stacks.set(slot, stack);
+        updateListener();
     }
 
     @Override
@@ -89,6 +106,7 @@ public class SimplerInventory implements Inventory {
     @Override
     public void clear() {
         this.stacks.clear();
+        updateListener();
     }
 
     public void readNbtList(NbtList nbtList) {
@@ -96,6 +114,8 @@ public class SimplerInventory implements Inventory {
             ItemStack itemStack = ItemStack.fromNbt(nbtList.getCompound(i));
             this.setStack(i, itemStack);
         }
+
+        updateListener();
     }
 
     public NbtList toNbtList() {
@@ -112,5 +132,16 @@ public class SimplerInventory implements Inventory {
     @Override
     public String toString() {
         return "SimplerInventory{" + "stacks=" + this.stacks + '}';
+    }
+
+    @Override
+    public SimplerInventory clone() {
+        try {
+            SimplerInventory clone = (SimplerInventory) super.clone();
+            clone.stacks = DefaultedList.copyOf(ItemStack.EMPTY, this.stacks.toArray(new ItemStack[0]));
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

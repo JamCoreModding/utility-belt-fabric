@@ -48,7 +48,7 @@ import net.minecraft.util.Identifier;
 public class UtilityBeltHotbarRenderer {
     private static final Identifier UTILITY_BELT_WIDGET_TEXTURE = UtilityBeltInit.idOf("textures/gui/utility_belt_widget.png");
 
-    public static void render(MatrixStack matrices, float tickDelta){
+    public static void render(MatrixStack matrices, float tickDelta) {
         PlayerEntity player = MinecraftClient.getInstance().player;
 
         if (player != null && TrinketsUtil.hasUtilityBelt(player) && (UtilityBeltClientInit.hasSwappedToUtilityBelt || UtilityBeltConfig.displayUtilityBeltWhenNotSelected)) {

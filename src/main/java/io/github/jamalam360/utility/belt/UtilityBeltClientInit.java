@@ -28,6 +28,7 @@ import com.mojang.blaze3d.platform.InputUtil;
 import io.github.jamalam360.jamlib.keybind.JamLibKeybinds;
 import io.github.jamalam360.jamlib.network.JamLibClientNetworking;
 import io.github.jamalam360.utility.belt.registry.ClientNetworking;
+import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.registry.ScreenHandlerRegistry;
 import io.github.jamalam360.utility.belt.render.UtilityBeltHotbarRenderer;
 import io.github.jamalam360.utility.belt.screen.UtilityBeltScreen;
@@ -59,7 +60,7 @@ public class UtilityBeltClientInit implements ClientModInitializer {
                 (client) -> {
                     if (TrinketsUtil.hasUtilityBelt(client.player)) {
                         hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
-                        ClientNetworking.SET_UTILITY_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
+                        Networking.SET_UTILITY_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
                     }
                 }
         ));
@@ -71,13 +72,13 @@ public class UtilityBeltClientInit implements ClientModInitializer {
                 (client) -> {
                     if (TrinketsUtil.hasUtilityBelt(client.player)) {
                         hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
-                        ClientNetworking.SET_UTILITY_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
+                        Networking.SET_UTILITY_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
                     }
                 },
                 (client) -> {
                     if (TrinketsUtil.hasUtilityBelt(client.player)) {
                         hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
-                        ClientNetworking.SET_UTILITY_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
+                        Networking.SET_UTILITY_BELT_SELECTED.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
                     }
                 }
         ));
@@ -86,7 +87,7 @@ public class UtilityBeltClientInit implements ClientModInitializer {
                 UtilityBeltInit.MOD_ID,
                 "open_screen",
                 InputUtil.KEY_APOSTROPHE_CODE,
-                (client) -> ClientNetworking.OPEN_SCREEN.send()
+                (client) -> Networking.OPEN_SCREEN.send()
         ));
 
         ClientNetworking.setHandlers();

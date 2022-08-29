@@ -29,15 +29,25 @@
     ],
     "modmenu": [
       "io.github.jamalam360.utility.belt.config.ModMenuScreen"
+    ],
+    "cardinal-components-item": [
+      "io.github.jamalam360.utility.belt.UtilityBeltInit"
     ]
   },
   "mixins": [
     "utilitybelt.mixins.json"
   ],
+  "custom": {
+    "cardinal-components": [
+      "utilitybelt:belt_inventory"
+    ]
+  },
   "depends": {
     "fabricloader": "*",
     "fabric": "*",
     "jamlib": ">=0.4.3",
-    "trinkets": "*"
+    "trinkets": "*",
+    "cardinal-components-base": "*",
+    "cardinal-components-item": "*"
   }
 }

@@ -24,9 +24,7 @@
 
 package io.github.jamalam360.utility.belt.registry;
 
-import io.github.jamalam360.jamlib.network.JamLibC2SNetworkChannel;
 import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
-import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
@@ -38,13 +36,13 @@ import net.minecraft.util.Hand;
  * @author Jamalam
  */
 public class ClientNetworking {
-    public static final JamLibC2SNetworkChannel SET_UTILITY_BELT_SELECTED = new JamLibC2SNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected"));
-    public static final JamLibC2SNetworkChannel SET_UTILITY_BELT_SELECTED_SLOT = new JamLibC2SNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected_slot"));
-    public static final JamLibC2SNetworkChannel OPEN_SCREEN = new JamLibC2SNetworkChannel(UtilityBeltInit.idOf("open_screen"));
+    /*
+     * Called client side
+     * */
 
     public static void setHandlers() {
         Networking.SWING_HAND.setHandler((client, handler, buf, responseSender) -> client.player.swingHand(Hand.MAIN_HAND));
-        Networking.SET_UTILITY_BELT_SELECTED_SLOT.setHandler((client, handler, buf, responseSender) -> UtilityBeltClientInit.utilityBeltSelectedSlot = buf.readInt());
+        Networking.SET_UTILITY_BELT_SELECTED_SLOT_S2C.setHandler((client, handler, buf, responseSender) -> UtilityBeltClientInit.utilityBeltSelectedSlot = buf.readInt());
         Networking.SYNC_UTILITY_BELT_INVENTORY.setHandler((client, handler, buf, responseSender) -> {
             ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(client.player);
 

@@ -46,6 +46,10 @@ public class TrinketsUtil {
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     public static ItemStack getUtilityBelt(PlayerEntity player) {
-        return TrinketsApi.getTrinketComponent(player).get().getEquipped(ItemRegistry.UTILITY_BELT).get(0).getRight();
+        try {
+            return TrinketsApi.getTrinketComponent(player).get().getEquipped(ItemRegistry.UTILITY_BELT).get(0).getRight();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

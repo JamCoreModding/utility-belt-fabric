@@ -28,7 +28,6 @@ import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketItem;
 import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
-import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.minecraft.client.item.TooltipContext;
@@ -39,9 +38,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.*;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
@@ -49,19 +46,55 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Jamalam
  */
 public class UtilityBeltItem extends TrinketItem {
     private static final int ITEM_BAR_COLOR = MathHelper.packRgb(0.4F, 0.4F, 1.0F);
-    private static final Map<ItemStack, SimplerInventory> INVENTORY_CACHE = new HashMap<>();
 
     public UtilityBeltItem(Settings settings) {
         super(settings);
+    }
+
+    public static void playInsertSound(Entity entity) {
+        entity.playSound(SoundEvents.ITEM_BUNDLE_INSERT, 0.8F, 0.8F + entity.getWorld().getRandom().nextFloat() * 0.4F);
+    }
+
+    public static void update(ItemStack stack, SimplerInventory inventory) {
+        ((ItemInventoryComponent) UtilityBeltInit.INVENTORY.get(stack)).onInventoryChanged(inventory);
+    }
+
+    public static SimplerInventory getInventory(ItemStack stack) {
+        return ((ItemInventoryComponent) UtilityBeltInit.INVENTORY.get(stack)).getInventory();
+    }
+
+    public static boolean isValidItem(ItemStack stack) {
+        return stack.getItem() instanceof ToolItem || stack.getItem() instanceof RangedWeaponItem || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof ShearsItem || stack.isEmpty() || stack.isIn(UtilityBeltInit.ALLOWED_IN_UTILITY_BELT);
+    }
+
+    public static ItemStack getSelectedUtilityBeltStack(PlayerEntity player) {
+        boolean selected = false;
+        int selectedSlot = 0;
+
+        if (player.world.isClient) {
+            if (UtilityBeltClientInit.hasSwappedToUtilityBelt) {
+                selected = true;
+                selectedSlot = UtilityBeltClientInit.utilityBeltSelectedSlot;
+            }
+        } else {
+            if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
+                selected = true;
+                selectedSlot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
+            }
+        }
+
+        if (selected && TrinketsUtil.hasUtilityBelt(player)) {
+            return getInventory(TrinketsUtil.getUtilityBelt(player)).getStack(selectedSlot);
+        }
+
+        return null;
     }
 
     @Override
@@ -163,7 +196,6 @@ public class UtilityBeltItem extends TrinketItem {
         }
     }
 
-
     @Override
     public void onUnequip(ItemStack stack, SlotReference slot, LivingEntity entity) {
         if (entity instanceof ClientPlayerEntity) {
@@ -172,7 +204,6 @@ public class UtilityBeltItem extends TrinketItem {
             UtilityBeltInit.UTILITY_BELT_SELECTED.put(player, false);
         }
     }
-
 
     @Override
     public void onItemEntityDestroyed(ItemEntity entity) {
@@ -194,73 +225,5 @@ public class UtilityBeltItem extends TrinketItem {
     @Override
     public int getItemBarColor(ItemStack stack) {
         return ITEM_BAR_COLOR;
-    }
-
-    public static void playInsertSound(Entity entity) {
-        entity.playSound(SoundEvents.ITEM_BUNDLE_INSERT, 0.8F, 0.8F + entity.getWorld().getRandom().nextFloat() * 0.4F);
-    }
-
-    public static void update(ItemStack stack, SimplerInventory inventory) {
-        NbtCompound nbt = stack.getOrCreateNbt();
-        nbt.put("Inventory", inventory.toNbtList());
-        INVENTORY_CACHE.put(stack, inventory);
-
-        Entity holder = stack.getEntityHolder();
-
-        if (holder instanceof PlayerEntity && !holder.world.isClient) {
-            Networking.SYNC_UTILITY_BELT_INVENTORY.send((ServerPlayerEntity) stack.getEntityHolder(), (buf) -> buf.writeNbt(nbt));
-        }
-    }
-
-    public static SimplerInventory getInventory(ItemStack stack) {
-        if (INVENTORY_CACHE.containsKey(stack)) {
-            return INVENTORY_CACHE.get(stack);
-        }
-
-        NbtCompound nbt = stack.getOrCreateNbt();
-        SimplerInventory inventory = new SimplerInventory(4);
-
-        if (nbt.contains("Inventory")) {
-            inventory.readNbtList(nbt.getList("Inventory", 10));
-        } else {
-            nbt.put("Inventory", inventory.toNbtList());
-        }
-
-        INVENTORY_CACHE.put(stack, inventory);
-
-        return inventory;
-    }
-
-    public static boolean isValidItem(ItemStack stack) {
-        return stack.getItem() instanceof ToolItem || stack.getItem() instanceof RangedWeaponItem || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof ShearsItem || stack.isEmpty() || stack.isIn(UtilityBeltInit.ALLOWED_IN_UTILITY_BELT);
-    }
-
-    public static ItemStack getSelectedUtilityBeltStack(PlayerEntity player) {
-        boolean selected = false;
-        int selectedSlot = 0;
-
-        if (player.world.isClient) {
-            if (UtilityBeltClientInit.hasSwappedToUtilityBelt) {
-                selected = true;
-                selectedSlot = UtilityBeltClientInit.utilityBeltSelectedSlot;
-            }
-        } else {
-            if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
-                selected = true;
-                selectedSlot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
-            }
-        }
-
-        if (selected && TrinketsUtil.hasUtilityBelt(player)) {
-            ItemStack stack = TrinketsUtil.getUtilityBelt(player);
-
-            if (INVENTORY_CACHE.containsKey(stack)) {
-                return INVENTORY_CACHE.get(TrinketsUtil.getUtilityBelt(player)).getStack(selectedSlot);
-            } else {
-                return getInventory(TrinketsUtil.getUtilityBelt(player)).getStack(selectedSlot);
-            }
-        }
-
-        return null;
     }
 }
