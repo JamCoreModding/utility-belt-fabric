@@ -1,9 +1,14 @@
 ## Changelog
 
+### Features
+
+- Add a new config option to allow you to change the behaviour when using hotbar keys in the belt.
+- Use JamLib mouse callbacks.
+
 ### Fixes
 
-- `allow_in_utility_belt` tag has extra `_belt` in file name (#11).
+- Attempt to fix a mysterious `ArrayIndexOutOfBoundsException`. (#13, #14)
 
-Closed issues: #11.
+Closed issues: #12, #13, #14.
 
-[Full Changelog](https://github.com/JamCoreModding/UtilityBelt/compare/1.1.0...1.1.1)
+[Full Changelog](https://github.com/JamCoreModding/UtilityBelt/compare/1.1.1...1.1.2)
