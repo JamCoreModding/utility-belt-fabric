@@ -10,7 +10,6 @@
   "client": [
     "client.ClientPlayerEntityMixin",
     "client.MinecraftClientMixin",
-    "client.input.MouseMixin",
     "client.render.InGameHudMixin"
   ],
   "server": [],

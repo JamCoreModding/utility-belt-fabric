@@ -25,8 +25,10 @@
 package io.github.jamalam360.utility.belt;
 
 import com.mojang.blaze3d.platform.InputUtil;
+import io.github.jamalam360.jamlib.event.client.MouseScrollCallback;
 import io.github.jamalam360.jamlib.keybind.JamLibKeybinds;
 import io.github.jamalam360.jamlib.network.JamLibClientNetworking;
+import io.github.jamalam360.utility.belt.config.UtilityBeltConfig;
 import io.github.jamalam360.utility.belt.registry.ClientNetworking;
 import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.registry.ScreenHandlerRegistry;
@@ -35,6 +37,7 @@ import io.github.jamalam360.utility.belt.screen.UtilityBeltScreen;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBind;
 
@@ -93,7 +96,48 @@ public class UtilityBeltClientInit implements ClientModInitializer {
                 (client) -> Networking.OPEN_SCREEN.send()
         ));
 
+        MouseScrollCallback.EVENT.register((mouseX, mouseY, amount) -> {
+            if (UtilityBeltClientInit.hasSwappedToUtilityBelt) {
+                if (amount > 0) {
+                    if (!UtilityBeltConfig.isScrollingInverted) {
+                        onMouseScrollInUtilityBelt(1);
+                    } else {
+                        onMouseScrollInUtilityBelt(-1);
+                    }
+                } else if (amount < 0) {
+                    if (!UtilityBeltConfig.isScrollingInverted) {
+                        onMouseScrollInUtilityBelt(-1);
+                    } else {
+                        onMouseScrollInUtilityBelt(1);
+                    }
+                }
+
+                if (amount != 0) {
+                    Networking.SET_UTILITY_BELT_SELECTED_SLOT_C2S.send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));
+                    UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(MinecraftClient.getInstance().player, UtilityBeltClientInit.utilityBeltSelectedSlot);
+                }
+
+                return true;
+            }
+
+            return false;
+        });
+
         ClientNetworking.setHandlers();
         JamLibClientNetworking.registerHandlers(UtilityBeltInit.MOD_ID);
+    }
+
+    private static void onMouseScrollInUtilityBelt(int direction) {
+        if (direction == 1) {
+            UtilityBeltClientInit.utilityBeltSelectedSlot--;
+            if (UtilityBeltClientInit.utilityBeltSelectedSlot < 0) {
+                UtilityBeltClientInit.utilityBeltSelectedSlot = 3;
+            }
+        } else if (direction == -1) {
+            UtilityBeltClientInit.utilityBeltSelectedSlot++;
+            if (UtilityBeltClientInit.utilityBeltSelectedSlot >= 4) {
+                UtilityBeltClientInit.utilityBeltSelectedSlot = 0;
+            }
+        }
     }
 }

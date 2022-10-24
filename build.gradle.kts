@@ -1,6 +1,5 @@
 plugins {
     id("fabric-loom") version "1.0-SNAPSHOT"
-    id("org.quiltmc.quilt-mappings-on-loom") version "4.2.0"
     id("io.github.juuxel.loom-quiltflower") version "1.7.+"
     id("io.github.p03w.machete") version "1.+"
     id("org.cadixdev.licenser") version "0.6.1"
@@ -25,6 +24,7 @@ repositories {
         Pair("https://maven.jamalam.tech/releases", listOf("io.github.jamalam360")),
         Pair("https://jitpack.io/", listOf("com.github.LlamaLad7")),
         Pair("https://ladysnake.jfrog.io/artifactory/mods", listOf("dev.onyxstudios.cardinal-components-api")),
+        Pair("https://maven.quiltmc.org/repository/release", listOf("org.quiltmc")),
     )
 
     for (mavenPair in mavenUrls) {
@@ -41,17 +41,15 @@ repositories {
 
 dependencies {
     minecraft(libs.minecraft)
-    mappings(loom.layered {
-        addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:${libs.versions.minecraft.get()}+build.${libs.versions.mappings.build.get()}:v2"))
-    })
+    mappings(variantOf(libs.quilt.mappings) { classifier("intermediary-v2") })
 
     modImplementation(libs.bundles.fabric)
     modImplementation(libs.bundles.required)
     modImplementation(libs.bundles.optional)
     modImplementation(libs.bundles.runtime)
 
-    include(libs.required.mixin.extras)
-    annotationProcessor(libs.required.mixin.extras)
+    include(libs.mixin.extras)
+    annotationProcessor(libs.mixin.extras)
 }
 
 sourceSets {
