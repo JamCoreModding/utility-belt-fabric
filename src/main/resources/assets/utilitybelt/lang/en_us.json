@@ -6,6 +6,9 @@
   "key.utilitybelt.open_screen": "Open Utility Belt GUI",
   "utilitybelt.jamlibconfig.isScrollingInverted": "Invert Scrolling",
   "utilitybelt.jamlibconfig.displayUtilityBeltWhenNotSelected": "Show Utility Belt Hotbar when not Selected",
+  "utilitybelt.jamlibconfig.hotbarKeyBehaviour": "Hotbar Key Behaviour While in Belt",
+  "utilitybelt.jamlibconfig.enum.HotbarKeyBehaviour.SWITCH_BACK_TO_HOTBAR": "Switch Back",
+  "utilitybelt.jamlibconfig.enum.HotbarKeyBehaviour.SWITCH_BELT_SLOT": "Switch Belt Slot",
   "utilitybelt.advancements.utility_belt.title": "Utility Belt",
   "utilitybelt.advancements.utility_belt.description": "Craft a utility belt to store your weapons and tools."
 }

@@ -1,6 +1,6 @@
 plugins {
     id("fabric-loom") version "1.0-SNAPSHOT"
-    id("io.github.juuxel.loom-quiltflower") version "1.7.+"
+    id("io.github.juuxel.loom-quiltflower") version "1.+"
     id("io.github.p03w.machete") version "1.+"
     id("org.cadixdev.licenser") version "0.6.1"
 }
@@ -25,6 +25,7 @@ repositories {
         Pair("https://jitpack.io/", listOf("com.github.LlamaLad7")),
         Pair("https://ladysnake.jfrog.io/artifactory/mods", listOf("dev.onyxstudios.cardinal-components-api")),
         Pair("https://maven.quiltmc.org/repository/release", listOf("org.quiltmc")),
+        Pair("https://maven.quiltmc.org/repository/snapshot", listOf("org.quiltmc", "org.quiltmc.unpick")),
     )
 
     for (mavenPair in mavenUrls) {

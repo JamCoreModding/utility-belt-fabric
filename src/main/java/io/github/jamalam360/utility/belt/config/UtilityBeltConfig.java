@@ -35,4 +35,12 @@ public class UtilityBeltConfig extends JamLibConfig {
 
     @Entry
     public static boolean displayUtilityBeltWhenNotSelected = true;
+
+    @Entry
+    public static HotbarKeyBehaviour hotbarKeyBehaviour = HotbarKeyBehaviour.SWITCH_BELT_SLOT;
+
+    public enum HotbarKeyBehaviour {
+        SWITCH_BACK_TO_HOTBAR,
+        SWITCH_BELT_SLOT
+    }
 }
