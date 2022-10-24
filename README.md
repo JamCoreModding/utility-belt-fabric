@@ -45,3 +45,7 @@ To insert items into the utility belt, use one of the following methods:
 If you are a modpack creator wishing to modify the list of tools that can be inserted into the utility belt, you may use
 the `allow_in_utility_belt` item tag. Hopefully this will be a rare case, as compatibility with other mods should be
 automatic ([report it](https://github.com/JamCoreModding/UtilityBelt/issues/new) if you think something's missing!).
+
+## Showcases
+
+- [KeyDevy](https://www.youtube.com/watch?v=xLFoTJpR_h8)
