@@ -55,8 +55,12 @@ public class Networking {
      * */
     public static void setHandlers() {
         SET_UTILITY_BELT_SELECTED_SLOT_C2S.setHandler((server, player, handler, buf, responseSender) -> {
-            UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player, buf.readInt());
-            ((Ducks.LivingEntity) player).updateEquipment();
+            int slot = buf.readInt();
+
+            if (slot > 0 && slot < 4) {
+                UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player, slot);
+                ((Ducks.LivingEntity) player).updateEquipment();
+            }
         });
 
         SET_UTILITY_BELT_SELECTED_C2S.setHandler((server, player, handler, buf, responseSender) -> {

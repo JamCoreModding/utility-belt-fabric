@@ -76,7 +76,7 @@ public abstract class MinecraftClientMixin {
     )
     private boolean utilitybelt$hijackHotbarKeys(KeyBind instance) {
         boolean wasPressed = instance.wasPressed();
-        
+
         if (wasPressed && UtilityBeltClientInit.hasSwappedToUtilityBelt && TrinketsUtil.hasUtilityBelt(this.player)) {
             switch (UtilityBeltConfig.hotbarKeyBehaviour) {
                 case SWITCH_BACK_TO_HOTBAR -> {
