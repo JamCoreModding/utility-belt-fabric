@@ -2,7 +2,8 @@
 
 _Free your hotbar._
 
-Utility Belt is a mod for the Fabric & Quilt mod loaders that allows you to clean up valuable hotbar space.
+Utility Belt is a mod for the Fabric & Quilt mod loaders that allows you to clean up valuable hotbar space. It is
+similar to the Tool Belt mod for Forge.
 
 ![Demo GIF](https://github.com/JamCoreModding/UtilityBelt/blob/1.19.x/readme-assets/demo_one.gif?raw=true)
 
