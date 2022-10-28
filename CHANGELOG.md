@@ -1,9 +1,11 @@
 ## Changelog
 
-### Features
+Small update, but a critical bug fix to prevent people losing their items :)
 
 ### Fixes
 
-Closed issues: None.
+- Tools breaking in the offhand slot no longer breaks the tool selected in the belt.
 
-[Full Changelog](https://github.com/JamCoreModding/UtilityBelt/compare/...)
+Closed issues: #15.
+
+[Full Changelog](https://github.com/JamCoreModding/UtilityBelt/compare/1.1.2...1.1.3)
