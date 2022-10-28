@@ -24,6 +24,7 @@
 
 package io.github.jamalam360.utility.belt.screen;
 
+import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
 import io.github.jamalam360.utility.belt.registry.ScreenHandlerRegistry;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
@@ -45,18 +46,18 @@ public class UtilityBeltScreenHandler extends ScreenHandler {
     private final SimplerInventory inventory;
 
     public UtilityBeltScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimplerInventory(4));
+        this(syncId, playerInventory, new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE));
     }
 
     public UtilityBeltScreenHandler(int syncId, PlayerInventory playerInventory, SimplerInventory inventory) {
         super(ScreenHandlerRegistry.SCREEN_HANDLER, syncId);
-        checkSize(inventory, 4);
+        checkSize(inventory, UtilityBeltInit.UTILITY_BELT_SIZE);
         this.inventory = inventory;
 
         int m;
         int l;
 
-        for (l = 0; l < 4; ++l) {
+        for (l = 0; l < UtilityBeltInit.UTILITY_BELT_SIZE; ++l) {
             this.addSlot(new Slot(inventory, l, 53 + l * 18, 17) {
                 @Override
                 public boolean canInsert(ItemStack stack) {

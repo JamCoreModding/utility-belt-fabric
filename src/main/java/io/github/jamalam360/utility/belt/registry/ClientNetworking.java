@@ -25,6 +25,7 @@
 package io.github.jamalam360.utility.belt.registry;
 
 import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
+import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
@@ -48,7 +49,7 @@ public class ClientNetworking {
             ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(client.player);
 
             if (utilityBelt != null) {
-                SimplerInventory inv = new SimplerInventory(4);
+                SimplerInventory inv = new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE);
                 NbtCompound comp = buf.readNbt();
                 inv.readNbtList(comp.getList("Inventory", 10));
                 UtilityBeltItem.update(utilityBelt, inv);

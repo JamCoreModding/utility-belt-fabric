@@ -25,6 +25,7 @@
 package io.github.jamalam360.utility.belt.item;
 
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
+import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import net.fabricmc.fabric.api.util.NbtType;
@@ -50,9 +51,9 @@ public class ItemInventoryComponent extends ItemComponent implements InventoryCo
     @Override
     public SimplerInventory getInventory() {
         if (cachedValue == null) {
-            if (!this.hasTag(INVENTORY, NbtType.LIST)) this.putList(INVENTORY, new SimplerInventory(4).toNbtList());
+            if (!this.hasTag(INVENTORY, NbtType.LIST)) this.putList(INVENTORY, new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE).toNbtList());
             NbtList list = this.getList(INVENTORY, NbtType.COMPOUND);
-            SimplerInventory inv = new SimplerInventory(4);
+            SimplerInventory inv = new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE);
             inv.readNbtList(list);
             cachedValue = inv;
             inv.registerListener(this::onInventoryChanged);

@@ -61,6 +61,10 @@ public class UtilityBeltInit implements ModInitializer, ItemComponentInitializer
     @SuppressWarnings("rawtypes")
     public static final ComponentKey<InventoryComponent> INVENTORY =
             ComponentRegistry.getOrCreate(idOf("belt_inventory"), InventoryComponent.class);
+    /*
+    * We use this now to aid with un-hardcoding in case issue #2 is ever tackled.
+    */
+    public static final int UTILITY_BELT_SIZE = 4;
 
     public static Identifier idOf(String path) {
         return new Identifier(MOD_ID, path);

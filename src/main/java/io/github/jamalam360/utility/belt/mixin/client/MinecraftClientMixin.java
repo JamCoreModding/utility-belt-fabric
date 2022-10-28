@@ -85,7 +85,7 @@ public abstract class MinecraftClientMixin {
                     Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(false));
                 }
                 case SWITCH_BELT_SLOT -> {
-                    for (int i = 0; i < 4; i++) {
+                    for (int i = 0; i < UtilityBeltInit.UTILITY_BELT_SIZE; i++) {
                         if (this.options.hotbarKeys[i] == instance) {
                             UtilityBeltClientInit.utilityBeltSelectedSlot = i;
                             Networking.SET_UTILITY_BELT_SELECTED_SLOT_C2S.send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));

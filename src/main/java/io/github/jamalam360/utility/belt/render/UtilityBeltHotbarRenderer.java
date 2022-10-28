@@ -75,7 +75,7 @@ public class UtilityBeltHotbarRenderer {
 
                 SimplerInventory inv = UtilityBeltItem.getInventory(component.getEquipped(ItemRegistry.UTILITY_BELT).get(0).getRight());
 
-                for (int n = 0; n < 4; ++n) {
+                for (int n = 0; n < UtilityBeltInit.UTILITY_BELT_SIZE; ++n) {
                     renderHotbarItem(scaledHeight / 2 - 45 + n * 20 + 4, tickDelta, player, inv.getStack(n), m++);
                 }
 

@@ -135,7 +135,7 @@ public class UtilityBeltClientInit implements ClientModInitializer {
             }
         } else if (direction == -1) {
             UtilityBeltClientInit.utilityBeltSelectedSlot++;
-            if (UtilityBeltClientInit.utilityBeltSelectedSlot >= 4) {
+            if (UtilityBeltClientInit.utilityBeltSelectedSlot >= UtilityBeltInit.UTILITY_BELT_SIZE) {
                 UtilityBeltClientInit.utilityBeltSelectedSlot = 0;
             }
         }

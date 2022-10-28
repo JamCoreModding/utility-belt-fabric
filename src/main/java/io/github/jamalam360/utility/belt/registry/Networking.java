@@ -57,7 +57,7 @@ public class Networking {
         SET_UTILITY_BELT_SELECTED_SLOT_C2S.setHandler((server, player, handler, buf, responseSender) -> {
             int slot = buf.readInt();
 
-            if (slot > 0 && slot < 4) {
+            if (slot > 0 && slot < UtilityBeltInit.UTILITY_BELT_SIZE) {
                 UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player, slot);
                 ((Ducks.LivingEntity) player).updateEquipment();
             }
