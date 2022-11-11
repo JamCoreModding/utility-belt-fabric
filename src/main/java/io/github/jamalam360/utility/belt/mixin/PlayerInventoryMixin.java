@@ -26,27 +26,37 @@ package io.github.jamalam360.utility.belt.mixin;
 
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
+import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.RecipeMatcher;
+import net.minecraft.tag.TagKey;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+//TODO: Try patch PlayerInventory.combinedInventories to include Utility Belt inventory.
 
 /**
  * @author Jamalam
  */
-
 @Mixin(PlayerInventory.class)
 public abstract class PlayerInventoryMixin {
     @Shadow
     @Final
     public PlayerEntity player;
+
+    @Shadow
+    public int selectedSlot;
 
     @Inject(
             method = "getBlockBreakingSpeed",
@@ -76,6 +86,194 @@ public abstract class PlayerInventoryMixin {
 
         if (stack != null) {
             cir.setReturnValue(stack);
+        }
+    }
+
+    /**
+     * This fixes cases like tridents not being removed from the belt when thrown
+     */
+    @Inject(
+            method = "removeOne",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void utilitybelt$patchRemoveOneForHeldItems(ItemStack stack, CallbackInfo ci) {
+        if (TrinketsUtil.hasUtilityBelt(this.player)) {
+            ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
+            SimplerInventory inv = UtilityBeltItem.getInventory(belt);
+            int found = -1;
+
+            for (int i = 0; i < inv.size(); i++) {
+                if (ItemStack.areEqual(stack, inv.getStack(i))) {
+                    found = i;
+                    break;
+                }
+            }
+
+            if (found != -1) {
+                inv.setStack(found, ItemStack.EMPTY);
+                UtilityBeltItem.update(belt, inv);
+                ci.cancel();
+            }
+        }
+    }
+
+    @Inject(
+            method = "populateRecipeFinder",
+            at = @At("HEAD")
+    )
+    private void utilitybelt$recipeFinderPatch(RecipeMatcher finder, CallbackInfo ci) {
+        if (TrinketsUtil.hasUtilityBelt(this.player)) {
+            ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
+            SimplerInventory inv = UtilityBeltItem.getInventory(belt);
+
+            for (int i = 0; i < inv.size(); i++) {
+                finder.addUnenchantedInput(inv.getStack(i));
+            }
+        }
+    }
+
+    @ModifyArg(
+            method = "dropSelectedItem",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/player/PlayerInventory;removeStack(II)Lnet/minecraft/item/ItemStack;"
+            ),
+            index = 0
+    )
+    private int utilitybelt$dropSelectedUtilityBeltItem(int slot) {
+        if (TrinketsUtil.hasUtilityBelt(this.player)) {
+            return UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false) ?
+                    UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0) : slot;
+        }
+
+        return slot;
+    }
+
+    @Inject(
+            method = "dropSelectedItem",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void utilitybelt$dropStackIfUsingUtilityBelt(boolean entireStack, CallbackInfoReturnable<ItemStack> cir) {
+        if (TrinketsUtil.hasUtilityBelt(this.player)) {
+            if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
+                int slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
+                ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
+                SimplerInventory inv = UtilityBeltItem.getInventory(belt);
+                ItemStack removed = inv.removeStack(slot);
+                UtilityBeltItem.update(belt, inv);
+
+                cir.setReturnValue(removed);
+            }
+        }
+    }
+
+    @Inject(
+            method = "clear",
+            at = @At("HEAD")
+    )
+    private void utilitybelt$clearUtilityBelt(CallbackInfo ci) {
+        if (TrinketsUtil.hasUtilityBelt(this.player)) {
+            ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
+            SimplerInventory inv = UtilityBeltItem.getInventory(belt);
+            inv.clear();
+            UtilityBeltItem.update(belt, inv);
+        }
+    }
+
+    @Inject(
+            method = "contains(Lnet/minecraft/item/ItemStack;)Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void utilitybelt$patchContainsStack(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+        if (TrinketsUtil.hasUtilityBelt(this.player)) {
+            ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
+            SimplerInventory inv = UtilityBeltItem.getInventory(belt);
+
+            for (int i = 0; i < inv.size(); i++) {
+                if (!inv.getStack(i).isEmpty() && inv.getStack(i).isItemEqualIgnoreDamage(stack)) {
+                    cir.setReturnValue(true);
+                }
+            }
+        }
+    }
+
+    @Inject(
+            method = "contains(Lnet/minecraft/tag/TagKey;)Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void utilitybelt$patchContainsStack(TagKey<Item> key, CallbackInfoReturnable<Boolean> cir) {
+        if (TrinketsUtil.hasUtilityBelt(this.player)) {
+            ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
+            SimplerInventory inv = UtilityBeltItem.getInventory(belt);
+
+            for (int i = 0; i < inv.size(); i++) {
+                if (!inv.getStack(i).isEmpty() && inv.getStack(i).isIn(key)) {
+                    cir.setReturnValue(true);
+                }
+            }
+        }
+    }
+
+    @Inject(
+            method = "dropAll",
+            at = @At("HEAD")
+    )
+    private void utilitybelt$dropAllFromUtilityBelt(CallbackInfo ci) {
+        if (TrinketsUtil.hasUtilityBelt(this.player)) {
+            ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
+            SimplerInventory inv = UtilityBeltItem.getInventory(belt);
+
+            for (int i = 0; i < inv.size(); i++) {
+                ItemStack itemStack = inv.getStack(i);
+                if (!itemStack.isEmpty()) {
+                    this.player.dropItem(itemStack, true, false);
+                    inv.setStack(i, ItemStack.EMPTY);
+                }
+            }
+
+            UtilityBeltItem.update(belt, inv);
+        }
+    }
+
+    @Inject(
+            method = "isEmpty",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void utilitybelt$patchIsEmpty(CallbackInfoReturnable<Boolean> cir) {
+        if (TrinketsUtil.hasUtilityBelt(this.player)) {
+            ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
+            SimplerInventory inv = UtilityBeltItem.getInventory(belt);
+
+            for (int i = 0; i < inv.size(); i++) {
+                if (!inv.getStack(i).isEmpty()) {
+                    cir.setReturnValue(false);
+                }
+            }
+        }
+    }
+
+    @Inject(
+            method = "updateItems",
+            at = @At("HEAD")
+    )
+    private void utilitybelt$doInventoryTick(CallbackInfo ci) {
+        if (TrinketsUtil.hasUtilityBelt(this.player)) {
+            ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
+            SimplerInventory inv = UtilityBeltItem.getInventory(belt);
+
+            int selected = UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(this.player, false) ? UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(this.player, 0) : selectedSlot;
+
+            for (int i = 0; i < inv.size(); i++) {
+                ItemStack itemStack = inv.getStack(i);
+                if (!itemStack.isEmpty()) {
+                    itemStack.inventoryTick(this.player.world, this.player, i, selected == i);
+                }
+            }
         }
     }
 }

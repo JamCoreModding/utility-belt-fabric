@@ -42,7 +42,6 @@ import io.github.jamalam360.utility.belt.registry.TrinketsBehaviours;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.tag.TagKey;
@@ -62,8 +61,8 @@ public class UtilityBeltInit implements ModInitializer, ItemComponentInitializer
     public static final ComponentKey<InventoryComponent> INVENTORY =
             ComponentRegistry.getOrCreate(idOf("belt_inventory"), InventoryComponent.class);
     /*
-    * We use this now to aid with un-hardcoding in case issue #2 is ever tackled.
-    */
+     * We use this now to aid with un-hardcoding in case issue #2 is ever tackled.
+     */
     public static final int UTILITY_BELT_SIZE = 4;
 
     public static Identifier idOf(String path) {
