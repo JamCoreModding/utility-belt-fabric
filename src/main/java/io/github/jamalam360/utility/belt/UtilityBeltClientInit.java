@@ -25,21 +25,27 @@
 package io.github.jamalam360.utility.belt;
 
 import com.mojang.blaze3d.platform.InputUtil;
+import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 import io.github.jamalam360.jamlib.event.client.MouseScrollCallback;
 import io.github.jamalam360.jamlib.keybind.JamLibKeybinds;
 import io.github.jamalam360.jamlib.network.JamLibClientNetworking;
+import io.github.jamalam360.utility.belt.client.BeltModel;
+import io.github.jamalam360.utility.belt.client.BeltRenderer;
 import io.github.jamalam360.utility.belt.config.UtilityBeltConfig;
 import io.github.jamalam360.utility.belt.registry.ClientNetworking;
+import io.github.jamalam360.utility.belt.registry.ItemRegistry;
 import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.registry.ScreenHandlerRegistry;
 import io.github.jamalam360.utility.belt.render.UtilityBeltHotbarRenderer;
 import io.github.jamalam360.utility.belt.screen.UtilityBeltScreen;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBind;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
 
 /**
  * @author Jamalam
@@ -50,9 +56,12 @@ public class UtilityBeltClientInit implements ClientModInitializer {
     public static KeyBind SWAP_KEYBIND_TOGGLE;
     public static KeyBind SWAP_KEYBIND_HOLD;
     public static KeyBind OPEN_SCREEN_KEYBIND;
+    public static final EntityModelLayer BELT_LAYER = new EntityModelLayer(UtilityBeltInit.idOf("belt"), "main");
 
     @Override
     public void onInitializeClient() {
+        TrinketRendererRegistry.registerRenderer(ItemRegistry.UTILITY_BELT, new BeltRenderer());
+        EntityModelLayerRegistry.registerModelLayer(BELT_LAYER, BeltModel::createTexturedModelData);
         HudRenderCallback.EVENT.register(UtilityBeltHotbarRenderer::render);
         HandledScreens.register(ScreenHandlerRegistry.SCREEN_HANDLER, UtilityBeltScreen::new);
 
