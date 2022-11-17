@@ -25,8 +25,6 @@
 package io.github.jamalam360.utility.belt.client;
 
 // Made with Blockbench 4.3.1
-// Exported for Minecraft version 1.17 - 1.18 with Mojang mappings
-// Paste this class into your mod and generate all required imports
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.BipedEntityModel;

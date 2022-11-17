@@ -46,6 +46,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.sound.SoundEvents;
 
 /**
  * @author Jamalam
@@ -74,6 +76,7 @@ public class UtilityBeltClientInit implements ClientModInitializer {
                         hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
                         UtilityBeltInit.UTILITY_BELT_SELECTED.put(client.player, hasSwappedToUtilityBelt);
                         Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
+                        playSwapNoise();
                     }
                 }
         ));
@@ -87,6 +90,7 @@ public class UtilityBeltClientInit implements ClientModInitializer {
                         hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
                         UtilityBeltInit.UTILITY_BELT_SELECTED.put(client.player, hasSwappedToUtilityBelt);
                         Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
+                        playSwapNoise();
                     }
                 },
                 (client) -> {
@@ -94,6 +98,7 @@ public class UtilityBeltClientInit implements ClientModInitializer {
                         hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
                         UtilityBeltInit.UTILITY_BELT_SELECTED.put(client.player, hasSwappedToUtilityBelt);
                         Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
+                        playSwapNoise();
                     }
                 }
         ));
@@ -124,6 +129,7 @@ public class UtilityBeltClientInit implements ClientModInitializer {
                 if (amount != 0) {
                     Networking.SET_UTILITY_BELT_SELECTED_SLOT_C2S.send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));
                     UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(MinecraftClient.getInstance().player, UtilityBeltClientInit.utilityBeltSelectedSlot);
+                    playSwapNoise();
                 }
 
                 return true;
@@ -148,5 +154,9 @@ public class UtilityBeltClientInit implements ClientModInitializer {
                 UtilityBeltClientInit.utilityBeltSelectedSlot = 0;
             }
         }
+    }
+
+    private static void playSwapNoise() {
+        MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, MinecraftClient.getInstance().world.random.nextFloat() + 0.50f));
     }
 }
