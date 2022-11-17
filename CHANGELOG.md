@@ -7,6 +7,8 @@
 
 ### Fixes
 
+- Update README assets to be compressed, and have newer textures for the crafting grid image. 
+
 Closed issues: #3.
 
 [Full Changelog](https://github.com/JamCoreModding/UtilityBelt/compare/...)
