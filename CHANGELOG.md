@@ -11,4 +11,4 @@
 
 Closed issues: #3.
 
-[Full Changelog](https://github.com/JamCoreModding/UtilityBelt/compare/...)
+[Full Changelog](https://github.com/JamCoreModding/UtilityBelt/compare/1.1.4...1.2.0)

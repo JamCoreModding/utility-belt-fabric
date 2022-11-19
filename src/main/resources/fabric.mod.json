@@ -13,11 +13,11 @@
     "supersaiyansubtlety - Tester"
   ],
   "contact": {
-    "sources": "https://github.com/JamCoreModding/UtilityBelt",
-    "issues": "https://github.com/JamCoreModding/UtilityBelt/issues"
+    "sources": "https://github.com/JamCoreModding/utility-belt",
+    "issues": "https://github.com/JamCoreModding/utility-belt/issues"
   },
   "license": "MIT",
-  "icon": "assets/utilitybelt/textures/item/utility_belt.png",
+  "icon": "assets/utilitybelt/icon.png",
   "accessWidener": "utilitybelt.accesswidener",
   "environment": "*",
   "entrypoints": {
