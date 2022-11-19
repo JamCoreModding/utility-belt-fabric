@@ -1,0 +1,15 @@
+{
+    "item.utilitybelt.utility_belt": "Cinto de utilidades",
+    "key.category.utilitybelt": "Cinto de utilidades",
+    "key.utilitybelt.quick_switch_toggle": "Troca rápida (alternar)",
+    "key.utilitybelt.quick_switch_hold": "Troca Rápida (Mantenha pressionado)",
+    "key.utilitybelt.open_screen": "Abrir GUI do cinto de utilidades",
+    "utilitybelt.jamlibconfig.isScrollingInverted": "Rolagem invertida",
+    "utilitybelt.jamlibconfig.displayUtilityBeltWhenNotSelected": "Mostrar barra de atalhos do cinto de utilidades quando não selecionado",
+    "utilitybelt.jamlibconfig.hotbarKeyBehaviour": "Comportamento da tecla Hotbar enquanto estiver no cinto",
+    "utilitybelt.jamlibconfig.enum.HotbarKeyBehaviour.SWITCH_BACK_TO_HOTBAR": "Alterar para trás",
+    "utilitybelt.jamlibconfig.enum.HotbarKeyBehaviour.SWITCH_BELT_SLOT": "Alterar Slot do Cinto",
+    "utilitybelt.advancements.utility_belt.title": "Cinto de utilidades",
+    "utilitybelt.advancements.utility_belt.description": "Crie um cinto de utilidades para guardar suas armas e ferramentas."
+  }
+  
