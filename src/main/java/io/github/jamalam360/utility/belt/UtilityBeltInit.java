@@ -41,28 +41,25 @@ import io.github.jamalam360.utility.belt.registry.ScreenHandlerRegistry;
 import io.github.jamalam360.utility.belt.registry.TrinketsBehaviours;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
+import java.util.Map;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-
-import java.util.Map;
 
 public class UtilityBeltInit implements ModInitializer, ItemComponentInitializer {
+
     public static final String MOD_ID = "utilitybelt";
     public static final JamLibLogger LOGGER = JamLibLogger.getLogger(MOD_ID);
 
     public static final Map<PlayerEntity, Boolean> UTILITY_BELT_SELECTED = new Object2BooleanArrayMap<>();
     public static final Map<PlayerEntity, Integer> UTILITY_BELT_SELECTED_SLOTS = new Object2IntArrayMap<>();
-    public static final TagKey<Item> ALLOWED_IN_UTILITY_BELT = TagKey.of(Registry.ITEM_KEY, idOf("allowed_in_utility_belt"));
+    public static final TagKey<Item> ALLOWED_IN_UTILITY_BELT = TagKey.of(Registries.ITEM.getKey(), idOf("allowed_in_utility_belt"));
     @SuppressWarnings("rawtypes")
     public static final ComponentKey<InventoryComponent> INVENTORY =
-            ComponentRegistry.getOrCreate(idOf("belt_inventory"), InventoryComponent.class);
-    /*
-     * We use this now to aid with un-hardcoding in case issue #2 is ever tackled.
-     */
+          ComponentRegistry.getOrCreate(idOf("belt_inventory"), InventoryComponent.class);
     public static final int UTILITY_BELT_SIZE = 4;
 
     public static Identifier idOf(String path) {

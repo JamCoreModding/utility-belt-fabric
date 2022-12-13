@@ -24,17 +24,25 @@
 
 package io.github.jamalam360.utility.belt.registry;
 
+import io.github.jamalam360.jamlib.registry.JamLibContentRegistry;
 import io.github.jamalam360.jamlib.registry.annotation.ContentRegistry;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
 
 /**
  * @author Jamalam
  */
 
 @ContentRegistry(UtilityBeltInit.MOD_ID)
-public class ItemRegistry {
-    public static final Item UTILITY_BELT = new UtilityBeltItem(new Item.Settings().group(ItemGroup.TOOLS).maxCount(1));
+public class ItemRegistry implements JamLibContentRegistry {
+    public static final Item UTILITY_BELT = new UtilityBeltItem(new Item.Settings().maxCount(1));
+
+    @Override
+    public ItemGroup getItemGroup(Item item) {
+        return ItemGroups.TOOLS;
+    }
 }

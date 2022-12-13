@@ -45,7 +45,7 @@
   "depends": {
     "fabricloader": "*",
     "fabric": "*",
-    "jamlib": ">=0.5.0",
+    "jamlib": ">=0.5.2",
     "trinkets": "*",
     "cardinal-components-base": "*",
     "cardinal-components-item": "*"

@@ -34,7 +34,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeMatcher;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.tag.TagKey;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -201,7 +201,7 @@ public abstract class PlayerInventoryMixin {
     }
 
     @Inject(
-            method = "contains(Lnet/minecraft/tag/TagKey;)Z",
+            method = "contains(Lnet/minecraft/registry/tag/TagKey;)Z",
             at = @At("HEAD"),
             cancellable = true
     )
