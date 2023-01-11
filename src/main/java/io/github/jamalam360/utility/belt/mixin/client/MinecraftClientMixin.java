@@ -24,6 +24,7 @@
 
 package io.github.jamalam360.utility.belt.mixin.client;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.config.UtilityBeltConfig;
@@ -48,6 +49,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
+
     @Shadow
     @Nullable
     public ClientPlayerEntity player;
@@ -57,9 +59,9 @@ public abstract class MinecraftClientMixin {
     public GameOptions options;
 
     @Inject(
-            method = "doItemPick",
-            at = @At("HEAD"),
-            cancellable = true
+          method = "doItemPick",
+          at = @At("HEAD"),
+          cancellable = true
     )
     private void utilitybelt$disableMiddleClick(CallbackInfo ci) {
         if (UtilityBeltClientInit.hasSwappedToUtilityBelt) {
@@ -68,11 +70,11 @@ public abstract class MinecraftClientMixin {
     }
 
     @Redirect(
-            method = "handleInputEvents",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/option/KeyBind;wasPressed()Z"
-            )
+          method = "handleInputEvents",
+          at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/client/option/KeyBind;wasPressed()Z"
+          )
     )
     private boolean utilitybelt$hijackHotbarKeys(KeyBind instance) {
         boolean wasPressed = instance.wasPressed();
@@ -83,6 +85,7 @@ public abstract class MinecraftClientMixin {
                     UtilityBeltClientInit.hasSwappedToUtilityBelt = false;
                     UtilityBeltInit.UTILITY_BELT_SELECTED.put(this.player, false);
                     Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(false));
+                    return true;
                 }
                 case SWITCH_BELT_SLOT -> {
                     for (int i = 0; i < UtilityBeltInit.UTILITY_BELT_SIZE; i++) {
@@ -95,8 +98,6 @@ public abstract class MinecraftClientMixin {
                     }
                 }
             }
-
-            return true;
         }
 
         return wasPressed;
