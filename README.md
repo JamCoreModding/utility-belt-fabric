@@ -1,5 +1,7 @@
 # Utility Belt
 
+[![Read the Documentation](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/documentation/ghpages_vector.svg)](https://docs.jamalam.tech/utility-belt/about/)
+
 _Free your hotbar._
 
 Utility Belt is a mod for the Fabric & Quilt mod loaders that allows you to clean up valuable hotbar space. It is
