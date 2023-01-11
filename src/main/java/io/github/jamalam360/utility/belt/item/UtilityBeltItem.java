@@ -30,13 +30,22 @@ import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
+import java.util.List;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
-import net.minecraft.item.*;
+import net.minecraft.item.FishingRodItem;
+import net.minecraft.item.FlintAndSteelItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsage;
+import net.minecraft.item.RangedWeaponItem;
+import net.minecraft.item.ShearsItem;
+import net.minecraft.item.SpyglassItem;
+import net.minecraft.item.ToolItem;
+import net.minecraft.item.TridentItem;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
@@ -46,12 +55,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 /**
  * @author Jamalam
  */
 public class UtilityBeltItem extends TrinketItem {
+
     private static final int ITEM_BAR_COLOR = MathHelper.packRgb(0.4F, 0.4F, 1.0F);
 
     public UtilityBeltItem(Settings settings) {
@@ -122,7 +130,9 @@ public class UtilityBeltItem extends TrinketItem {
                     }
                 }
 
-                if (!inserted) return false;
+                if (!inserted) {
+                    return false;
+                }
             } else if (isValidItem(slotStack)) {
                 boolean inserted = false;
 
@@ -135,7 +145,9 @@ public class UtilityBeltItem extends TrinketItem {
                     }
                 }
 
-                if (!inserted) return false;
+                if (!inserted) {
+                    return false;
+                }
             }
 
             playInsertSound(player);
@@ -161,9 +173,13 @@ public class UtilityBeltItem extends TrinketItem {
                     }
                 }
 
-                if (!inserted) return false;
+                if (!inserted) {
+                    return false;
+                }
             } else {
-                if (!isValidItem(otherStack)) return false;
+                if (!isValidItem(otherStack)) {
+                    return false;
+                }
 
                 boolean inserted = false;
 
@@ -176,7 +192,9 @@ public class UtilityBeltItem extends TrinketItem {
                     }
                 }
 
-                if (!inserted) return false;
+                if (!inserted) {
+                    return false;
+                }
             }
 
             playInsertSound(player);

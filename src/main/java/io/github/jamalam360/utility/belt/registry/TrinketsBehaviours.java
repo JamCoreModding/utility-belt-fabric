@@ -40,6 +40,7 @@ import net.minecraft.entity.player.PlayerEntity;
  * @author Jamalam
  */
 public class TrinketsBehaviours {
+
     public static void registerEvents() {
         TrinketsApi.registerTrinketPredicate(UtilityBeltInit.idOf("only_one_utility_belt"), (stack, slot, entity) -> {
             if (stack.getItem() instanceof UtilityBeltItem && entity instanceof PlayerEntity player) {

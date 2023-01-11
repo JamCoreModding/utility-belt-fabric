@@ -42,9 +42,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin {
+
     @Inject(
-            method = "remove",
-            at = @At("HEAD")
+          method = "remove",
+          at = @At("HEAD")
     )
     private void utilitybelt$switchBackToHotbar(CallbackInfo ci) {
         if (!((PlayerEntity) (Object) this).world.isClient) {
@@ -54,8 +55,8 @@ public abstract class PlayerEntityMixin {
     }
 
     @Inject(
-            method = "tick",
-            at = @At("HEAD")
+          method = "tick",
+          at = @At("HEAD")
     )
     private void utilitybelt$syncInventoryIfNeeded(CallbackInfo ci) {
         if (((PlayerEntity) (Object) this) instanceof ServerPlayerEntity serverPlayerEntity) {

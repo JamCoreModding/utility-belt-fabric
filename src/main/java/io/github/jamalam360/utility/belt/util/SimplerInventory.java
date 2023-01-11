@@ -37,6 +37,7 @@ import net.minecraft.util.collection.DefaultedList;
  * @author Jamalam
  */
 public class SimplerInventory implements Inventory, Cloneable {
+
     private DefaultedList<ItemStack> stacks;
     private InventoryChangedListener listener;
 

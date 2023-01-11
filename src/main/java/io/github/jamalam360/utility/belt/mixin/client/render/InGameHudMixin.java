@@ -38,13 +38,14 @@ import org.spongepowered.asm.mixin.injection.At;
 @SuppressWarnings("unused")
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
+
     @WrapWithCondition(
-            method = "renderHotbar",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V",
-                    ordinal = 1
-            )
+          method = "renderHotbar",
+          at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V",
+                ordinal = 1
+          )
     )
     private boolean utilitybelt$disableHotbarHighlight(InGameHud instance, MatrixStack matrixStack, int a, int b, int c, int d, int e, int f) {
         return !UtilityBeltClientInit.hasSwappedToUtilityBelt;

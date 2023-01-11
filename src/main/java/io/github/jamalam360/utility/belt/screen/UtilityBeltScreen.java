@@ -37,6 +37,7 @@ import net.minecraft.util.Identifier;
  * @author Jamalam
  */
 public class UtilityBeltScreen extends HandledScreen<UtilityBeltScreenHandler> {
+
     private static final Identifier TEXTURE = UtilityBeltInit.idOf("textures/gui/utility_belt_gui.png");
 
     public UtilityBeltScreen(UtilityBeltScreenHandler handler, PlayerInventory inventory, Text title) {

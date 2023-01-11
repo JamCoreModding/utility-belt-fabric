@@ -32,6 +32,7 @@ import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
 import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
 import io.github.jamalam360.utility.belt.registry.ItemRegistry;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
+import java.lang.reflect.Method;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -40,13 +41,12 @@ import net.minecraft.item.Items;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
 
-import java.lang.reflect.Method;
-
 /**
  * @author Jamalam
  */
 @SuppressWarnings("unused")
 public class SlotSwapTests implements FabricGameTest {
+
     private PlayerEntity player;
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")

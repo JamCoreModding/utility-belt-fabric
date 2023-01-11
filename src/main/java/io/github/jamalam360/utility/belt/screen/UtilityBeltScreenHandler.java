@@ -43,6 +43,7 @@ import net.minecraft.text.Text;
  */
 
 public class UtilityBeltScreenHandler extends ScreenHandler {
+
     private final SimplerInventory inventory;
 
     public UtilityBeltScreenHandler(int syncId, PlayerInventory playerInventory) {
@@ -135,6 +136,7 @@ public class UtilityBeltScreenHandler extends ScreenHandler {
     }
 
     public static class Factory implements NamedScreenHandlerFactory {
+
         public static final Factory INSTANCE = new Factory();
 
         private Factory() {

@@ -28,7 +28,6 @@ import io.github.jamalam360.jamlib.registry.JamLibContentRegistry;
 import io.github.jamalam360.jamlib.registry.annotation.ContentRegistry;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
@@ -39,6 +38,7 @@ import net.minecraft.item.ItemGroups;
 
 @ContentRegistry(UtilityBeltInit.MOD_ID)
 public class ItemRegistry implements JamLibContentRegistry {
+
     public static final Item UTILITY_BELT = new UtilityBeltItem(new Item.Settings().maxCount(1));
 
     @Override

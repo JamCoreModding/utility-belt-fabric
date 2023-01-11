@@ -40,6 +40,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
  */
 @SuppressWarnings("UnstableApiUsage")
 public class ItemInventoryComponent extends ItemComponent implements InventoryComponent<SimplerInventory> {
+
     public static final String INVENTORY = "Inventory";
     private SimplerInventory cachedValue;
     private SimplerInventory lastSynced;
@@ -51,7 +52,9 @@ public class ItemInventoryComponent extends ItemComponent implements InventoryCo
     @Override
     public SimplerInventory getInventory() {
         if (cachedValue == null) {
-            if (!this.hasTag(INVENTORY, NbtType.LIST)) this.putList(INVENTORY, new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE).toNbtList());
+            if (!this.hasTag(INVENTORY, NbtType.LIST)) {
+                this.putList(INVENTORY, new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE).toNbtList());
+            }
             NbtList list = this.getList(INVENTORY, NbtType.COMPOUND);
             SimplerInventory inv = new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE);
             inv.readNbtList(list);

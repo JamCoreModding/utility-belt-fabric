@@ -53,12 +53,31 @@ import net.minecraft.sound.SoundEvents;
  * @author Jamalam
  */
 public class UtilityBeltClientInit implements ClientModInitializer {
+
+    public static final EntityModelLayer BELT_LAYER = new EntityModelLayer(UtilityBeltInit.idOf("belt"), "main");
     public static boolean hasSwappedToUtilityBelt = false;
     public static int utilityBeltSelectedSlot = 0;
     public static KeyBind SWAP_KEYBIND_TOGGLE;
     public static KeyBind SWAP_KEYBIND_HOLD;
     public static KeyBind OPEN_SCREEN_KEYBIND;
-    public static final EntityModelLayer BELT_LAYER = new EntityModelLayer(UtilityBeltInit.idOf("belt"), "main");
+
+    private static void onMouseScrollInUtilityBelt(int direction) {
+        if (direction == 1) {
+            UtilityBeltClientInit.utilityBeltSelectedSlot--;
+            if (UtilityBeltClientInit.utilityBeltSelectedSlot < 0) {
+                UtilityBeltClientInit.utilityBeltSelectedSlot = 3;
+            }
+        } else if (direction == -1) {
+            UtilityBeltClientInit.utilityBeltSelectedSlot++;
+            if (UtilityBeltClientInit.utilityBeltSelectedSlot >= UtilityBeltInit.UTILITY_BELT_SIZE) {
+                UtilityBeltClientInit.utilityBeltSelectedSlot = 0;
+            }
+        }
+    }
+
+    private static void playSwapNoise() {
+        MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, MinecraftClient.getInstance().world.random.nextFloat() + 0.50f));
+    }
 
     @Override
     public void onInitializeClient() {
@@ -68,46 +87,46 @@ public class UtilityBeltClientInit implements ClientModInitializer {
         HandledScreens.register(ScreenHandlerRegistry.SCREEN_HANDLER, UtilityBeltScreen::new);
 
         SWAP_KEYBIND_TOGGLE = JamLibKeybinds.register(new JamLibKeybinds.JamLibKeybind(
-                UtilityBeltInit.MOD_ID,
-                "quick_switch_toggle",
-                InputUtil.KEY_B_CODE,
-                (client) -> {
-                    if (TrinketsUtil.hasUtilityBelt(client.player)) {
-                        hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
-                        UtilityBeltInit.UTILITY_BELT_SELECTED.put(client.player, hasSwappedToUtilityBelt);
-                        Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
-                        playSwapNoise();
-                    }
-                }
+              UtilityBeltInit.MOD_ID,
+              "quick_switch_toggle",
+              InputUtil.KEY_B_CODE,
+              (client) -> {
+                  if (TrinketsUtil.hasUtilityBelt(client.player)) {
+                      hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
+                      UtilityBeltInit.UTILITY_BELT_SELECTED.put(client.player, hasSwappedToUtilityBelt);
+                      Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
+                      playSwapNoise();
+                  }
+              }
         ));
 
         SWAP_KEYBIND_HOLD = JamLibKeybinds.register(new JamLibKeybinds.JamLibHoldKeybind(
-                UtilityBeltInit.MOD_ID,
-                "quick_switch_hold",
-                InputUtil.KEY_N_CODE,
-                (client) -> {
-                    if (TrinketsUtil.hasUtilityBelt(client.player)) {
-                        hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
-                        UtilityBeltInit.UTILITY_BELT_SELECTED.put(client.player, hasSwappedToUtilityBelt);
-                        Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
-                        playSwapNoise();
-                    }
-                },
-                (client) -> {
-                    if (TrinketsUtil.hasUtilityBelt(client.player)) {
-                        hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
-                        UtilityBeltInit.UTILITY_BELT_SELECTED.put(client.player, hasSwappedToUtilityBelt);
-                        Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
-                        playSwapNoise();
-                    }
-                }
+              UtilityBeltInit.MOD_ID,
+              "quick_switch_hold",
+              InputUtil.KEY_N_CODE,
+              (client) -> {
+                  if (TrinketsUtil.hasUtilityBelt(client.player)) {
+                      hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
+                      UtilityBeltInit.UTILITY_BELT_SELECTED.put(client.player, hasSwappedToUtilityBelt);
+                      Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
+                      playSwapNoise();
+                  }
+              },
+              (client) -> {
+                  if (TrinketsUtil.hasUtilityBelt(client.player)) {
+                      hasSwappedToUtilityBelt = !hasSwappedToUtilityBelt;
+                      UtilityBeltInit.UTILITY_BELT_SELECTED.put(client.player, hasSwappedToUtilityBelt);
+                      Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(hasSwappedToUtilityBelt));
+                      playSwapNoise();
+                  }
+              }
         ));
 
         OPEN_SCREEN_KEYBIND = JamLibKeybinds.register(new JamLibKeybinds.JamLibKeybind(
-                UtilityBeltInit.MOD_ID,
-                "open_screen",
-                InputUtil.KEY_APOSTROPHE_CODE,
-                (client) -> Networking.OPEN_SCREEN.send()
+              UtilityBeltInit.MOD_ID,
+              "open_screen",
+              InputUtil.KEY_APOSTROPHE_CODE,
+              (client) -> Networking.OPEN_SCREEN.send()
         ));
 
         MouseScrollCallback.EVENT.register((mouseX, mouseY, amount) -> {
@@ -140,23 +159,5 @@ public class UtilityBeltClientInit implements ClientModInitializer {
 
         ClientNetworking.setHandlers();
         JamLibClientNetworking.registerHandlers(UtilityBeltInit.MOD_ID);
-    }
-
-    private static void onMouseScrollInUtilityBelt(int direction) {
-        if (direction == 1) {
-            UtilityBeltClientInit.utilityBeltSelectedSlot--;
-            if (UtilityBeltClientInit.utilityBeltSelectedSlot < 0) {
-                UtilityBeltClientInit.utilityBeltSelectedSlot = 3;
-            }
-        } else if (direction == -1) {
-            UtilityBeltClientInit.utilityBeltSelectedSlot++;
-            if (UtilityBeltClientInit.utilityBeltSelectedSlot >= UtilityBeltInit.UTILITY_BELT_SIZE) {
-                UtilityBeltClientInit.utilityBeltSelectedSlot = 0;
-            }
-        }
-    }
-
-    private static void playSwapNoise() {
-        MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, MinecraftClient.getInstance().world.random.nextFloat() + 0.50f));
     }
 }

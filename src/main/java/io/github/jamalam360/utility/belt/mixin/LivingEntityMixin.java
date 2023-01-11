@@ -47,15 +47,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin implements Ducks.LivingEntity {
+
     @Shadow
     protected abstract void detectEquipmentUpdates();
 
     @Inject(
-            method = "sendEquipmentBreakStatus",
-            at = @At("HEAD")
+          method = "sendEquipmentBreakStatus",
+          at = @At("HEAD")
     )
     private void utilitybelt$updateUtilityBeltNbtOnToolBreak(EquipmentSlot slot, CallbackInfo ci) {
-        if (slot != EquipmentSlot.MAINHAND) return;
+        if (slot != EquipmentSlot.MAINHAND) {
+            return;
+        }
 
         if (((LivingEntity) (Object) this) instanceof PlayerEntity player) {
             if (TrinketsUtil.hasUtilityBelt(player)) {
@@ -71,9 +74,9 @@ public abstract class LivingEntityMixin implements Ducks.LivingEntity {
     }
 
     @Inject(
-            method = "getStackInHand",
-            at = @At("HEAD"),
-            cancellable = true
+          method = "getStackInHand",
+          at = @At("HEAD"),
+          cancellable = true
     )
     private void utilitybelt$useUtilityBeltStack(Hand hand, CallbackInfoReturnable<ItemStack> cir) {
         if (hand == Hand.MAIN_HAND && ((LivingEntity) (Object) this) instanceof PlayerEntity player) {
@@ -86,9 +89,9 @@ public abstract class LivingEntityMixin implements Ducks.LivingEntity {
     }
 
     @Inject(
-            method = "getMainHandStack",
-            at = @At("HEAD"),
-            cancellable = true
+          method = "getMainHandStack",
+          at = @At("HEAD"),
+          cancellable = true
     )
     private void utilitybelt$useUtilityBeltStack2(CallbackInfoReturnable<ItemStack> cir) {
         if (((LivingEntity) (Object) this) instanceof PlayerEntity player) {
@@ -101,9 +104,9 @@ public abstract class LivingEntityMixin implements Ducks.LivingEntity {
     }
 
     @Inject(
-            method = "setStackInHand",
-            at = @At("HEAD"),
-            cancellable = true
+          method = "setStackInHand",
+          at = @At("HEAD"),
+          cancellable = true
     )
     private void utilitybelt$setStackInHandUtilityBelt(Hand hand, ItemStack stack, CallbackInfo ci) {
         if (hand == Hand.MAIN_HAND && ((LivingEntity) (Object) this) instanceof PlayerEntity player) {

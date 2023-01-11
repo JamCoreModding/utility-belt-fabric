@@ -46,6 +46,7 @@ import net.minecraft.util.Identifier;
  * @author Jamalam
  */
 public class UtilityBeltHotbarRenderer {
+
     private static final Identifier UTILITY_BELT_WIDGET_TEXTURE = UtilityBeltInit.idOf("textures/gui/utility_belt_widget.png");
 
     public static void render(MatrixStack matrices, float tickDelta) {

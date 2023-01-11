@@ -24,7 +24,6 @@
 
 package io.github.jamalam360.utility.belt.mixin.client;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.config.UtilityBeltConfig;

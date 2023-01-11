@@ -51,6 +51,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(PlayerInventory.class)
 public abstract class PlayerInventoryMixin {
+
     @Shadow
     @Final
     public PlayerEntity player;
@@ -59,9 +60,9 @@ public abstract class PlayerInventoryMixin {
     public int selectedSlot;
 
     @Inject(
-            method = "getBlockBreakingSpeed",
-            at = @At("HEAD"),
-            cancellable = true
+          method = "getBlockBreakingSpeed",
+          at = @At("HEAD"),
+          cancellable = true
     )
     private void utilitybelt$getBlockBreakingSpeedWithUtilityBeltItem(BlockState state, CallbackInfoReturnable<Float> cir) {
         int slot;
@@ -77,9 +78,9 @@ public abstract class PlayerInventoryMixin {
     }
 
     @Inject(
-            method = "getMainHandStack",
-            at = @At("HEAD"),
-            cancellable = true
+          method = "getMainHandStack",
+          at = @At("HEAD"),
+          cancellable = true
     )
     private void utilitybelt$useUtilityBeltStack(CallbackInfoReturnable<ItemStack> cir) {
         ItemStack stack = UtilityBeltItem.getSelectedUtilityBeltStack(player);
@@ -93,9 +94,9 @@ public abstract class PlayerInventoryMixin {
      * This fixes cases like tridents not being removed from the belt when thrown
      */
     @Inject(
-            method = "removeOne",
-            at = @At("HEAD"),
-            cancellable = true
+          method = "removeOne",
+          at = @At("HEAD"),
+          cancellable = true
     )
     private void utilitybelt$patchRemoveOneForHeldItems(ItemStack stack, CallbackInfo ci) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
@@ -119,8 +120,8 @@ public abstract class PlayerInventoryMixin {
     }
 
     @Inject(
-            method = "populateRecipeFinder",
-            at = @At("HEAD")
+          method = "populateRecipeFinder",
+          at = @At("HEAD")
     )
     private void utilitybelt$recipeFinderPatch(RecipeMatcher finder, CallbackInfo ci) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
@@ -134,26 +135,26 @@ public abstract class PlayerInventoryMixin {
     }
 
     @ModifyArg(
-            method = "dropSelectedItem",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/entity/player/PlayerInventory;removeStack(II)Lnet/minecraft/item/ItemStack;"
-            ),
-            index = 0
+          method = "dropSelectedItem",
+          at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/entity/player/PlayerInventory;removeStack(II)Lnet/minecraft/item/ItemStack;"
+          ),
+          index = 0
     )
     private int utilitybelt$dropSelectedUtilityBeltItem(int slot) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
             return UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false) ?
-                    UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0) : slot;
+                   UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0) : slot;
         }
 
         return slot;
     }
 
     @Inject(
-            method = "dropSelectedItem",
-            at = @At("HEAD"),
-            cancellable = true
+          method = "dropSelectedItem",
+          at = @At("HEAD"),
+          cancellable = true
     )
     private void utilitybelt$dropStackIfUsingUtilityBelt(boolean entireStack, CallbackInfoReturnable<ItemStack> cir) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
@@ -170,8 +171,8 @@ public abstract class PlayerInventoryMixin {
     }
 
     @Inject(
-            method = "clear",
-            at = @At("HEAD")
+          method = "clear",
+          at = @At("HEAD")
     )
     private void utilitybelt$clearUtilityBelt(CallbackInfo ci) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
@@ -183,9 +184,9 @@ public abstract class PlayerInventoryMixin {
     }
 
     @Inject(
-            method = "contains(Lnet/minecraft/item/ItemStack;)Z",
-            at = @At("HEAD"),
-            cancellable = true
+          method = "contains(Lnet/minecraft/item/ItemStack;)Z",
+          at = @At("HEAD"),
+          cancellable = true
     )
     private void utilitybelt$patchContainsStack(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
@@ -201,9 +202,9 @@ public abstract class PlayerInventoryMixin {
     }
 
     @Inject(
-            method = "contains(Lnet/minecraft/registry/tag/TagKey;)Z",
-            at = @At("HEAD"),
-            cancellable = true
+          method = "contains(Lnet/minecraft/registry/tag/TagKey;)Z",
+          at = @At("HEAD"),
+          cancellable = true
     )
     private void utilitybelt$patchContainsStack(TagKey<Item> key, CallbackInfoReturnable<Boolean> cir) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
@@ -219,8 +220,8 @@ public abstract class PlayerInventoryMixin {
     }
 
     @Inject(
-            method = "dropAll",
-            at = @At("HEAD")
+          method = "dropAll",
+          at = @At("HEAD")
     )
     private void utilitybelt$dropAllFromUtilityBelt(CallbackInfo ci) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
@@ -240,9 +241,9 @@ public abstract class PlayerInventoryMixin {
     }
 
     @Inject(
-            method = "isEmpty",
-            at = @At("HEAD"),
-            cancellable = true
+          method = "isEmpty",
+          at = @At("HEAD"),
+          cancellable = true
     )
     private void utilitybelt$patchIsEmpty(CallbackInfoReturnable<Boolean> cir) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
@@ -258,8 +259,8 @@ public abstract class PlayerInventoryMixin {
     }
 
     @Inject(
-            method = "updateItems",
-            at = @At("HEAD")
+          method = "updateItems",
+          at = @At("HEAD")
     )
     private void utilitybelt$doInventoryTick(CallbackInfo ci) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {

@@ -43,13 +43,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin extends PlayerEntity {
+
     public ClientPlayerEntityMixin(World world, BlockPos blockPos, float f, GameProfile gameProfile, @Nullable PlayerPublicKey playerPublicKey) {
         super(world, blockPos, f, gameProfile);
     }
 
     @Inject(
-            method = "updatePostDeath",
-            at = @At("HEAD")
+          method = "updatePostDeath",
+          at = @At("HEAD")
     )
     private void utilitybelt$switchBackToHotbar(CallbackInfo ci) {
         if (this.deathTime == 20) {

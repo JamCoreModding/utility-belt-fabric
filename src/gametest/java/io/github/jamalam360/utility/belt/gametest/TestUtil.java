@@ -31,6 +31,7 @@ import net.minecraft.test.GameTestException;
  * @author Jamalam
  */
 public class TestUtil {
+
     public static void pressKeyBind(KeyBind keyBind) {
         // Key will always be default on gametest.
         KeyBind.onKeyPressed(keyBind.getDefaultKey());
