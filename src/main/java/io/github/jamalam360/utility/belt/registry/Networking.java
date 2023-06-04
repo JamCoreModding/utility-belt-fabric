@@ -33,7 +33,6 @@ import io.github.jamalam360.utility.belt.screen.UtilityBeltScreenHandler;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
 
 /**
  * @author Jamalam

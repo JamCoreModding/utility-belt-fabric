@@ -35,7 +35,6 @@ import org.spongepowered.asm.mixin.injection.At;
  * @author Jamalam
  */
 
-@SuppressWarnings("unused")
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
     @WrapWithCondition(

@@ -31,6 +31,11 @@ import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.KeyBind;
 import org.jetbrains.annotations.Nullable;
@@ -39,7 +44,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
@@ -56,26 +60,16 @@ public abstract class MinecraftClientMixin {
     @Final
     public GameOptions options;
 
-    @Inject(
-            method = "doItemPick",
-            at = @At("HEAD"),
-            cancellable = true
-    )
+    @Inject(method = "doItemPick", at = @At("HEAD"), cancellable = true)
     private void utilitybelt$disableMiddleClick(CallbackInfo ci) {
         if (UtilityBeltClientInit.hasSwappedToUtilityBelt) {
             ci.cancel();
         }
     }
 
-    @Redirect(
-            method = "handleInputEvents",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/option/KeyBind;wasPressed()Z"
-            )
-    )
-    private boolean utilitybelt$hijackHotbarKeys(KeyBind instance) {
-        boolean wasPressed = instance.wasPressed();
+    @WrapOperation(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBind;wasPressed()Z"))
+    private boolean utilitybelt$hijackHotbarKeys(KeyBind instance, Operation<Boolean> operation) {
+        boolean wasPressed = operation.call(instance);
 
         if (wasPressed && UtilityBeltClientInit.hasSwappedToUtilityBelt && TrinketsUtil.hasUtilityBelt(this.player)) {
             switch (UtilityBeltConfig.hotbarKeyBehaviour) {
@@ -88,8 +82,10 @@ public abstract class MinecraftClientMixin {
                     for (int i = 0; i < UtilityBeltInit.UTILITY_BELT_SIZE; i++) {
                         if (this.options.hotbarKeys[i] == instance) {
                             UtilityBeltClientInit.utilityBeltSelectedSlot = i;
-                            Networking.SET_UTILITY_BELT_SELECTED_SLOT_C2S.send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));
-                            UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(MinecraftClient.getInstance().player, UtilityBeltClientInit.utilityBeltSelectedSlot);
+                            Networking.SET_UTILITY_BELT_SELECTED_SLOT_C2S
+                                    .send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));
+                            UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(MinecraftClient.getInstance().player,
+                                    UtilityBeltClientInit.utilityBeltSelectedSlot);
                             return false;
                         }
                     }

@@ -6,4 +6,4 @@
 
 Closed issues: None.
 
-[Full Changelog](https://github.com/JamCoreModding/UtilityBelt/compare/...)
+[Full Changelog](https://github.com/JamCoreModding/utility-belt/compare/...)

@@ -28,10 +28,10 @@ import dev.onyxstudios.cca.api.v3.item.ItemComponent;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
-import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
 
@@ -51,8 +51,8 @@ public class ItemInventoryComponent extends ItemComponent implements InventoryCo
     @Override
     public SimplerInventory getInventory() {
         if (cachedValue == null) {
-            if (!this.hasTag(INVENTORY, NbtType.LIST)) this.putList(INVENTORY, new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE).toNbtList());
-            NbtList list = this.getList(INVENTORY, NbtType.COMPOUND);
+            if (!this.hasTag(INVENTORY, NbtElement.LIST_TYPE)) this.putList(INVENTORY, new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE).toNbtList());
+            NbtList list = this.getList(INVENTORY, NbtElement.COMPOUND_TYPE);
             SimplerInventory inv = new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE);
             inv.readNbtList(list);
             cachedValue = inv;
