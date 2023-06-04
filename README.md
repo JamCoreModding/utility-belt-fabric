@@ -7,7 +7,7 @@ _Free your hotbar._
 Utility Belt is a mod for the Fabric & Quilt mod loaders that allows you to clean up valuable hotbar space. It is
 similar to the Tool Belt mod for Forge.
 
-![Photo of Steve with a Belt On](https://github.com/JamCoreModding/utility-belt/blob/1.19.x/readme-assets/wide.png?raw=true)
+![Photo of Steve with a Belt On](https://github.com/JamCoreModding/utility-belt/blob/1.19.3/readme-assets/wide.png?raw=true)
 
 [Demo Video](https://github.com/JamCoreModding/utility-belt/blob/1.19.x/readme-assets/demo.webm?raw=tru)
 
@@ -20,7 +20,7 @@ similar to the Tool Belt mod for Forge.
 Utility belts must be crafted and placed into the belt [trinket slot](https://github.com/emilyploszaj/trinkets) in order
 to be used.
 
-![utility Belt Crafting Recipe](https://github.com/JamCoreModding/utility-belt/blob/1.19.x/readme-assets/crafting.png?raw=true)
+![utility Belt Crafting Recipe](https://github.com/JamCoreModding/utility-belt/blob/1.19.3/readme-assets/crafting.png?raw=true)
 
 ## Controls
 
