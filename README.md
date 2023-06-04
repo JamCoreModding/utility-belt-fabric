@@ -40,6 +40,8 @@ To insert items into the utility belt, use one of the following methods:
 - [Modrinth](https://modrinth.com/mod/utility-belt)
 - [GitHub](https://github.com/JamCoreModding/utility-belt/releases/latest)
 
+[![Need a server? Use code JAMALAM at Bisect Hosting for 25% off, and support me as well!](https://www.bisecthosting.com/partners/custom-banners/bed9e0dd-9142-4d6e-8683-b593593c11ff.webp)](https://bisecthosting.com/jamalam)
+
 ## Discuss
 
 - [Discord](https://discord.jamalam.tech)
