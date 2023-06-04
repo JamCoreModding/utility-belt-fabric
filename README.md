@@ -9,7 +9,7 @@ similar to the Tool Belt mod for Forge.
 
 ![Photo of Steve with a Belt On](https://github.com/JamCoreModding/utility-belt/blob/1.19.3/readme-assets/wide.png?raw=true)
 
-[Demo Video](https://github.com/JamCoreModding/utility-belt/blob/1.19.x/readme-assets/demo.webm?raw=tru)
+[Demo Video](https://github.com/JamCoreModding/utility-belt/blob/1.19.3/readme-assets/demo.webm?raw=true)
 
 ![Environment: Both](https://img.shields.io/badge/environment-both-4caf50?style=flat-square)
 ![Mod Loader: Fabric](https://img.shields.io/badge/mod%20loader-fabric-d64541?style=flat-square)
