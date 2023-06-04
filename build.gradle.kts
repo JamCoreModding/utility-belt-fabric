@@ -24,7 +24,7 @@ repositories {
         Pair("https://maven.jamalam.tech/releases", listOf("io.github.jamalam360")),
         Pair("https://jitpack.io/", listOf("com.github.LlamaLad7")),
         Pair("https://ladysnake.jfrog.io/artifactory/mods", listOf("dev.onyxstudios.cardinal-components-api")),
-        Pair("https://maven.quiltmc.org/repository/release", listOf("org.quiltmc")),
+        Pair("https://maven.quiltmc.org/repository/release", listOf("org.quiltmc", "org.quiltmc.unpick")),
         Pair("https://maven.quiltmc.org/repository/snapshot", listOf("org.quiltmc", "org.quiltmc.unpick")),
     )
 
@@ -45,9 +45,9 @@ dependencies {
     mappings(variantOf(libs.quilt.mappings) { classifier("intermediary-v2") })
 
     modImplementation(libs.bundles.fabric)
-    modImplementation(libs.bundles.required)
+    modApi(libs.bundles.required)
     modImplementation(libs.bundles.optional)
-    modImplementation(libs.bundles.runtime)
+    modLocalRuntime(libs.bundles.runtime)
 
     include(libs.mixin.extras)
     annotationProcessor(libs.mixin.extras)
