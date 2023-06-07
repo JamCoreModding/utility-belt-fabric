@@ -42,13 +42,18 @@ import io.github.jamalam360.utility.belt.registry.TrinketsBehaviours;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.server.command.CommandManager;
 import net.minecraft.tag.TagKey;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.util.Map;
+import java.util.function.Function;
 
 public class UtilityBeltInit implements ModInitializer, ItemComponentInitializer {
     public static final String MOD_ID = "utilitybelt";
@@ -56,10 +61,12 @@ public class UtilityBeltInit implements ModInitializer, ItemComponentInitializer
 
     public static final Map<PlayerEntity, Boolean> UTILITY_BELT_SELECTED = new Object2BooleanArrayMap<>();
     public static final Map<PlayerEntity, Integer> UTILITY_BELT_SELECTED_SLOTS = new Object2IntArrayMap<>();
-    public static final TagKey<Item> ALLOWED_IN_UTILITY_BELT = TagKey.of(Registry.ITEM_KEY, idOf("allowed_in_utility_belt"));
+    public static final TagKey<Item> ALLOWED_IN_UTILITY_BELT = TagKey.of(Registry.ITEM_KEY,
+            idOf("allowed_in_utility_belt"));
     @SuppressWarnings("rawtypes")
-    public static final ComponentKey<InventoryComponent> INVENTORY =
-            ComponentRegistry.getOrCreate(idOf("belt_inventory"), InventoryComponent.class);
+    public static final ComponentKey<InventoryComponent> INVENTORY = ComponentRegistry
+            .getOrCreate(idOf("belt_inventory"), InventoryComponent.class);
+
     /*
      * We use this now to aid with un-hardcoding in case issue #2 is ever tackled.
      */
@@ -76,6 +83,24 @@ public class UtilityBeltInit implements ModInitializer, ItemComponentInitializer
         Networking.setHandlers();
         TrinketsBehaviours.registerEvents();
         JamLibServerNetworking.registerHandlers(MOD_ID);
+
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            CommandRegistrationCallback.EVENT.register((dispatcher, ctx, dedicated) -> {
+                dispatcher.register(
+                        CommandManager.literal(MOD_ID)
+                                .then(CommandManager.literal("selected_slots")
+                                        .executes(context -> {
+                                            context.getSource().getPlayer().sendMessage(
+                                                    Text.literal(UTILITY_BELT_SELECTED.toString()), false);
+
+                                            context.getSource().getPlayer().sendMessage(
+                                                    Text.literal(UTILITY_BELT_SELECTED_SLOTS.toString()), false);
+
+                                            return 1;
+                                        })));
+            });
+        }
+
         LOGGER.logInitialize();
     }
 
