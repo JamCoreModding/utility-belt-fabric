@@ -71,14 +71,18 @@ public class UtilityBeltItem extends TrinketItem {
     }
 
     public static boolean isValidItem(ItemStack stack) {
-        return stack.getItem() instanceof ToolItem || stack.getItem() instanceof RangedWeaponItem || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof ShearsItem || stack.isEmpty() || stack.isIn(UtilityBeltInit.ALLOWED_IN_UTILITY_BELT);
+        return stack.getItem() instanceof ToolItem || stack.getItem() instanceof RangedWeaponItem
+                || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem
+                || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem
+                || stack.getItem() instanceof ShearsItem || stack.isEmpty()
+                || stack.isIn(UtilityBeltInit.ALLOWED_IN_UTILITY_BELT);
     }
 
     public static ItemStack getSelectedUtilityBeltStack(PlayerEntity player) {
         int slot;
 
-        if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
-            slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
+        if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player.getUuid(), false)) {
+            slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(), 0);
 
             if (TrinketsUtil.hasUtilityBelt(player)) {
                 return getInventory(TrinketsUtil.getUtilityBelt(player)).getStack(slot);
@@ -122,7 +126,8 @@ public class UtilityBeltItem extends TrinketItem {
                     }
                 }
 
-                if (!inserted) return false;
+                if (!inserted)
+                    return false;
             } else if (isValidItem(slotStack)) {
                 boolean inserted = false;
 
@@ -135,7 +140,8 @@ public class UtilityBeltItem extends TrinketItem {
                     }
                 }
 
-                if (!inserted) return false;
+                if (!inserted)
+                    return false;
             }
 
             playInsertSound(player);
@@ -145,7 +151,8 @@ public class UtilityBeltItem extends TrinketItem {
     }
 
     @Override
-    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference) {
+    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player,
+            StackReference cursorStackReference) {
         if (clickType == ClickType.RIGHT && slot.canTakePartial(player)) {
             SimplerInventory inv = getInventory(stack);
 
@@ -161,9 +168,11 @@ public class UtilityBeltItem extends TrinketItem {
                     }
                 }
 
-                if (!inserted) return false;
+                if (!inserted)
+                    return false;
             } else {
-                if (!isValidItem(otherStack)) return false;
+                if (!isValidItem(otherStack))
+                    return false;
 
                 boolean inserted = false;
 
@@ -176,7 +185,8 @@ public class UtilityBeltItem extends TrinketItem {
                     }
                 }
 
-                if (!inserted) return false;
+                if (!inserted)
+                    return false;
             }
 
             playInsertSound(player);
@@ -190,8 +200,9 @@ public class UtilityBeltItem extends TrinketItem {
     @Override
     public void onUnequip(ItemStack stack, SlotReference slot, LivingEntity entity) {
         if (!entity.world.isClient && entity instanceof PlayerEntity player) {
-            UtilityBeltInit.UTILITY_BELT_SELECTED.put(player, false);
-            Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) player, (buf) -> buf.writeBoolean(false));
+            UtilityBeltInit.UTILITY_BELT_SELECTED.put(player.getUuid(), false);
+            Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) player,
+                    (buf) -> buf.writeBoolean(false));
         }
     }
 

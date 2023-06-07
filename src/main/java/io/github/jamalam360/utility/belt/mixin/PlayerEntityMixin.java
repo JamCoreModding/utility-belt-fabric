@@ -48,7 +48,7 @@ public abstract class PlayerEntityMixin {
     )
     private void utilitybelt$switchBackToHotbar(CallbackInfo ci) {
         if (!((PlayerEntity) (Object) this).world.isClient) {
-            UtilityBeltInit.UTILITY_BELT_SELECTED.put((PlayerEntity) (Object) this, false);
+            UtilityBeltInit.UTILITY_BELT_SELECTED.put(((PlayerEntity) (Object) this).getUuid(), false);
             Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) (Object) this, (buf) -> buf.writeBoolean(false));
         }
     }

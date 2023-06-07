@@ -44,7 +44,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.tag.TagKey;
@@ -53,14 +52,14 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.util.Map;
-import java.util.function.Function;
+import java.util.UUID;
 
 public class UtilityBeltInit implements ModInitializer, ItemComponentInitializer {
     public static final String MOD_ID = "utilitybelt";
     public static final JamLibLogger LOGGER = JamLibLogger.getLogger(MOD_ID);
 
-    public static final Map<PlayerEntity, Boolean> UTILITY_BELT_SELECTED = new Object2BooleanArrayMap<>();
-    public static final Map<PlayerEntity, Integer> UTILITY_BELT_SELECTED_SLOTS = new Object2IntArrayMap<>();
+    public static final Map<UUID, Boolean> UTILITY_BELT_SELECTED = new Object2BooleanArrayMap<>();
+    public static final Map<UUID, Integer> UTILITY_BELT_SELECTED_SLOTS = new Object2IntArrayMap<>();
     public static final TagKey<Item> ALLOWED_IN_UTILITY_BELT = TagKey.of(Registry.ITEM_KEY,
             idOf("allowed_in_utility_belt"));
     @SuppressWarnings("rawtypes")

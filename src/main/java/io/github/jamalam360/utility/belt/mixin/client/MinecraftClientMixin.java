@@ -73,7 +73,7 @@ public abstract class MinecraftClientMixin {
             switch (UtilityBeltConfig.hotbarKeyBehaviour) {
                 case SWITCH_BACK_TO_HOTBAR -> {
                     UtilityBeltClientInit.hasSwappedToUtilityBelt = false;
-                    UtilityBeltInit.UTILITY_BELT_SELECTED.put(this.player, false);
+                    UtilityBeltInit.UTILITY_BELT_SELECTED.put(this.player.getUuid(), false);
                     Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(false));
                 }
                 case SWITCH_BELT_SLOT -> {
@@ -82,7 +82,7 @@ public abstract class MinecraftClientMixin {
                             UtilityBeltClientInit.utilityBeltSelectedSlot = i;
                             Networking.SET_UTILITY_BELT_SELECTED_SLOT_C2S
                                     .send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));
-                            UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(MinecraftClient.getInstance().player,
+                            UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(MinecraftClient.getInstance().player.getUuid(),
                                     UtilityBeltClientInit.utilityBeltSelectedSlot);
                             return false;
                         }
