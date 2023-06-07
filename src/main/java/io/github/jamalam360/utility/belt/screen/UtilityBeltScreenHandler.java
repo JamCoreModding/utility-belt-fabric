@@ -147,7 +147,8 @@ public class UtilityBeltScreenHandler extends ScreenHandler {
 
         @Override
         public ScreenHandler createMenu(int i, PlayerInventory playerInventory, PlayerEntity player) {
-            return new UtilityBeltScreenHandler(i, playerInventory, UtilityBeltItem.getInventory(TrinketsUtil.getUtilityBelt(player)));
+            return new UtilityBeltScreenHandler(i, playerInventory,
+                    UtilityBeltItem.getInventory(TrinketsUtil.getUtilityBelt(player)));
         }
     }
 }

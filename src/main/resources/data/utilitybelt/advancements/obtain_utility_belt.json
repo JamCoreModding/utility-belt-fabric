@@ -24,17 +24,11 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "utilitybelt:utility_belt"
-            ]
+            "items": ["utilitybelt:utility_belt"]
           }
         ]
       }
     }
   },
-  "requirements": [
-    [
-      "utility_belt"
-    ]
-  ]
+  "requirements": [["utility_belt"]]
 }

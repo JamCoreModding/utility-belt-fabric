@@ -4,9 +4,7 @@
   "version": "${version}",
   "name": "Utility Belt",
   "description": "Free your hotbar",
-  "authors": [
-    "Jamalam"
-  ],
+  "authors": ["Jamalam"],
   "contributors": [
     "Jomlom - Artist",
     "jo!! - Tester",
@@ -21,26 +19,16 @@
   "accessWidener": "utilitybelt.accesswidener",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "io.github.jamalam360.utility.belt.UtilityBeltInit"
-    ],
-    "client": [
-      "io.github.jamalam360.utility.belt.UtilityBeltClientInit"
-    ],
-    "modmenu": [
-      "io.github.jamalam360.utility.belt.config.ModMenuScreen"
-    ],
+    "main": ["io.github.jamalam360.utility.belt.UtilityBeltInit"],
+    "client": ["io.github.jamalam360.utility.belt.UtilityBeltClientInit"],
+    "modmenu": ["io.github.jamalam360.utility.belt.config.ModMenuScreen"],
     "cardinal-components-item": [
       "io.github.jamalam360.utility.belt.UtilityBeltInit"
     ]
   },
-  "mixins": [
-    "utilitybelt.mixins.json"
-  ],
+  "mixins": ["utilitybelt.mixins.json"],
   "custom": {
-    "cardinal-components": [
-      "utilitybelt:belt_inventory"
-    ]
+    "cardinal-components": ["utilitybelt:belt_inventory"]
   },
   "depends": {
     "fabricloader": "*",

@@ -38,8 +38,7 @@ public class TrinketsUtil {
 
         TrinketsApi.getTrinketComponent(player).ifPresentOrElse(
                 component -> result[0] = component.getEquipped(ItemRegistry.UTILITY_BELT).size() > 0,
-                () -> result[0] = false
-        );
+                () -> result[0] = false);
 
         return result[0];
     }
@@ -47,7 +46,8 @@ public class TrinketsUtil {
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     public static ItemStack getUtilityBelt(PlayerEntity player) {
         try {
-            return TrinketsApi.getTrinketComponent(player).get().getEquipped(ItemRegistry.UTILITY_BELT).get(0).getRight();
+            return TrinketsApi.getTrinketComponent(player).get().getEquipped(ItemRegistry.UTILITY_BELT).get(0)
+                    .getRight();
         } catch (Exception e) {
             return null;
         }

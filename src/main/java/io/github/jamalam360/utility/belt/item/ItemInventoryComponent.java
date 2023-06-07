@@ -51,7 +51,8 @@ public class ItemInventoryComponent extends ItemComponent implements InventoryCo
     @Override
     public SimplerInventory getInventory() {
         if (cachedValue == null) {
-            if (!this.hasTag(INVENTORY, NbtElement.LIST_TYPE)) this.putList(INVENTORY, new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE).toNbtList());
+            if (!this.hasTag(INVENTORY, NbtElement.LIST_TYPE))
+                this.putList(INVENTORY, new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE).toNbtList());
             NbtList list = this.getList(INVENTORY, NbtElement.COMPOUND_TYPE);
             SimplerInventory inv = new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE);
             inv.readNbtList(list);

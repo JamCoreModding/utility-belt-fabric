@@ -26,6 +26,7 @@ package io.github.jamalam360.utility.belt.config;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
+
 import io.github.jamalam360.jamlib.config.JamLibConfig;
 
 /**

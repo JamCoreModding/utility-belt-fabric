@@ -24,6 +24,8 @@
 
 package io.github.jamalam360.utility.belt.gametest;
 
+import java.lang.reflect.Method;
+
 import dev.emi.trinkets.TrinketSlot;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketInventory;
@@ -39,8 +41,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.test.GameTest;
 import net.minecraft.test.TestContext;
-
-import java.lang.reflect.Method;
 
 /**
  * @author Jamalam

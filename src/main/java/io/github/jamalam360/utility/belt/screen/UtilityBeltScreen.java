@@ -25,6 +25,7 @@
 package io.github.jamalam360.utility.belt.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;

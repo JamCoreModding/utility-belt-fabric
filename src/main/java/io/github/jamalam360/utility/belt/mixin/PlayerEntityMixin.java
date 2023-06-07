@@ -24,6 +24,11 @@
 
 package io.github.jamalam360.utility.belt.mixin;
 
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.item.ItemInventoryComponent;
 import io.github.jamalam360.utility.belt.registry.Networking;
@@ -31,10 +36,6 @@ import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * @author Jamalam
@@ -42,21 +43,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin {
-    @Inject(
-            method = "remove",
-            at = @At("HEAD")
-    )
+    @Inject(method = "remove", at = @At("HEAD"))
     private void utilitybelt$switchBackToHotbar(CallbackInfo ci) {
         if (!((PlayerEntity) (Object) this).world.isClient) {
             UtilityBeltInit.UTILITY_BELT_SELECTED.put(((PlayerEntity) (Object) this).getUuid(), false);
-            Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) (Object) this, (buf) -> buf.writeBoolean(false));
+            Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) (Object) this,
+                    (buf) -> buf.writeBoolean(false));
         }
     }
 
-    @Inject(
-            method = "tick",
-            at = @At("HEAD")
-    )
+    @Inject(method = "tick", at = @At("HEAD"))
     private void utilitybelt$syncInventoryIfNeeded(CallbackInfo ci) {
         if (((PlayerEntity) (Object) this) instanceof ServerPlayerEntity serverPlayerEntity) {
             if (TrinketsUtil.hasUtilityBelt(serverPlayerEntity)) {

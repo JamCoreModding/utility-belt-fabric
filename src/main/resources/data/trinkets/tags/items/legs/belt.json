@@ -1,6 +1,4 @@
 {
   "replace": false,
-  "values": [
-    "utilitybelt:utility_belt"
-  ]
+  "values": ["utilitybelt:utility_belt"]
 }

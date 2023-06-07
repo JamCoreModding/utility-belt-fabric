@@ -82,7 +82,8 @@ public abstract class MinecraftClientMixin {
                             UtilityBeltClientInit.utilityBeltSelectedSlot = i;
                             Networking.SET_UTILITY_BELT_SELECTED_SLOT_C2S
                                     .send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));
-                            UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(MinecraftClient.getInstance().player.getUuid(),
+                            UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(
+                                    MinecraftClient.getInstance().player.getUuid(),
                                     UtilityBeltClientInit.utilityBeltSelectedSlot);
                             return false;
                         }

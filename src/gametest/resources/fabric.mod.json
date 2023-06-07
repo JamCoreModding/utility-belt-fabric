@@ -4,9 +4,7 @@
   "version": "NOT-VERSIONED",
   "name": "Utility Belt Gametest",
   "description": "Tests using the gametest framework for Utility Belt.",
-  "authors": [
-    "Jamalam"
-  ],
+  "authors": ["Jamalam"],
   "license": "MIT",
   "environment": "*",
   "entrypoints": {

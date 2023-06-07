@@ -24,6 +24,9 @@
 
 package io.github.jamalam360.utility.belt;
 
+import java.util.Map;
+import java.util.UUID;
+
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.item.ItemComponentFactoryRegistry;
@@ -50,9 +53,6 @@ import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-
-import java.util.Map;
-import java.util.UUID;
 
 public class UtilityBeltInit implements ModInitializer, ItemComponentInitializer {
     public static final String MOD_ID = "utilitybelt";

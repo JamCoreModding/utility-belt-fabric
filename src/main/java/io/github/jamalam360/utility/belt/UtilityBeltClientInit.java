@@ -150,10 +150,11 @@ public class UtilityBeltClientInit implements ClientModInitializer {
                     .send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));
             UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(MinecraftClient.getInstance().player.getUuid(),
                     UtilityBeltClientInit.utilityBeltSelectedSlot);
-                
+
             Networking.SET_UTILITY_BELT_SELECTED_C2S
                     .send((buf) -> buf.writeBoolean(UtilityBeltClientInit.hasSwappedToUtilityBelt));
-            UtilityBeltInit.UTILITY_BELT_SELECTED.put(MinecraftClient.getInstance().player.getUuid(), UtilityBeltClientInit.hasSwappedToUtilityBelt);
+            UtilityBeltInit.UTILITY_BELT_SELECTED.put(MinecraftClient.getInstance().player.getUuid(),
+                    UtilityBeltClientInit.hasSwappedToUtilityBelt);
         });
 
         ClientNetworking.setHandlers();
