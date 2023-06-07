@@ -16,7 +16,6 @@
   },
   "license": "MIT",
   "icon": "assets/utilitybelt/icon.png",
-  "accessWidener": "utilitybelt.accesswidener",
   "environment": "*",
   "entrypoints": {
     "main": ["io.github.jamalam360.utility.belt.UtilityBeltInit"],

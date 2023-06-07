@@ -13,10 +13,6 @@ val mod_version: String by project
 group = "io.github.jamalam360"
 version = mod_version
 
-loom {
-    accessWidenerPath.set(project.file("src/main/resources/utilitybelt.accesswidener"))
-}
-
 repositories {
     val mavenUrls = mapOf(
         Pair("https://maven.terraformersmc.com/releases", listOf("com.terraformersmc", "dev.emi")),
@@ -51,28 +47,4 @@ dependencies {
 
     include(libs.mixin.extras)
     annotationProcessor(libs.mixin.extras)
-}
-
-sourceSets {
-    val main = this.getByName("main")
-
-    create("gametest") {
-        this.compileClasspath += main.compileClasspath
-        this.compileClasspath += main.output
-        this.runtimeClasspath += main.runtimeClasspath
-        this.runtimeClasspath += main.output
-    }
-}
-
-loom {
-    runs {
-        create("gametest") {
-            client()
-            name("Game Test")
-            source(sourceSets.getByName("gametest"))
-            vmArg("-Dfabric-api.gametest")
-            vmArg("-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml")
-            runDir("build/gametest")
-        }
-    }
 }
