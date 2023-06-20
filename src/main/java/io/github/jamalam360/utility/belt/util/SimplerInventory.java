@@ -37,6 +37,7 @@ import net.minecraft.util.collection.DefaultedList;
  * @author Jamalam
  */
 public class SimplerInventory implements Inventory, Cloneable {
+
     private DefaultedList<ItemStack> stacks;
     private InventoryChangedListener listener;
 
@@ -139,7 +140,7 @@ public class SimplerInventory implements Inventory, Cloneable {
         try {
             SimplerInventory clone = (SimplerInventory) super.clone();
             clone.stacks = DefaultedList.copyOf(ItemStack.EMPTY,
-                    this.stacks.stream().map(ItemStack::copy).toList().toArray(new ItemStack[0]));
+                  this.stacks.stream().map(ItemStack::copy).toList().toArray(new ItemStack[0]));
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

@@ -25,7 +25,6 @@
 package io.github.jamalam360.utility.belt.client;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.client.TrinketRenderer;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
@@ -53,9 +52,9 @@ public class BeltRenderer implements TrinketRenderer {
 
     @Override
     public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel,
-            MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, LivingEntity entity,
-            float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw,
-            float headPitch) {
+          MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, LivingEntity entity,
+          float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw,
+          float headPitch) {
         BipedEntityModel<LivingEntity> model = this.getModel();
         model.setAngles(entity, limbAngle, limbDistance, animationProgress, animationProgress, headPitch);
         model.animateModel(entity, limbAngle, limbDistance, tickDelta);

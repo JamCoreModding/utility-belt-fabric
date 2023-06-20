@@ -43,8 +43,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin extends PlayerEntity {
+
     public ClientPlayerEntityMixin(World world, BlockPos blockPos, float f, GameProfile gameProfile,
-            @Nullable PlayerPublicKey playerPublicKey) {
+          @Nullable PlayerPublicKey playerPublicKey) {
         super(world, blockPos, f, gameProfile, playerPublicKey);
     }
 

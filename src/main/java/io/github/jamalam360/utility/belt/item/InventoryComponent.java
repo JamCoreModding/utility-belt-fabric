@@ -31,5 +31,6 @@ import net.minecraft.inventory.Inventory;
  * @author Jamalam
  */
 public interface InventoryComponent<T extends Inventory> extends ComponentV3 {
+
     T getInventory();
 }

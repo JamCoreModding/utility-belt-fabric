@@ -24,15 +24,6 @@
 
 package io.github.jamalam360.utility.belt.mixin;
 
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
@@ -44,6 +35,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeMatcher;
 import net.minecraft.tag.TagKey;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 //TODO: Try patch PlayerInventory.combinedInventories to include Utility Belt inventory.
 
@@ -52,6 +51,7 @@ import net.minecraft.tag.TagKey;
  */
 @Mixin(PlayerInventory.class)
 public abstract class PlayerInventoryMixin {
+
     @Shadow
     @Final
     public PlayerEntity player;
@@ -61,7 +61,7 @@ public abstract class PlayerInventoryMixin {
 
     @Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
     private void utilitybelt$getBlockBreakingSpeedWithUtilityBeltItem(BlockState state,
-            CallbackInfoReturnable<Float> cir) {
+          CallbackInfoReturnable<Float> cir) {
         int slot;
 
         if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player.getUuid(), false)) {
@@ -124,8 +124,8 @@ public abstract class PlayerInventoryMixin {
     private int utilitybelt$dropSelectedUtilityBeltItem(int slot) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
             return UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player.getUuid(), false)
-                    ? UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(), 0)
-                    : slot;
+                   ? UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(), 0)
+                   : slot;
         }
 
         return slot;
@@ -223,8 +223,8 @@ public abstract class PlayerInventoryMixin {
             SimplerInventory inv = UtilityBeltItem.getInventory(belt);
 
             int selected = UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(this.player.getUuid(), false)
-                    ? UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(this.player.getUuid(), 0)
-                    : selectedSlot;
+                           ? UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(this.player.getUuid(), 0)
+                           : selectedSlot;
 
             for (int i = 0; i < inv.size(); i++) {
                 ItemStack itemStack = inv.getStack(i);

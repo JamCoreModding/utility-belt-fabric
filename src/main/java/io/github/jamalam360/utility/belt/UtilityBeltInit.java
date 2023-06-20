@@ -24,9 +24,6 @@
 
 package io.github.jamalam360.utility.belt;
 
-import java.util.Map;
-import java.util.UUID;
-
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.item.ItemComponentFactoryRegistry;
@@ -42,8 +39,11 @@ import io.github.jamalam360.utility.belt.registry.ItemRegistry;
 import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.registry.ScreenHandlerRegistry;
 import io.github.jamalam360.utility.belt.registry.TrinketsBehaviours;
+import io.github.jamalam360.utility.belt.registry.UtilityBeltTutorial;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
+import java.util.Map;
+import java.util.UUID;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
@@ -55,19 +55,20 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class UtilityBeltInit implements ModInitializer, ItemComponentInitializer {
+
     public static final String MOD_ID = "utilitybelt";
     public static final JamLibLogger LOGGER = JamLibLogger.getLogger(MOD_ID);
 
     public static final Map<UUID, Boolean> UTILITY_BELT_SELECTED = new Object2BooleanArrayMap<>();
     public static final Map<UUID, Integer> UTILITY_BELT_SELECTED_SLOTS = new Object2IntArrayMap<>();
     public static final TagKey<Item> ALLOWED_IN_UTILITY_BELT = TagKey.of(Registry.ITEM_KEY,
-            idOf("allowed_in_utility_belt"));
+          idOf("allowed_in_utility_belt"));
     @SuppressWarnings("rawtypes")
     public static final ComponentKey<InventoryComponent> INVENTORY = ComponentRegistry
-            .getOrCreate(idOf("belt_inventory"), InventoryComponent.class);
+          .getOrCreate(idOf("belt_inventory"), InventoryComponent.class);
 
     /*
-     * We use this now to aid with un-hardcoding in case issue #2 is ever tackled.
+     * We use this now to aid with un-hard-coding in case issue #2 is ever tackled.
      */
     public static final int UTILITY_BELT_SIZE = 4;
 
@@ -79,25 +80,24 @@ public class UtilityBeltInit implements ModInitializer, ItemComponentInitializer
     public void onInitialize() {
         JamLibRegistry.register(ItemRegistry.class, ScreenHandlerRegistry.class);
         JamLibConfig.init(MOD_ID, UtilityBeltConfig.class);
-        Networking.setHandlers();
         TrinketsBehaviours.registerEvents();
+        UtilityBeltTutorial.registerTutorial();
+        Networking.setHandlers();
         JamLibServerNetworking.registerHandlers(MOD_ID);
 
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-            CommandRegistrationCallback.EVENT.register((dispatcher, ctx, dedicated) -> {
-                dispatcher.register(
-                        CommandManager.literal(MOD_ID)
-                                .then(CommandManager.literal("selected_slots")
-                                        .executes(context -> {
-                                            context.getSource().getPlayer().sendMessage(
-                                                    Text.literal(UTILITY_BELT_SELECTED.toString()), false);
+            CommandRegistrationCallback.EVENT.register((dispatcher, ctx, dedicated) -> dispatcher.register(
+                  CommandManager.literal(MOD_ID)
+                        .then(CommandManager.literal("selected_slots")
+                              .executes(context -> {
+                                  context.getSource().getPlayer().sendMessage(
+                                        Text.literal(UTILITY_BELT_SELECTED.toString()), false);
 
-                                            context.getSource().getPlayer().sendMessage(
-                                                    Text.literal(UTILITY_BELT_SELECTED_SLOTS.toString()), false);
+                                  context.getSource().getPlayer().sendMessage(
+                                        Text.literal(UTILITY_BELT_SELECTED_SLOTS.toString()), false);
 
-                                            return 1;
-                                        })));
-            });
+                                  return 1;
+                              }))));
         }
 
         LOGGER.logInitialize();
