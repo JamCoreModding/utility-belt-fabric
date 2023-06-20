@@ -47,12 +47,14 @@ import net.minecraft.util.Identifier;
  */
 public class UtilityBeltHotbarRenderer {
 
-    private static final Identifier UTILITY_BELT_WIDGET_TEXTURE = UtilityBeltInit.idOf("textures/gui/utility_belt_widget.png");
+    private static final Identifier UTILITY_BELT_WIDGET_TEXTURE = UtilityBeltInit
+          .idOf("textures/gui/utility_belt_widget.png");
 
     public static void render(MatrixStack matrices, float tickDelta) {
         PlayerEntity player = MinecraftClient.getInstance().player;
 
-        if (player != null && TrinketsUtil.hasUtilityBelt(player) && (UtilityBeltClientInit.hasSwappedToUtilityBelt || UtilityBeltConfig.displayUtilityBeltWhenNotSelected)) {
+        if (player != null && TrinketsUtil.hasUtilityBelt(player) && (UtilityBeltClientInit.hasSwappedToUtilityBelt
+                                                                      || UtilityBeltConfig.displayUtilityBeltWhenNotSelected)) {
             InGameHud hud = MinecraftClient.getInstance().inGameHud;
             int scaledHeight = MinecraftClient.getInstance().getWindow().getScaledHeight();
 
@@ -65,7 +67,8 @@ public class UtilityBeltHotbarRenderer {
 
             if (UtilityBeltClientInit.hasSwappedToUtilityBelt) {
                 RenderSystem.setShaderTexture(0, ClickableWidget.WIDGETS_TEXTURE);
-                hud.drawTexture(matrices, 1, scaledHeight / 2 - 45 + UtilityBeltClientInit.utilityBeltSelectedSlot * 20, 0, 22, 24, 22);
+                hud.drawTexture(matrices, 1, scaledHeight / 2 - 45 + UtilityBeltClientInit.utilityBeltSelectedSlot * 20,
+                      0, 22, 24, 22);
             }
 
             TrinketsApi.getTrinketComponent(player).ifPresent((component) -> {
@@ -74,7 +77,8 @@ public class UtilityBeltHotbarRenderer {
                 RenderSystem.defaultBlendFunc();
                 int m = 1;
 
-                SimplerInventory inv = UtilityBeltItem.getInventory(component.getEquipped(ItemRegistry.UTILITY_BELT).get(0).getRight());
+                SimplerInventory inv = UtilityBeltItem
+                      .getInventory(component.getEquipped(ItemRegistry.UTILITY_BELT).get(0).getRight());
 
                 for (int n = 0; n < UtilityBeltInit.UTILITY_BELT_SIZE; ++n) {
                     renderHotbarItem(scaledHeight / 2 - 45 + n * 20 + 4, tickDelta, player, inv.getStack(n), m++);
@@ -105,7 +109,8 @@ public class UtilityBeltHotbarRenderer {
                 RenderSystem.applyModelViewMatrix();
             }
 
-            MinecraftClient.getInstance().getItemRenderer().renderGuiItemOverlay(MinecraftClient.getInstance().textRenderer, stack, 4, y);
+            MinecraftClient.getInstance().getItemRenderer()
+                  .renderGuiItemOverlay(MinecraftClient.getInstance().textRenderer, stack, 4, y);
         }
     }
 }

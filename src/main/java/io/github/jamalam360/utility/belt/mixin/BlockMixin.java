@@ -22,31 +22,30 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.utility.belt.mixin.client.render;
+package io.github.jamalam360.utility.belt.mixin;
 
-import com.llamalad7.mixinextras.injector.WrapWithCondition;
-import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
-import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.util.math.MatrixStack;
+import io.github.jamalam360.utility.belt.client.tutorial.MineBlockUsingPickaxeInBeltStage;
+import io.github.jamalam360.utility.belt.registry.UtilityBeltTutorial;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.PickaxeItem;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * @author Jamalam
- */
+@Mixin(Block.class)
+public class BlockMixin {
 
-@Mixin(InGameHud.class)
-public abstract class InGameHudMixin {
-
-    @WrapWithCondition(
-          method = "renderHotbar",
-          at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V",
-                ordinal = 1
-          )
-    )
-    private boolean utilitybelt$disableHotbarHighlight(InGameHud instance, MatrixStack matrixStack, int a, int b, int c, int d, int e, int f) {
-        return !UtilityBeltClientInit.hasSwappedToUtilityBelt;
+    @Inject(method = "afterBreak", at = @At("HEAD"))
+    private void utilitybelt$triggerPickaxeTutorialStage(World world, PlayerEntity player, BlockPos pos, BlockState state, BlockEntity blockEntity, ItemStack stack, CallbackInfo ci) {
+        if (stack.getItem() instanceof PickaxeItem && UtilityBeltTutorial.TUTORIAL.getCurrentStage() instanceof MineBlockUsingPickaxeInBeltStage) {
+            UtilityBeltTutorial.TUTORIAL.advanceStage();
+        }
     }
 }

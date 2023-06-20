@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "1.0-SNAPSHOT"
+    id("fabric-loom") version "1.2-SNAPSHOT"
     id("io.github.juuxel.loom-quiltflower") version "1.+"
     id("io.github.p03w.machete") version "1.+"
     id("org.cadixdev.licenser") version "0.6.1"
@@ -12,10 +12,6 @@ val mod_version: String by project
 
 group = "io.github.jamalam360"
 version = mod_version
-
-loom {
-    accessWidenerPath.set(project.file("src/main/resources/utilitybelt.accesswidener"))
-}
 
 repositories {
     val mavenUrls = mapOf(
@@ -49,30 +45,7 @@ dependencies {
     modImplementation(libs.bundles.optional)
     modLocalRuntime(libs.bundles.runtime)
 
+    include(libs.tutorial.lib)
     include(libs.mixin.extras)
     annotationProcessor(libs.mixin.extras)
-}
-
-sourceSets {
-    val main = this.getByName("main")
-
-    create("gametest") {
-        this.compileClasspath += main.compileClasspath
-        this.compileClasspath += main.output
-        this.runtimeClasspath += main.runtimeClasspath
-        this.runtimeClasspath += main.output
-    }
-}
-
-loom {
-    runs {
-        create("gametest") {
-            client()
-            name("Game Test")
-            source(sourceSets.getByName("gametest"))
-            vmArg("-Dfabric-api.gametest")
-            vmArg("-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml")
-            runDir("build/gametest")
-        }
-    }
 }

@@ -3,6 +3,7 @@
   "package": "io.github.jamalam360.utility.belt.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "BlockMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
     "PlayerInventoryMixin"

@@ -22,24 +22,28 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.utility.belt.gametest;
+package io.github.jamalam360.utility.belt.client.tutorial;
 
-import net.minecraft.client.option.KeyBind;
-import net.minecraft.test.GameTestException;
+import io.github.jamalam360.tutorial.lib.stage.Stage;
+import net.minecraft.client.toast.TutorialToast;
 
-/**
- * @author Jamalam
- */
-public class TestUtil {
+public class SwitchToBeltStage extends Stage {
 
-    public static void pressKeyBind(KeyBind keyBind) {
-        // Key will always be default on gametest.
-        KeyBind.onKeyPressed(keyBind.getDefaultKey());
+    private final Type type;
+
+    public SwitchToBeltStage(Type type, TutorialToast toast) {
+        super(toast);
+        this.type = type;
     }
 
-    public static void assertEquals(Object expected, Object actual) {
-        if (!expected.equals(actual)) {
-            throw new GameTestException("Expected: " + expected + ", actual: " + actual);
-        }
+    public boolean shouldTrigger(Type type) {
+        return this.type == type;
+    }
+
+    public enum Type {
+        HOLD,
+        TOGGLE,
+        GUI,
+        INSERT_PICKAXE,
     }
 }

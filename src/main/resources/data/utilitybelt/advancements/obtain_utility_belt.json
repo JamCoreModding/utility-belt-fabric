@@ -5,10 +5,10 @@
       "item": "utilitybelt:utility_belt"
     },
     "title": {
-      "translate": "utilitybelt.advancements.utility_belt.title"
+      "translate": "advancements.utilitybelt.utility_belt.title"
     },
     "description": {
-      "translate": "utilitybelt.advancements.utility_belt.description"
+      "translate": "advancements.utilitybelt.utility_belt.description"
     },
     "frame": "task",
     "show_toast": true,

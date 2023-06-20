@@ -1,15 +1,16 @@
 [versions]
 minecraft = "1.19.3"
-quilt-mappings = "1.19.3+build.16"
-fabric-loader = "0.14.12"
-fabric-api = "0.72.0+1.19.3"
+quilt-mappings = "1.19.3+build.28"
+fabric-loader = "0.14.11"
+fabric-api = "0.76.1+1.19.3"
 
 jamlib = "0.6.0+1.19.3"
+tutorial-lib = "1.1.0+1.19.3"
 mixin-extras = "0.1.1"
-trinkets = "3.5.0"
+trinkets = "3.5.1"
 cardinal-components = "5.1.0"
 
-mod-menu = "5.0.2"
+mod-menu = "5.1.0-beta.4"
 
 lazy-dfu = "0.1.3"
 
@@ -20,6 +21,7 @@ fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-l
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 
 jamlib = { module = "io.github.jamalam360:jamlib", version.ref = "jamlib" }
+tutorial-lib = { module = "io.github.jamalam360:tutorial-lib", version.ref = "tutorial-lib" }
 mixin-extras = { module = "com.github.LlamaLad7:MixinExtras", version.ref = "mixin-extras" }
 trinkets = { module = "dev.emi:trinkets", version.ref = "trinkets" }
 cardinal-components-base = { module = "dev.onyxstudios.cardinal-components-api:cardinal-components-base", version.ref = "cardinal-components" }
@@ -33,6 +35,6 @@ cardinal-components-entity = { module = "dev.onyxstudios.cardinal-components-api
 
 [bundles]
 fabric = [ "fabric-loader", "fabric-api" ]
-required = [ "jamlib", "mixin-extras", "trinkets", "cardinal-components-base", "cardinal-components-item" ]
+required = [ "jamlib", "tutorial-lib", "mixin-extras", "trinkets", "cardinal-components-base", "cardinal-components-item" ]
 optional = [ "mod-menu" ]
 runtime = [ "lazy-dfu", "cardinal-components-entity" ]

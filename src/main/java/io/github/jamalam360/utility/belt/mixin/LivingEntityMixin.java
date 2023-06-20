@@ -51,10 +51,7 @@ public abstract class LivingEntityMixin implements Ducks.LivingEntity {
     @Shadow
     protected abstract void detectEquipmentUpdates();
 
-    @Inject(
-          method = "sendEquipmentBreakStatus",
-          at = @At("HEAD")
-    )
+    @Inject(method = "sendEquipmentBreakStatus", at = @At("HEAD"))
     private void utilitybelt$updateUtilityBeltNbtOnToolBreak(EquipmentSlot slot, CallbackInfo ci) {
         if (slot != EquipmentSlot.MAINHAND) {
             return;
@@ -65,19 +62,16 @@ public abstract class LivingEntityMixin implements Ducks.LivingEntity {
                 ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);
                 SimplerInventory inv = UtilityBeltItem.getInventory(utilityBelt);
 
-                if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
-                    inv.setStack(UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0), ItemStack.EMPTY);
+                if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player.getUuid(), false)) {
+                    inv.setStack(UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(), 0),
+                          ItemStack.EMPTY);
                     UtilityBeltItem.update(utilityBelt, inv);
                 }
             }
         }
     }
 
-    @Inject(
-          method = "getStackInHand",
-          at = @At("HEAD"),
-          cancellable = true
-    )
+    @Inject(method = "getStackInHand", at = @At("HEAD"), cancellable = true)
     private void utilitybelt$useUtilityBeltStack(Hand hand, CallbackInfoReturnable<ItemStack> cir) {
         if (hand == Hand.MAIN_HAND && ((LivingEntity) (Object) this) instanceof PlayerEntity player) {
             ItemStack stack = UtilityBeltItem.getSelectedUtilityBeltStack(player);
@@ -88,11 +82,7 @@ public abstract class LivingEntityMixin implements Ducks.LivingEntity {
         }
     }
 
-    @Inject(
-          method = "getMainHandStack",
-          at = @At("HEAD"),
-          cancellable = true
-    )
+    @Inject(method = "getMainHandStack", at = @At("HEAD"), cancellable = true)
     private void utilitybelt$useUtilityBeltStack2(CallbackInfoReturnable<ItemStack> cir) {
         if (((LivingEntity) (Object) this) instanceof PlayerEntity player) {
             ItemStack stack = UtilityBeltItem.getSelectedUtilityBeltStack(player);
@@ -103,17 +93,13 @@ public abstract class LivingEntityMixin implements Ducks.LivingEntity {
         }
     }
 
-    @Inject(
-          method = "setStackInHand",
-          at = @At("HEAD"),
-          cancellable = true
-    )
+    @Inject(method = "setStackInHand", at = @At("HEAD"), cancellable = true)
     private void utilitybelt$setStackInHandUtilityBelt(Hand hand, ItemStack stack, CallbackInfo ci) {
         if (hand == Hand.MAIN_HAND && ((LivingEntity) (Object) this) instanceof PlayerEntity player) {
             int slot;
 
-            if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
-                slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
+            if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player.getUuid(), false)) {
+                slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(), 0);
 
                 if (TrinketsUtil.hasUtilityBelt(player)) {
                     ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);

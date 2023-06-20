@@ -24,6 +24,8 @@
 
 package io.github.jamalam360.utility.belt.mixin.client;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.config.UtilityBeltConfig;
@@ -39,7 +41,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
@@ -57,46 +58,40 @@ public abstract class MinecraftClientMixin {
     @Final
     public GameOptions options;
 
-    @Inject(
-          method = "doItemPick",
-          at = @At("HEAD"),
-          cancellable = true
-    )
+    @Inject(method = "doItemPick", at = @At("HEAD"), cancellable = true)
     private void utilitybelt$disableMiddleClick(CallbackInfo ci) {
         if (UtilityBeltClientInit.hasSwappedToUtilityBelt) {
             ci.cancel();
         }
     }
 
-    @Redirect(
-          method = "handleInputEvents",
-          at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/option/KeyBind;wasPressed()Z"
-          )
-    )
-    private boolean utilitybelt$hijackHotbarKeys(KeyBind instance) {
-        boolean wasPressed = instance.wasPressed();
+    @WrapOperation(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBind;wasPressed()Z"))
+    private boolean utilitybelt$hijackHotbarKeys(KeyBind instance, Operation<Boolean> operation) {
+        boolean wasPressed = operation.call(instance);
 
         if (wasPressed && UtilityBeltClientInit.hasSwappedToUtilityBelt && TrinketsUtil.hasUtilityBelt(this.player)) {
             switch (UtilityBeltConfig.hotbarKeyBehaviour) {
                 case SWITCH_BACK_TO_HOTBAR -> {
                     UtilityBeltClientInit.hasSwappedToUtilityBelt = false;
-                    UtilityBeltInit.UTILITY_BELT_SELECTED.put(this.player, false);
+                    UtilityBeltInit.UTILITY_BELT_SELECTED.put(this.player.getUuid(), false);
                     Networking.SET_UTILITY_BELT_SELECTED_C2S.send((buf) -> buf.writeBoolean(false));
-                    return true;
                 }
                 case SWITCH_BELT_SLOT -> {
                     for (int i = 0; i < UtilityBeltInit.UTILITY_BELT_SIZE; i++) {
                         if (this.options.hotbarKeys[i] == instance) {
                             UtilityBeltClientInit.utilityBeltSelectedSlot = i;
-                            Networking.SET_UTILITY_BELT_SELECTED_SLOT_C2S.send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));
-                            UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(MinecraftClient.getInstance().player, UtilityBeltClientInit.utilityBeltSelectedSlot);
+                            Networking.SET_UTILITY_BELT_SELECTED_SLOT_C2S
+                                  .send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));
+                            UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(
+                                  MinecraftClient.getInstance().player.getUuid(),
+                                  UtilityBeltClientInit.utilityBeltSelectedSlot);
                             return false;
                         }
                     }
                 }
             }
+
+            return true;
         }
 
         return wasPressed;

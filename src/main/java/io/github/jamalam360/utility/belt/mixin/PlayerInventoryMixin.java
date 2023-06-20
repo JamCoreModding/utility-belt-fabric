@@ -59,16 +59,13 @@ public abstract class PlayerInventoryMixin {
     @Shadow
     public int selectedSlot;
 
-    @Inject(
-          method = "getBlockBreakingSpeed",
-          at = @At("HEAD"),
-          cancellable = true
-    )
-    private void utilitybelt$getBlockBreakingSpeedWithUtilityBeltItem(BlockState state, CallbackInfoReturnable<Float> cir) {
+    @Inject(method = "getBlockBreakingSpeed", at = @At("HEAD"), cancellable = true)
+    private void utilitybelt$getBlockBreakingSpeedWithUtilityBeltItem(BlockState state,
+          CallbackInfoReturnable<Float> cir) {
         int slot;
 
-        if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
-            slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
+        if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player.getUuid(), false)) {
+            slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(), 0);
 
             if (TrinketsUtil.hasUtilityBelt(player)) {
                 ItemStack stack = TrinketsUtil.getUtilityBelt(player);
@@ -77,11 +74,7 @@ public abstract class PlayerInventoryMixin {
         }
     }
 
-    @Inject(
-          method = "getMainHandStack",
-          at = @At("HEAD"),
-          cancellable = true
-    )
+    @Inject(method = "getMainHandStack", at = @At("HEAD"), cancellable = true)
     private void utilitybelt$useUtilityBeltStack(CallbackInfoReturnable<ItemStack> cir) {
         ItemStack stack = UtilityBeltItem.getSelectedUtilityBeltStack(player);
 
@@ -93,11 +86,7 @@ public abstract class PlayerInventoryMixin {
     /**
      * This fixes cases like tridents not being removed from the belt when thrown
      */
-    @Inject(
-          method = "removeOne",
-          at = @At("HEAD"),
-          cancellable = true
-    )
+    @Inject(method = "removeOne", at = @At("HEAD"), cancellable = true)
     private void utilitybelt$patchRemoveOneForHeldItems(ItemStack stack, CallbackInfo ci) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
             ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
@@ -119,10 +108,7 @@ public abstract class PlayerInventoryMixin {
         }
     }
 
-    @Inject(
-          method = "populateRecipeFinder",
-          at = @At("HEAD")
-    )
+    @Inject(method = "populateRecipeFinder", at = @At("HEAD"))
     private void utilitybelt$recipeFinderPatch(RecipeMatcher finder, CallbackInfo ci) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
             ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
@@ -134,32 +120,22 @@ public abstract class PlayerInventoryMixin {
         }
     }
 
-    @ModifyArg(
-          method = "dropSelectedItem",
-          at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/entity/player/PlayerInventory;removeStack(II)Lnet/minecraft/item/ItemStack;"
-          ),
-          index = 0
-    )
+    @ModifyArg(method = "dropSelectedItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;removeStack(II)Lnet/minecraft/item/ItemStack;"), index = 0)
     private int utilitybelt$dropSelectedUtilityBeltItem(int slot) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
-            return UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false) ?
-                   UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0) : slot;
+            return UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player.getUuid(), false)
+                   ? UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(), 0)
+                   : slot;
         }
 
         return slot;
     }
 
-    @Inject(
-          method = "dropSelectedItem",
-          at = @At("HEAD"),
-          cancellable = true
-    )
+    @Inject(method = "dropSelectedItem", at = @At("HEAD"), cancellable = true)
     private void utilitybelt$dropStackIfUsingUtilityBelt(boolean entireStack, CallbackInfoReturnable<ItemStack> cir) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
-            if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
-                int slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
+            if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player.getUuid(), false)) {
+                int slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(), 0);
                 ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
                 SimplerInventory inv = UtilityBeltItem.getInventory(belt);
                 ItemStack removed = inv.removeStack(slot);
@@ -170,10 +146,7 @@ public abstract class PlayerInventoryMixin {
         }
     }
 
-    @Inject(
-          method = "clear",
-          at = @At("HEAD")
-    )
+    @Inject(method = "clear", at = @At("HEAD"))
     private void utilitybelt$clearUtilityBelt(CallbackInfo ci) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
             ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
@@ -183,11 +156,7 @@ public abstract class PlayerInventoryMixin {
         }
     }
 
-    @Inject(
-          method = "contains(Lnet/minecraft/item/ItemStack;)Z",
-          at = @At("HEAD"),
-          cancellable = true
-    )
+    @Inject(method = "contains(Lnet/minecraft/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
     private void utilitybelt$patchContainsStack(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
             ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
@@ -201,11 +170,7 @@ public abstract class PlayerInventoryMixin {
         }
     }
 
-    @Inject(
-          method = "contains(Lnet/minecraft/registry/tag/TagKey;)Z",
-          at = @At("HEAD"),
-          cancellable = true
-    )
+    @Inject(method = "contains(Lnet/minecraft/registry/tag/TagKey;)Z", at = @At("HEAD"), cancellable = true)
     private void utilitybelt$patchContainsStack(TagKey<Item> key, CallbackInfoReturnable<Boolean> cir) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
             ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
@@ -219,10 +184,7 @@ public abstract class PlayerInventoryMixin {
         }
     }
 
-    @Inject(
-          method = "dropAll",
-          at = @At("HEAD")
-    )
+    @Inject(method = "dropAll", at = @At("HEAD"))
     private void utilitybelt$dropAllFromUtilityBelt(CallbackInfo ci) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
             ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
@@ -240,11 +202,7 @@ public abstract class PlayerInventoryMixin {
         }
     }
 
-    @Inject(
-          method = "isEmpty",
-          at = @At("HEAD"),
-          cancellable = true
-    )
+    @Inject(method = "isEmpty", at = @At("HEAD"), cancellable = true)
     private void utilitybelt$patchIsEmpty(CallbackInfoReturnable<Boolean> cir) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
             ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
@@ -258,16 +216,15 @@ public abstract class PlayerInventoryMixin {
         }
     }
 
-    @Inject(
-          method = "updateItems",
-          at = @At("HEAD")
-    )
+    @Inject(method = "updateItems", at = @At("HEAD"))
     private void utilitybelt$doInventoryTick(CallbackInfo ci) {
         if (TrinketsUtil.hasUtilityBelt(this.player)) {
             ItemStack belt = TrinketsUtil.getUtilityBelt(this.player);
             SimplerInventory inv = UtilityBeltItem.getInventory(belt);
 
-            int selected = UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(this.player, false) ? UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(this.player, 0) : selectedSlot;
+            int selected = UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(this.player.getUuid(), false)
+                           ? UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(this.player.getUuid(), 0)
+                           : selectedSlot;
 
             for (int i = 0; i < inv.size(); i++) {
                 ItemStack itemStack = inv.getStack(i);

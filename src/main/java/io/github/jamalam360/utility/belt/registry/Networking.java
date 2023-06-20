@@ -33,31 +33,40 @@ import io.github.jamalam360.utility.belt.screen.UtilityBeltScreenHandler;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.PickaxeItem;
 
 /**
  * @author Jamalam
  */
 public class Networking {
 
-    public static final JamLibS2CNetworkChannel SWING_HAND = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("swing_hand"));
-    public static final JamLibS2CNetworkChannel SET_UTILITY_BELT_SELECTED_S2C = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected_s2c"));
+    public static final JamLibS2CNetworkChannel SWING_HAND = new JamLibS2CNetworkChannel(
+          UtilityBeltInit.idOf("swing_hand"));
+    public static final JamLibS2CNetworkChannel SET_UTILITY_BELT_SELECTED_S2C = new JamLibS2CNetworkChannel(
+          UtilityBeltInit.idOf("set_utility_belt_selected_s2c"));
 
-    public static final JamLibS2CNetworkChannel SET_UTILITY_BELT_SELECTED_SLOT_S2C = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected_slot_s2c"));
-    public static final JamLibS2CNetworkChannel SYNC_UTILITY_BELT_INVENTORY = new JamLibS2CNetworkChannel(UtilityBeltInit.idOf("sync_utility_belt_inventory"));
-
-    public static final JamLibC2SNetworkChannel SET_UTILITY_BELT_SELECTED_C2S = new JamLibC2SNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected_c2s"));
-    public static final JamLibC2SNetworkChannel SET_UTILITY_BELT_SELECTED_SLOT_C2S = new JamLibC2SNetworkChannel(UtilityBeltInit.idOf("set_utility_belt_selected_slot_c2s"));
-    public static final JamLibC2SNetworkChannel OPEN_SCREEN = new JamLibC2SNetworkChannel(UtilityBeltInit.idOf("open_screen"));
+    public static final JamLibS2CNetworkChannel SET_UTILITY_BELT_SELECTED_SLOT_S2C = new JamLibS2CNetworkChannel(
+          UtilityBeltInit.idOf("set_utility_belt_selected_slot_s2c"));
+    public static final JamLibS2CNetworkChannel SYNC_UTILITY_BELT_INVENTORY = new JamLibS2CNetworkChannel(
+          UtilityBeltInit.idOf("sync_utility_belt_inventory"));
+    public static final JamLibS2CNetworkChannel ON_MOVE_PICKAXE_TO_BELT = new JamLibS2CNetworkChannel(
+          UtilityBeltInit.idOf("on_move_pickaxe_to_belt"));
+    public static final JamLibC2SNetworkChannel SET_UTILITY_BELT_SELECTED_C2S = new JamLibC2SNetworkChannel(
+          UtilityBeltInit.idOf("set_utility_belt_selected_c2s"));
+    public static final JamLibC2SNetworkChannel SET_UTILITY_BELT_SELECTED_SLOT_C2S = new JamLibC2SNetworkChannel(
+          UtilityBeltInit.idOf("set_utility_belt_selected_slot_c2s"));
+    public static final JamLibC2SNetworkChannel OPEN_SCREEN = new JamLibC2SNetworkChannel(
+          UtilityBeltInit.idOf("open_screen"));
 
     /*
      * Called server side
-     * */
+     */
     public static void setHandlers() {
         SET_UTILITY_BELT_SELECTED_SLOT_C2S.setHandler((server, player, handler, buf, responseSender) -> {
             int slot = buf.readInt();
 
-            if (slot > 0 && slot < UtilityBeltInit.UTILITY_BELT_SIZE) {
-                UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player, slot);
+            if (slot >= 0 && slot < UtilityBeltInit.UTILITY_BELT_SIZE) {
+                UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player.getUuid(), slot);
                 ((Ducks.LivingEntity) player).updateEquipment();
             }
         });
@@ -72,7 +81,8 @@ public class Networking {
 
                     if (hasSwappedToUtilityBelt) {
                         // We use this rather than getStackInHand since at this point, the map already
-                        // states that the player is swapped to the utility belt, so getStackInHand returns
+                        // states that the player is swapped to the utility belt, so getStackInHand
+                        // returns
                         // whatever is in there.
                         ItemStack heldItem = player.getInventory().getStack(player.getInventory().selectedSlot);
 
@@ -91,13 +101,19 @@ public class Networking {
                                 // Same reason as above.
                                 player.getInventory().setStack(player.getInventory().selectedSlot, ItemStack.EMPTY);
                                 UtilityBeltItem.update(utilityBelt, utilityBeltInventory);
-                                UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player, utilityBeltSlot);
+                                UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player.getUuid(), utilityBeltSlot);
                                 final int finalUtilityBeltSlot = utilityBeltSlot;
-                                SET_UTILITY_BELT_SELECTED_SLOT_S2C.send(player, (resBuf) -> resBuf.writeInt(finalUtilityBeltSlot));
+                                SET_UTILITY_BELT_SELECTED_SLOT_S2C.send(player,
+                                      (resBuf) -> resBuf.writeInt(finalUtilityBeltSlot));
+
+                                if (utilityBeltInventory.getStack(utilityBeltSlot).getItem() instanceof PickaxeItem) {
+                                    ON_MOVE_PICKAXE_TO_BELT.send(player);
+                                }
                             }
                         }
                     } else {
-                        int utilityBeltSlot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
+                        int utilityBeltSlot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(),
+                              0);
 
                         if (!utilityBeltInventory.getStack(utilityBeltSlot).isEmpty()) {
                             int playerSlot = player.getInventory().selectedSlot;
@@ -106,8 +122,9 @@ public class Networking {
                                 playerSlot = player.getInventory().getEmptySlot();
                             }
 
-                            if (player.getInventory().getStack(playerSlot).isEmpty()) {
-                                player.getInventory().setStack(playerSlot, utilityBeltInventory.getStack(utilityBeltSlot));
+                            if (playerSlot != -1 && player.getInventory().getStack(playerSlot).isEmpty()) {
+                                player.getInventory().setStack(playerSlot,
+                                      utilityBeltInventory.getStack(utilityBeltSlot));
                                 utilityBeltInventory.setStack(utilityBeltSlot, ItemStack.EMPTY);
                                 UtilityBeltItem.update(utilityBelt, utilityBeltInventory);
                             }
@@ -116,7 +133,7 @@ public class Networking {
                 }
             }
 
-            UtilityBeltInit.UTILITY_BELT_SELECTED.put(player, hasSwappedToUtilityBelt);
+            UtilityBeltInit.UTILITY_BELT_SELECTED.put(player.getUuid(), hasSwappedToUtilityBelt);
             ((Ducks.LivingEntity) player).updateEquipment();
             SWING_HAND.send(player);
         });

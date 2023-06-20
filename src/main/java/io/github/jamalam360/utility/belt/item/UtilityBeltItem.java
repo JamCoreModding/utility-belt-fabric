@@ -26,11 +26,14 @@ package io.github.jamalam360.utility.belt.item;
 
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketItem;
+import io.github.jamalam360.tutorial.lib.stage.EquipItemStage;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.registry.Networking;
+import io.github.jamalam360.utility.belt.registry.UtilityBeltTutorial;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import java.util.List;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
@@ -79,14 +82,18 @@ public class UtilityBeltItem extends TrinketItem {
     }
 
     public static boolean isValidItem(ItemStack stack) {
-        return stack.getItem() instanceof ToolItem || stack.getItem() instanceof RangedWeaponItem || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof ShearsItem || stack.isEmpty() || stack.isIn(UtilityBeltInit.ALLOWED_IN_UTILITY_BELT);
+        return stack.getItem() instanceof ToolItem || stack.getItem() instanceof RangedWeaponItem
+               || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem
+               || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem
+               || stack.getItem() instanceof ShearsItem || stack.isEmpty()
+               || stack.isIn(UtilityBeltInit.ALLOWED_IN_UTILITY_BELT);
     }
 
     public static ItemStack getSelectedUtilityBeltStack(PlayerEntity player) {
         int slot;
 
-        if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player, false)) {
-            slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player, 0);
+        if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player.getUuid(), false)) {
+            slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(), 0);
 
             if (TrinketsUtil.hasUtilityBelt(player)) {
                 return getInventory(TrinketsUtil.getUtilityBelt(player)).getStack(slot);
@@ -94,6 +101,15 @@ public class UtilityBeltItem extends TrinketItem {
         }
 
         return null;
+    }
+
+    @Override
+    public void onEquip(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        if (entity.getWorld().isClient && entity.getId() == MinecraftClient.getInstance().player.getId()) {
+            if (UtilityBeltTutorial.TUTORIAL.getCurrentStage() instanceof EquipItemStage equipItemStage && equipItemStage.matches(stack.getItem())) {
+                UtilityBeltTutorial.TUTORIAL.advanceStage();
+            }
+        }
     }
 
     @Override
@@ -157,7 +173,8 @@ public class UtilityBeltItem extends TrinketItem {
     }
 
     @Override
-    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference) {
+    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player,
+          StackReference cursorStackReference) {
         if (clickType == ClickType.RIGHT && slot.canTakePartial(player)) {
             SimplerInventory inv = getInventory(stack);
 
@@ -208,8 +225,9 @@ public class UtilityBeltItem extends TrinketItem {
     @Override
     public void onUnequip(ItemStack stack, SlotReference slot, LivingEntity entity) {
         if (!entity.world.isClient && entity instanceof PlayerEntity player) {
-            UtilityBeltInit.UTILITY_BELT_SELECTED.put(player, false);
-            Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) player, (buf) -> buf.writeBoolean(false));
+            UtilityBeltInit.UTILITY_BELT_SELECTED.put(player.getUuid(), false);
+            Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) player,
+                  (buf) -> buf.writeBoolean(false));
         }
     }
 

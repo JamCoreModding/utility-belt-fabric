@@ -43,21 +43,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin {
 
-    @Inject(
-          method = "remove",
-          at = @At("HEAD")
-    )
+    @Inject(method = "remove", at = @At("HEAD"))
     private void utilitybelt$switchBackToHotbar(CallbackInfo ci) {
         if (!((PlayerEntity) (Object) this).world.isClient) {
-            UtilityBeltInit.UTILITY_BELT_SELECTED.put((PlayerEntity) (Object) this, false);
-            Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) (Object) this, (buf) -> buf.writeBoolean(false));
+            UtilityBeltInit.UTILITY_BELT_SELECTED.put(((PlayerEntity) (Object) this).getUuid(), false);
+            Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) (Object) this,
+                  (buf) -> buf.writeBoolean(false));
         }
     }
 
-    @Inject(
-          method = "tick",
-          at = @At("HEAD")
-    )
+    @Inject(method = "tick", at = @At("HEAD"))
     private void utilitybelt$syncInventoryIfNeeded(CallbackInfo ci) {
         if (((PlayerEntity) (Object) this) instanceof ServerPlayerEntity serverPlayerEntity) {
             if (TrinketsUtil.hasUtilityBelt(serverPlayerEntity)) {
