@@ -25,7 +25,6 @@
 package io.github.jamalam360.utility.belt.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
@@ -38,6 +37,7 @@ import net.minecraft.util.Identifier;
  * @author Jamalam
  */
 public class UtilityBeltScreen extends HandledScreen<UtilityBeltScreenHandler> {
+
     private static final Identifier TEXTURE = UtilityBeltInit.idOf("textures/gui/utility_belt_gui.png");
 
     public UtilityBeltScreen(UtilityBeltScreenHandler handler, PlayerInventory inventory, Text title) {

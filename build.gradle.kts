@@ -45,6 +45,7 @@ dependencies {
     modImplementation(libs.bundles.optional)
     modImplementation(libs.bundles.runtime)
 
+    include(libs.tutorial.lib)
     include(libs.mixin.extras)
     annotationProcessor(libs.mixin.extras)
 }

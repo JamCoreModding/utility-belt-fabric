@@ -5,6 +5,7 @@ fabric-loader = "0.14.21"
 fabric-api = "0.76.0+1.19.2"
 
 jamlib = "0.6.0+1.19"
+tutorial-lib = "1.1.0+1.19.2"
 mixin-extras = "0.1.1"
 trinkets = "3.4.0"
 cardinal-components = "5.0.2"
@@ -20,6 +21,7 @@ fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-l
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 
 jamlib = { module = "io.github.jamalam360:jamlib", version.ref = "jamlib" }
+tutorial-lib = { module = "io.github.jamalam360:tutorial-lib", version.ref = "tutorial-lib" }
 mixin-extras = { module = "com.github.LlamaLad7:MixinExtras", version.ref = "mixin-extras" }
 trinkets = { module = "dev.emi:trinkets", version.ref = "trinkets" }
 cardinal-components-base = { module = "dev.onyxstudios.cardinal-components-api:cardinal-components-base", version.ref = "cardinal-components" }
@@ -31,6 +33,6 @@ lazy-dfu = { module = "maven.modrinth:lazydfu", version.ref = "lazy-dfu" }
 
 [bundles]
 fabric = [ "fabric-loader", "fabric-api" ]
-required = [ "jamlib", "mixin-extras", "trinkets", "cardinal-components-base", "cardinal-components-item" ]
+required = [ "jamlib", "tutorial-lib", "mixin-extras", "trinkets", "cardinal-components-base", "cardinal-components-item" ]
 optional = [ "mod-menu" ]
 runtime = [ "lazy-dfu" ]

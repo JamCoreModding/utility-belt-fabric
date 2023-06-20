@@ -2,7 +2,12 @@
   "required": true,
   "package": "io.github.jamalam360.utility.belt.mixin",
   "compatibilityLevel": "JAVA_16",
-  "mixins": ["LivingEntityMixin", "PlayerEntityMixin", "PlayerInventoryMixin"],
+  "mixins": [
+    "BlockMixin",
+    "LivingEntityMixin",
+    "PlayerEntityMixin",
+    "PlayerInventoryMixin"
+  ],
   "client": [
     "client.ClientPlayerEntityMixin",
     "client.MinecraftClientMixin",

@@ -1,4 +1,9 @@
 {
   "replace": false,
-  "values": [{ "id": "create:wrench", "required": false }]
+  "values": [
+    {
+      "id": "create:wrench",
+      "required": false
+    }
+  ]
 }

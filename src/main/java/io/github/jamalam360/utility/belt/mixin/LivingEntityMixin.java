@@ -47,13 +47,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin implements Ducks.LivingEntity {
+
     @Shadow
     protected abstract void detectEquipmentUpdates();
 
     @Inject(method = "sendEquipmentBreakStatus", at = @At("HEAD"))
     private void utilitybelt$updateUtilityBeltNbtOnToolBreak(EquipmentSlot slot, CallbackInfo ci) {
-        if (slot != EquipmentSlot.MAINHAND)
+        if (slot != EquipmentSlot.MAINHAND) {
             return;
+        }
 
         if (((LivingEntity) (Object) this) instanceof PlayerEntity player) {
             if (TrinketsUtil.hasUtilityBelt(player)) {
@@ -62,7 +64,7 @@ public abstract class LivingEntityMixin implements Ducks.LivingEntity {
 
                 if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player.getUuid(), false)) {
                     inv.setStack(UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(), 0),
-                            ItemStack.EMPTY);
+                          ItemStack.EMPTY);
                     UtilityBeltItem.update(utilityBelt, inv);
                 }
             }

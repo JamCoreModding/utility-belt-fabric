@@ -30,6 +30,7 @@ import io.github.jamalam360.jamlib.config.JamLibConfig;
  * @author Jamalam
  */
 public class UtilityBeltConfig extends JamLibConfig {
+
     @Entry
     public static boolean isScrollingInverted = false;
 

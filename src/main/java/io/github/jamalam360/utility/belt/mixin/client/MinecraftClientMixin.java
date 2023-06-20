@@ -24,6 +24,8 @@
 
 package io.github.jamalam360.utility.belt.mixin.client;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.config.UtilityBeltConfig;
@@ -31,9 +33,6 @@ import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.KeyBind;
 import org.jetbrains.annotations.Nullable;
@@ -50,6 +49,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
+
     @Shadow
     @Nullable
     public ClientPlayerEntity player;
@@ -81,10 +81,10 @@ public abstract class MinecraftClientMixin {
                         if (this.options.hotbarKeys[i] == instance) {
                             UtilityBeltClientInit.utilityBeltSelectedSlot = i;
                             Networking.SET_UTILITY_BELT_SELECTED_SLOT_C2S
-                                    .send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));
+                                  .send((buf) -> buf.writeInt(UtilityBeltClientInit.utilityBeltSelectedSlot));
                             UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(
-                                    MinecraftClient.getInstance().player.getUuid(),
-                                    UtilityBeltClientInit.utilityBeltSelectedSlot);
+                                  MinecraftClient.getInstance().player.getUuid(),
+                                  UtilityBeltClientInit.utilityBeltSelectedSlot);
                             return false;
                         }
                     }

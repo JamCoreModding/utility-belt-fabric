@@ -24,16 +24,16 @@
 
 package io.github.jamalam360.utility.belt.item;
 
-import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketItem;
+import io.github.jamalam360.tutorial.lib.stage.EquipItemStage;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.registry.Networking;
+import io.github.jamalam360.utility.belt.registry.UtilityBeltTutorial;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
+import java.util.List;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
@@ -56,11 +56,13 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Jamalam
  */
 public class UtilityBeltItem extends TrinketItem {
+
     private static final int ITEM_BAR_COLOR = MathHelper.packRgb(0.4F, 0.4F, 1.0F);
 
     public UtilityBeltItem(Settings settings) {
@@ -81,10 +83,10 @@ public class UtilityBeltItem extends TrinketItem {
 
     public static boolean isValidItem(ItemStack stack) {
         return stack.getItem() instanceof ToolItem || stack.getItem() instanceof RangedWeaponItem
-                || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem
-                || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem
-                || stack.getItem() instanceof ShearsItem || stack.isEmpty()
-                || stack.isIn(UtilityBeltInit.ALLOWED_IN_UTILITY_BELT);
+               || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem
+               || stack.getItem() instanceof TridentItem || stack.getItem() instanceof FlintAndSteelItem
+               || stack.getItem() instanceof ShearsItem || stack.isEmpty()
+               || stack.isIn(UtilityBeltInit.ALLOWED_IN_UTILITY_BELT);
     }
 
     public static ItemStack getSelectedUtilityBeltStack(PlayerEntity player) {
@@ -99,6 +101,15 @@ public class UtilityBeltItem extends TrinketItem {
         }
 
         return null;
+    }
+
+    @Override
+    public void onEquip(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        if (entity.getWorld().isClient && entity.getId() == MinecraftClient.getInstance().player.getId()) {
+            if (UtilityBeltTutorial.TUTORIAL.getCurrentStage() instanceof EquipItemStage equipItemStage && equipItemStage.matches(stack.getItem())) {
+                UtilityBeltTutorial.TUTORIAL.advanceStage();
+            }
+        }
     }
 
     @Override
@@ -135,8 +146,9 @@ public class UtilityBeltItem extends TrinketItem {
                     }
                 }
 
-                if (!inserted)
+                if (!inserted) {
                     return false;
+                }
             } else if (isValidItem(slotStack)) {
                 boolean inserted = false;
 
@@ -149,8 +161,9 @@ public class UtilityBeltItem extends TrinketItem {
                     }
                 }
 
-                if (!inserted)
+                if (!inserted) {
                     return false;
+                }
             }
 
             playInsertSound(player);
@@ -161,7 +174,7 @@ public class UtilityBeltItem extends TrinketItem {
 
     @Override
     public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player,
-            StackReference cursorStackReference) {
+          StackReference cursorStackReference) {
         if (clickType == ClickType.RIGHT && slot.canTakePartial(player)) {
             SimplerInventory inv = getInventory(stack);
 
@@ -177,11 +190,13 @@ public class UtilityBeltItem extends TrinketItem {
                     }
                 }
 
-                if (!inserted)
+                if (!inserted) {
                     return false;
+                }
             } else {
-                if (!isValidItem(otherStack))
+                if (!isValidItem(otherStack)) {
                     return false;
+                }
 
                 boolean inserted = false;
 
@@ -194,8 +209,9 @@ public class UtilityBeltItem extends TrinketItem {
                     }
                 }
 
-                if (!inserted)
+                if (!inserted) {
                     return false;
+                }
             }
 
             playInsertSound(player);
@@ -211,7 +227,7 @@ public class UtilityBeltItem extends TrinketItem {
         if (!entity.world.isClient && entity instanceof PlayerEntity player) {
             UtilityBeltInit.UTILITY_BELT_SELECTED.put(player.getUuid(), false);
             Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) player,
-                    (buf) -> buf.writeBoolean(false));
+                  (buf) -> buf.writeBoolean(false));
         }
     }
 

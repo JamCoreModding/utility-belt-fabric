@@ -4,6 +4,4 @@
 
 ### Fixes
 
-Closed issues: None.
-
-[Full Changelog](https://github.com/JamCoreModding/utility-belt/compare/...)
+Closed issues: #16, #21, #22, #23, #24, #25
