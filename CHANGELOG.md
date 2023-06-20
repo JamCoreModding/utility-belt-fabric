@@ -17,4 +17,4 @@ This release will be released for 1.19.2, 1.19.3, 1.19.4, and 1.20.x.
 
 Closed issues: #16, #17, #20, #21, #22, #23, #24, #25.
 
-[Full Changelog](https://github.com/JamCoreModding/utility-belt/compare/1.2.1...1.3.0+1.19.2)
+[Full Changelog](https://github.com/JamCoreModding/utility-belt/compare/1.2.1...1.3.0+1.19.3)
