@@ -33,12 +33,13 @@ import net.minecraft.item.ItemStack;
  * @author Jamalam
  */
 public class TrinketsUtil {
+
     public static boolean hasUtilityBelt(PlayerEntity player) {
         final boolean[] result = new boolean[1];
 
         TrinketsApi.getTrinketComponent(player).ifPresentOrElse(
-                component -> result[0] = component.getEquipped(ItemRegistry.UTILITY_BELT).size() > 0,
-                () -> result[0] = false);
+              component -> result[0] = component.getEquipped(ItemRegistry.UTILITY_BELT).size() > 0,
+              () -> result[0] = false);
 
         return result[0];
     }
@@ -47,7 +48,7 @@ public class TrinketsUtil {
     public static ItemStack getUtilityBelt(PlayerEntity player) {
         try {
             return TrinketsApi.getTrinketComponent(player).get().getEquipped(ItemRegistry.UTILITY_BELT).get(0)
-                    .getRight();
+                  .getRight();
         } catch (Exception e) {
             return null;
         }

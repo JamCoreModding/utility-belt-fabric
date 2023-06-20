@@ -33,6 +33,7 @@ import io.github.jamalam360.utility.belt.screen.UtilityBeltScreenHandler;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.PickaxeItem;
 
 /**
  * @author Jamalam
@@ -40,21 +41,22 @@ import net.minecraft.item.ItemStack;
 public class Networking {
 
     public static final JamLibS2CNetworkChannel SWING_HAND = new JamLibS2CNetworkChannel(
-            UtilityBeltInit.idOf("swing_hand"));
+          UtilityBeltInit.idOf("swing_hand"));
     public static final JamLibS2CNetworkChannel SET_UTILITY_BELT_SELECTED_S2C = new JamLibS2CNetworkChannel(
-            UtilityBeltInit.idOf("set_utility_belt_selected_s2c"));
+          UtilityBeltInit.idOf("set_utility_belt_selected_s2c"));
 
     public static final JamLibS2CNetworkChannel SET_UTILITY_BELT_SELECTED_SLOT_S2C = new JamLibS2CNetworkChannel(
-            UtilityBeltInit.idOf("set_utility_belt_selected_slot_s2c"));
+          UtilityBeltInit.idOf("set_utility_belt_selected_slot_s2c"));
     public static final JamLibS2CNetworkChannel SYNC_UTILITY_BELT_INVENTORY = new JamLibS2CNetworkChannel(
-            UtilityBeltInit.idOf("sync_utility_belt_inventory"));
-
+          UtilityBeltInit.idOf("sync_utility_belt_inventory"));
+    public static final JamLibS2CNetworkChannel ON_MOVE_PICKAXE_TO_BELT = new JamLibS2CNetworkChannel(
+          UtilityBeltInit.idOf("on_move_pickaxe_to_belt"));
     public static final JamLibC2SNetworkChannel SET_UTILITY_BELT_SELECTED_C2S = new JamLibC2SNetworkChannel(
-            UtilityBeltInit.idOf("set_utility_belt_selected_c2s"));
+          UtilityBeltInit.idOf("set_utility_belt_selected_c2s"));
     public static final JamLibC2SNetworkChannel SET_UTILITY_BELT_SELECTED_SLOT_C2S = new JamLibC2SNetworkChannel(
-            UtilityBeltInit.idOf("set_utility_belt_selected_slot_c2s"));
+          UtilityBeltInit.idOf("set_utility_belt_selected_slot_c2s"));
     public static final JamLibC2SNetworkChannel OPEN_SCREEN = new JamLibC2SNetworkChannel(
-            UtilityBeltInit.idOf("open_screen"));
+          UtilityBeltInit.idOf("open_screen"));
 
     /*
      * Called server side
@@ -102,12 +104,16 @@ public class Networking {
                                 UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player.getUuid(), utilityBeltSlot);
                                 final int finalUtilityBeltSlot = utilityBeltSlot;
                                 SET_UTILITY_BELT_SELECTED_SLOT_S2C.send(player,
-                                        (resBuf) -> resBuf.writeInt(finalUtilityBeltSlot));
+                                      (resBuf) -> resBuf.writeInt(finalUtilityBeltSlot));
+
+                                if (utilityBeltInventory.getStack(utilityBeltSlot).getItem() instanceof PickaxeItem) {
+                                    ON_MOVE_PICKAXE_TO_BELT.send(player);
+                                }
                             }
                         }
                     } else {
                         int utilityBeltSlot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(),
-                                0);
+                              0);
 
                         if (!utilityBeltInventory.getStack(utilityBeltSlot).isEmpty()) {
                             int playerSlot = player.getInventory().selectedSlot;
@@ -118,7 +124,7 @@ public class Networking {
 
                             if (playerSlot != -1 && player.getInventory().getStack(playerSlot).isEmpty()) {
                                 player.getInventory().setStack(playerSlot,
-                                        utilityBeltInventory.getStack(utilityBeltSlot));
+                                      utilityBeltInventory.getStack(utilityBeltSlot));
                                 utilityBeltInventory.setStack(utilityBeltSlot, ItemStack.EMPTY);
                                 UtilityBeltItem.update(utilityBelt, utilityBeltInventory);
                             }

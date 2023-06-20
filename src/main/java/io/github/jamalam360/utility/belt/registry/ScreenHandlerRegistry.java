@@ -35,6 +35,7 @@ import net.minecraft.screen.ScreenHandlerType;
 
 @ContentRegistry(UtilityBeltInit.MOD_ID)
 public class ScreenHandlerRegistry {
+
     public static final ScreenHandlerType<UtilityBeltScreenHandler> SCREEN_HANDLER = new ScreenHandlerType<>(
-            UtilityBeltScreenHandler::new);
+          UtilityBeltScreenHandler::new);
 }

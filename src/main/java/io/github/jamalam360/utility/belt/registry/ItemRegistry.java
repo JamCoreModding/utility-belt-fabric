@@ -36,5 +36,6 @@ import net.minecraft.item.ItemGroup;
 
 @ContentRegistry(UtilityBeltInit.MOD_ID)
 public class ItemRegistry {
+
     public static final Item UTILITY_BELT = new UtilityBeltItem(new Item.Settings().group(ItemGroup.TOOLS).maxCount(1));
 }

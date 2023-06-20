@@ -26,6 +26,8 @@ package io.github.jamalam360.utility.belt.registry;
 
 import io.github.jamalam360.utility.belt.UtilityBeltClientInit;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
+import io.github.jamalam360.utility.belt.client.tutorial.SwitchToBeltStage;
+import io.github.jamalam360.utility.belt.client.tutorial.SwitchToBeltStage.Type;
 import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
@@ -43,11 +45,11 @@ public class ClientNetworking {
 
     public static void setHandlers() {
         Networking.SWING_HAND
-                .setHandler((client, handler, buf, responseSender) -> client.player.swingHand(Hand.MAIN_HAND));
+              .setHandler((client, handler, buf, responseSender) -> client.player.swingHand(Hand.MAIN_HAND));
         Networking.SET_UTILITY_BELT_SELECTED_S2C.setHandler((client, handler, buf,
-                responseSender) -> UtilityBeltClientInit.hasSwappedToUtilityBelt = buf.readBoolean());
+              responseSender) -> UtilityBeltClientInit.hasSwappedToUtilityBelt = buf.readBoolean());
         Networking.SET_UTILITY_BELT_SELECTED_SLOT_S2C.setHandler((client, handler, buf,
-                responseSender) -> UtilityBeltClientInit.utilityBeltSelectedSlot = buf.readInt());
+              responseSender) -> UtilityBeltClientInit.utilityBeltSelectedSlot = buf.readInt());
         Networking.SYNC_UTILITY_BELT_INVENTORY.setHandler((client, handler, buf, responseSender) -> {
             ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(client.player);
 
@@ -58,5 +60,10 @@ public class ClientNetworking {
                 UtilityBeltItem.update(utilityBelt, inv);
             }
         });
+        Networking.ON_MOVE_PICKAXE_TO_BELT.setHandler(((client, handler, buf, responseSender) -> {
+            if (UtilityBeltTutorial.TUTORIAL.getCurrentStage() instanceof SwitchToBeltStage stage && stage.shouldTrigger(Type.INSERT_PICKAXE)) {
+                UtilityBeltTutorial.TUTORIAL.advanceStage();
+            }
+        }));
     }
 }

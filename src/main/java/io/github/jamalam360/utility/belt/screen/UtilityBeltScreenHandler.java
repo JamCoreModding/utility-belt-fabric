@@ -26,16 +26,19 @@ package io.github.jamalam360.utility.belt.screen;
 
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
+import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.registry.ScreenHandlerRegistry;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.PickaxeItem;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 /**
@@ -43,6 +46,7 @@ import net.minecraft.text.Text;
  */
 
 public class UtilityBeltScreenHandler extends ScreenHandler {
+
     private final SimplerInventory inventory;
 
     public UtilityBeltScreenHandler(int syncId, PlayerInventory playerInventory) {
@@ -131,10 +135,15 @@ public class UtilityBeltScreenHandler extends ScreenHandler {
         ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);
         UtilityBeltItem.update(utilityBelt, this.inventory);
 
+        if (player instanceof ServerPlayerEntity sPlayer && inventory.anyMatch(i -> i.getItem() instanceof PickaxeItem)) {
+            Networking.ON_MOVE_PICKAXE_TO_BELT.send(sPlayer);
+        }
+
         super.close(player);
     }
 
     public static class Factory implements NamedScreenHandlerFactory {
+
         public static final Factory INSTANCE = new Factory();
 
         private Factory() {
@@ -148,7 +157,7 @@ public class UtilityBeltScreenHandler extends ScreenHandler {
         @Override
         public ScreenHandler createMenu(int i, PlayerInventory playerInventory, PlayerEntity player) {
             return new UtilityBeltScreenHandler(i, playerInventory,
-                    UtilityBeltItem.getInventory(TrinketsUtil.getUtilityBelt(player)));
+                  UtilityBeltItem.getInventory(TrinketsUtil.getUtilityBelt(player)));
         }
     }
 }
