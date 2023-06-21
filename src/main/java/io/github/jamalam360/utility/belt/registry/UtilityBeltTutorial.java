@@ -112,14 +112,14 @@ public class UtilityBeltTutorial {
                 )
           ),
           new DelayedStage(
+                200,
                 new CustomTutorialToast(
                       TEXTURE,
                       140,
                       0,
                       Text.translatable("tutorial.utilitybelt.8.title"),
                       Text.translatable("tutorial.utilitybelt.8.description")
-                ),
-                200
+                )
           )
     );
 

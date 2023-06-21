@@ -2,8 +2,7 @@
 
 ### Fixes
 
-- Fix an issue with networking.
-- Fix a crash on the dedicated server caused by TutorialLib.
+- Fixes another crash on the dedicated server.
 
-[Full Changelog](https://github.com/JamCoreModding/utility-belt/compare/1.3.1+1.19.2...1.3.2+1.19.2)
+[Full Changelog](https://github.com/JamCoreModding/utility-belt/compare/1.3.2+1.19.2...1.3.3+1.19.2)
 
