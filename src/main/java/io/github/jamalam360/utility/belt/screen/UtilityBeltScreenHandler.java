@@ -41,10 +41,6 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
-/**
- * @author Jamalam
- */
-
 public class UtilityBeltScreenHandler extends ScreenHandler {
 
     private final SimplerInventory inventory;

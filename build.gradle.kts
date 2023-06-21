@@ -49,3 +49,9 @@ dependencies {
     include(libs.mixin.extras)
     annotationProcessor(libs.mixin.extras)
 }
+
+configurations {
+    named("modLocalRuntime").configure {
+        exclude("net.fabricmc", "fabric-loader")
+    }
+}

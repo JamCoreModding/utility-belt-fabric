@@ -63,7 +63,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class UtilityBeltItem extends TrinketItem {
 
-    private static final int ITEM_BAR_COLOR = MathHelper.packRgb(0.4F, 0.4F, 1.0F);
+    private static final int ITEM_BAR_COLOR = MathHelper.color(0.4F, 0.4F, 1.0F);
 
     public UtilityBeltItem(Settings settings) {
         super(settings);
