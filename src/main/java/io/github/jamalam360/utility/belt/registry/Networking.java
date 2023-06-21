@@ -65,83 +65,87 @@ public class Networking {
         SET_UTILITY_BELT_SELECTED_SLOT_C2S.setHandler((server, player, handler, buf, responseSender) -> {
             int slot = buf.readInt();
 
-            if (slot >= 0 && slot < UtilityBeltInit.UTILITY_BELT_SIZE) {
-                UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player.getUuid(), slot);
-                ((Ducks.LivingEntity) player).updateEquipment();
-            }
+            server.execute(() -> {
+                if (slot >= 0 && slot < UtilityBeltInit.UTILITY_BELT_SIZE) {
+                    UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player.getUuid(), slot);
+                    ((Ducks.LivingEntity) player).updateEquipment();
+                }
+            });
         });
 
         SET_UTILITY_BELT_SELECTED_C2S.setHandler((server, player, handler, buf, responseSender) -> {
             boolean hasSwappedToUtilityBelt = buf.readBoolean();
 
-            if (player.isSneaking()) {
-                if (TrinketsUtil.hasUtilityBelt(player)) {
-                    ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);
-                    SimplerInventory utilityBeltInventory = UtilityBeltItem.getInventory(utilityBelt);
+            server.execute(() -> {
+                if (player.isSneaking()) {
+                    if (TrinketsUtil.hasUtilityBelt(player)) {
+                        ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);
+                        SimplerInventory utilityBeltInventory = UtilityBeltItem.getInventory(utilityBelt);
 
-                    if (hasSwappedToUtilityBelt) {
-                        // We use this rather than getStackInHand since at this point, the map already
-                        // states that the player is swapped to the utility belt, so getStackInHand
-                        // returns
-                        // whatever is in there.
-                        ItemStack heldItem = player.getInventory().getStack(player.getInventory().selectedSlot);
+                        if (hasSwappedToUtilityBelt) {
+                            // We use this rather than getStackInHand since at this point, the map already
+                            // states that the player is swapped to the utility belt, so getStackInHand
+                            // returns
+                            // whatever is in there.
+                            ItemStack heldItem = player.getInventory().getStack(player.getInventory().selectedSlot);
 
-                        if (!heldItem.isEmpty() && UtilityBeltItem.isValidItem(heldItem)) {
-                            int utilityBeltSlot = 0;
+                            if (!heldItem.isEmpty() && UtilityBeltItem.isValidItem(heldItem)) {
+                                int utilityBeltSlot = 0;
 
-                            for (int i = 0; i < utilityBeltInventory.size(); i++) {
-                                if (utilityBeltInventory.getStack(i).isEmpty()) {
-                                    utilityBeltSlot = i;
-                                    break;
+                                for (int i = 0; i < utilityBeltInventory.size(); i++) {
+                                    if (utilityBeltInventory.getStack(i).isEmpty()) {
+                                        utilityBeltSlot = i;
+                                        break;
+                                    }
+                                }
+
+                                if (utilityBeltInventory.getStack(utilityBeltSlot).isEmpty()) {
+                                    utilityBeltInventory.setStack(utilityBeltSlot, heldItem);
+                                    // Same reason as above.
+                                    player.getInventory().setStack(player.getInventory().selectedSlot, ItemStack.EMPTY);
+                                    UtilityBeltItem.update(utilityBelt, utilityBeltInventory);
+                                    UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player.getUuid(), utilityBeltSlot);
+                                    final int finalUtilityBeltSlot = utilityBeltSlot;
+                                    SET_UTILITY_BELT_SELECTED_SLOT_S2C.send(player,
+                                          (resBuf) -> resBuf.writeInt(finalUtilityBeltSlot));
+
+                                    if (utilityBeltInventory.getStack(utilityBeltSlot).getItem() instanceof PickaxeItem) {
+                                        ON_MOVE_PICKAXE_TO_BELT.send(player);
+                                    }
                                 }
                             }
+                        } else {
+                            int utilityBeltSlot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(),
+                                  0);
 
-                            if (utilityBeltInventory.getStack(utilityBeltSlot).isEmpty()) {
-                                utilityBeltInventory.setStack(utilityBeltSlot, heldItem);
-                                // Same reason as above.
-                                player.getInventory().setStack(player.getInventory().selectedSlot, ItemStack.EMPTY);
-                                UtilityBeltItem.update(utilityBelt, utilityBeltInventory);
-                                UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player.getUuid(), utilityBeltSlot);
-                                final int finalUtilityBeltSlot = utilityBeltSlot;
-                                SET_UTILITY_BELT_SELECTED_SLOT_S2C.send(player,
-                                      (resBuf) -> resBuf.writeInt(finalUtilityBeltSlot));
+                            if (!utilityBeltInventory.getStack(utilityBeltSlot).isEmpty()) {
+                                int playerSlot = player.getInventory().selectedSlot;
 
-                                if (utilityBeltInventory.getStack(utilityBeltSlot).getItem() instanceof PickaxeItem) {
-                                    ON_MOVE_PICKAXE_TO_BELT.send(player);
+                                if (!player.getInventory().getStack(playerSlot).isEmpty()) {
+                                    playerSlot = player.getInventory().getEmptySlot();
                                 }
-                            }
-                        }
-                    } else {
-                        int utilityBeltSlot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(),
-                              0);
 
-                        if (!utilityBeltInventory.getStack(utilityBeltSlot).isEmpty()) {
-                            int playerSlot = player.getInventory().selectedSlot;
-
-                            if (!player.getInventory().getStack(playerSlot).isEmpty()) {
-                                playerSlot = player.getInventory().getEmptySlot();
-                            }
-
-                            if (playerSlot != -1 && player.getInventory().getStack(playerSlot).isEmpty()) {
-                                player.getInventory().setStack(playerSlot,
-                                      utilityBeltInventory.getStack(utilityBeltSlot));
-                                utilityBeltInventory.setStack(utilityBeltSlot, ItemStack.EMPTY);
-                                UtilityBeltItem.update(utilityBelt, utilityBeltInventory);
+                                if (playerSlot != -1 && player.getInventory().getStack(playerSlot).isEmpty()) {
+                                    player.getInventory().setStack(playerSlot,
+                                          utilityBeltInventory.getStack(utilityBeltSlot));
+                                    utilityBeltInventory.setStack(utilityBeltSlot, ItemStack.EMPTY);
+                                    UtilityBeltItem.update(utilityBelt, utilityBeltInventory);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            UtilityBeltInit.UTILITY_BELT_SELECTED.put(player.getUuid(), hasSwappedToUtilityBelt);
-            ((Ducks.LivingEntity) player).updateEquipment();
-            SWING_HAND.send(player);
+                UtilityBeltInit.UTILITY_BELT_SELECTED.put(player.getUuid(), hasSwappedToUtilityBelt);
+                ((Ducks.LivingEntity) player).updateEquipment();
+                SWING_HAND.send(player);
+            });
         });
 
-        OPEN_SCREEN.setHandler((server, player, handler, buf, responseSender) -> {
+        OPEN_SCREEN.setHandler((server, player, handler, buf, responseSender) -> server.execute(() -> {
             if (TrinketsUtil.hasUtilityBelt(player)) {
                 player.openHandledScreen(UtilityBeltScreenHandler.Factory.INSTANCE);
             }
-        });
+        }));
     }
 }

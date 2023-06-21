@@ -45,12 +45,12 @@ public class ClientNetworking {
 
     public static void setHandlers() {
         Networking.SWING_HAND
-              .setHandler((client, handler, buf, responseSender) -> client.player.swingHand(Hand.MAIN_HAND));
+              .setHandler((client, handler, buf, responseSender) -> client.execute(() -> client.player.swingHand(Hand.MAIN_HAND)));
         Networking.SET_UTILITY_BELT_SELECTED_S2C.setHandler((client, handler, buf,
               responseSender) -> UtilityBeltClientInit.hasSwappedToUtilityBelt = buf.readBoolean());
         Networking.SET_UTILITY_BELT_SELECTED_SLOT_S2C.setHandler((client, handler, buf,
               responseSender) -> UtilityBeltClientInit.utilityBeltSelectedSlot = buf.readInt());
-        Networking.SYNC_UTILITY_BELT_INVENTORY.setHandler((client, handler, buf, responseSender) -> {
+        Networking.SYNC_UTILITY_BELT_INVENTORY.setHandler((client, handler, buf, responseSender) -> client.execute(() -> {
             ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(client.player);
 
             if (utilityBelt != null) {
@@ -59,11 +59,11 @@ public class ClientNetworking {
                 inv.readNbtList(comp.getList("Inventory", 10));
                 UtilityBeltItem.update(utilityBelt, inv);
             }
-        });
-        Networking.ON_MOVE_PICKAXE_TO_BELT.setHandler(((client, handler, buf, responseSender) -> {
+        }));
+        Networking.ON_MOVE_PICKAXE_TO_BELT.setHandler(((client, handler, buf, responseSender) -> client.execute(() -> {
             if (UtilityBeltTutorial.TUTORIAL.getCurrentStage() instanceof SwitchToBeltStage stage && stage.shouldTrigger(Type.INSERT_PICKAXE)) {
                 UtilityBeltTutorial.TUTORIAL.advanceStage();
             }
-        }));
+        })));
     }
 }

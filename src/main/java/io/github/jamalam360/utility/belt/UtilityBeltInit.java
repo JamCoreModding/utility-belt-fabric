@@ -39,7 +39,6 @@ import io.github.jamalam360.utility.belt.registry.ItemRegistry;
 import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.registry.ScreenHandlerRegistry;
 import io.github.jamalam360.utility.belt.registry.TrinketsBehaviours;
-import io.github.jamalam360.utility.belt.registry.UtilityBeltTutorial;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import java.util.Map;
@@ -81,7 +80,6 @@ public class UtilityBeltInit implements ModInitializer, ItemComponentInitializer
         JamLibRegistry.register(ItemRegistry.class, ScreenHandlerRegistry.class);
         JamLibConfig.init(MOD_ID, UtilityBeltConfig.class);
         TrinketsBehaviours.registerEvents();
-        UtilityBeltTutorial.registerTutorial();
         Networking.setHandlers();
         JamLibServerNetworking.registerHandlers(MOD_ID);
 
