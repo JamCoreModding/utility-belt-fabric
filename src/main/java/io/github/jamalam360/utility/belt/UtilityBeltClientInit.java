@@ -94,6 +94,7 @@ public class UtilityBeltClientInit implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(BELT_LAYER, BeltModel::createTexturedModelData);
         HudRenderCallback.EVENT.register(UtilityBeltHotbarRenderer::render);
         HandledScreens.register(ScreenHandlerRegistry.SCREEN_HANDLER, UtilityBeltScreen::new);
+        UtilityBeltTutorial.registerTutorial();
 
         SWAP_KEYBIND_TOGGLE = JamLibKeybinds.register(new JamLibKeybinds.JamLibKeybind(
               UtilityBeltInit.MOD_ID,

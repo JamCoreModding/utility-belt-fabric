@@ -50,8 +50,12 @@ dependencies {
     annotationProcessor(libs.mixin.extras)
 }
 
-configurations {
-    named("modLocalRuntime").configure {
-        exclude("net.fabricmc", "fabric-loader")
+tasks {
+    getByName("modrinth") {
+        dependsOn("optimizeOutputsOfRemapJar")
+    }
+
+    getByName("curseforge") {
+        dependsOn("optimizeOutputsOfRemapJar")
     }
 }

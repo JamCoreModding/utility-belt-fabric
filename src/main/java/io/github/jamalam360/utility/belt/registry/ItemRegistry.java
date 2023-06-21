@@ -43,6 +43,6 @@ public class ItemRegistry implements JamLibContentRegistry {
 
     @Override
     public ItemGroup getItemGroup(Item item) {
-        return ItemGroups.TOOLS_AND_UTILITIES;
+        return ItemGroups.TOOLS;
     }
 }

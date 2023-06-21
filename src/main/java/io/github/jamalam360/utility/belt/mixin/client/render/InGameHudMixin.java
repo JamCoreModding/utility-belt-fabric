@@ -46,7 +46,7 @@ public abstract class InGameHudMixin {
                 ordinal = 1
           )
     )
-    private boolean utilitybelt$disableHotbarHighlight(MatrixStack oneBeforeA, int a, int b, int c, int d, int e, int f, float g, MatrixStack h) {
+    private boolean utilitybelt$disableHotbarHighlight(InGameHud instance, MatrixStack matrixStack, int a, int b, int c, int d, int e, int f) {
         return !UtilityBeltClientInit.hasSwappedToUtilityBelt;
     }
 }
