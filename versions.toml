@@ -5,7 +5,7 @@ fabric-loader = "0.14.21"
 fabric-api = "0.83.0+1.19.4"
 
 jamlib = "0.6.0+1.19.4"
-tutorial-lib = "1.1.1+1.19.4"
+tutorial-lib = "1.1.2+1.19.4"
 mixin-extras = "0.1.1"
 trinkets = "3.6.0"
 cardinal-components = "5.1.0"
