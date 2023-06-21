@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.utility.belt.mixin;
+package io.github.jamalam360.utility.belt.mixin.client;
 
 import io.github.jamalam360.utility.belt.client.tutorial.MineBlockUsingPickaxeInBeltStage;
 import io.github.jamalam360.utility.belt.registry.UtilityBeltTutorial;
