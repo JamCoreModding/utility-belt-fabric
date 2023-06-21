@@ -62,7 +62,6 @@ public class UtilityBeltHotbarRenderer {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
             RenderSystem.setShaderTexture(0, UTILITY_BELT_WIDGET_TEXTURE);
-            hud.setZOffset(-90);
             hud.drawTexture(matrices, 2, scaledHeight / 2 - 44, 0, 0, 22, 88);
 
             if (UtilityBeltClientInit.hasSwappedToUtilityBelt) {
@@ -72,7 +71,6 @@ public class UtilityBeltHotbarRenderer {
             }
 
             TrinketsApi.getTrinketComponent(player).ifPresent((component) -> {
-                hud.setZOffset(hud.getZOffset());
                 RenderSystem.enableBlend();
                 RenderSystem.defaultBlendFunc();
                 int m = 1;
@@ -81,7 +79,7 @@ public class UtilityBeltHotbarRenderer {
                       .getInventory(component.getEquipped(ItemRegistry.UTILITY_BELT).get(0).getRight());
 
                 for (int n = 0; n < UtilityBeltInit.UTILITY_BELT_SIZE; ++n) {
-                    renderHotbarItem(scaledHeight / 2 - 45 + n * 20 + 4, tickDelta, player, inv.getStack(n), m++);
+                    renderHotbarItem(matrices, scaledHeight / 2 - 45 + n * 20 + 4, tickDelta, player, inv.getStack(n), m++);
                 }
 
                 RenderSystem.disableBlend();
@@ -89,7 +87,7 @@ public class UtilityBeltHotbarRenderer {
         }
     }
 
-    private static void renderHotbarItem(int y, float tickDelta, PlayerEntity player, ItemStack stack, int seed) {
+    private static void renderHotbarItem(MatrixStack matrices, int y, float tickDelta, PlayerEntity player, ItemStack stack, int seed) {
         if (!stack.isEmpty()) {
             MatrixStack matrixStack = RenderSystem.getModelViewStack();
             float f = (float) stack.getCooldown() - tickDelta;
@@ -102,7 +100,7 @@ public class UtilityBeltHotbarRenderer {
                 RenderSystem.applyModelViewMatrix();
             }
 
-            MinecraftClient.getInstance().getItemRenderer().renderInGuiWithOverrides(player, stack, 5, y, seed);
+            MinecraftClient.getInstance().getItemRenderer().renderItemWithOverridesInGui(matrices, player, stack, 5, y, seed);
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             if (f > 0.0F) {
                 matrixStack.pop();
@@ -110,7 +108,7 @@ public class UtilityBeltHotbarRenderer {
             }
 
             MinecraftClient.getInstance().getItemRenderer()
-                  .renderGuiItemOverlay(MinecraftClient.getInstance().textRenderer, stack, 4, y);
+                  .renderGuiItemDecorations(matrices, MinecraftClient.getInstance().textRenderer, stack, 4, y);
         }
     }
 }

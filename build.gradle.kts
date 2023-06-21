@@ -59,3 +59,9 @@ tasks {
         dependsOn("optimizeOutputsOfRemapJar")
     }
 }
+
+configurations {
+    named("modLocalRuntime") {
+        exclude("net.fabricmc", "fabric-loader")
+    }
+}
