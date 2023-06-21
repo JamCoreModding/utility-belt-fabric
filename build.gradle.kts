@@ -49,3 +49,13 @@ dependencies {
     include(libs.mixin.extras)
     annotationProcessor(libs.mixin.extras)
 }
+
+tasks {
+    getByName("modrinth") {
+        dependsOn("optimizeOutputsOfRemapJar")
+    }
+
+    getByName("curseforge") {
+        dependsOn("optimizeOutputsOfRemapJar")
+    }
+}
