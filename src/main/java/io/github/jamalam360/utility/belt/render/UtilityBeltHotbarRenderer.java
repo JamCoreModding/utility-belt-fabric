@@ -34,10 +34,9 @@ import io.github.jamalam360.utility.belt.registry.ItemRegistry;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -50,23 +49,20 @@ public class UtilityBeltHotbarRenderer {
     private static final Identifier UTILITY_BELT_WIDGET_TEXTURE = UtilityBeltInit
           .idOf("textures/gui/utility_belt_widget.png");
 
-    public static void render(MatrixStack matrices, float tickDelta) {
+    public static void render(GuiGraphics graphics, float tickDelta) {
         PlayerEntity player = MinecraftClient.getInstance().player;
 
         if (player != null && TrinketsUtil.hasUtilityBelt(player) && (UtilityBeltClientInit.hasSwappedToUtilityBelt
                                                                       || UtilityBeltConfig.displayUtilityBeltWhenNotSelected)) {
-            InGameHud hud = MinecraftClient.getInstance().inGameHud;
             int scaledHeight = MinecraftClient.getInstance().getWindow().getScaledHeight();
 
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
-            RenderSystem.setShaderTexture(0, UTILITY_BELT_WIDGET_TEXTURE);
-            hud.drawTexture(matrices, 2, scaledHeight / 2 - 44, 0, 0, 22, 88);
+            graphics.drawTexture(UTILITY_BELT_WIDGET_TEXTURE, 2, scaledHeight / 2 - 44, 0, 0, 22, 88);
 
             if (UtilityBeltClientInit.hasSwappedToUtilityBelt) {
-                RenderSystem.setShaderTexture(0, ClickableWidget.WIDGETS_TEXTURE);
-                hud.drawTexture(matrices, 1, scaledHeight / 2 - 45 + UtilityBeltClientInit.utilityBeltSelectedSlot * 20,
+                graphics.drawTexture(ClickableWidget.WIDGETS_TEXTURE, 1, scaledHeight / 2 - 45 + UtilityBeltClientInit.utilityBeltSelectedSlot * 20,
                       0, 22, 24, 22);
             }
 
@@ -79,7 +75,7 @@ public class UtilityBeltHotbarRenderer {
                       .getInventory(component.getEquipped(ItemRegistry.UTILITY_BELT).get(0).getRight());
 
                 for (int n = 0; n < UtilityBeltInit.UTILITY_BELT_SIZE; ++n) {
-                    renderHotbarItem(matrices, scaledHeight / 2 - 45 + n * 20 + 4, tickDelta, player, inv.getStack(n), m++);
+                    renderHotbarItem(graphics, scaledHeight / 2 - 45 + n * 20 + 4, tickDelta, player, inv.getStack(n), m++);
                 }
 
                 RenderSystem.disableBlend();
@@ -87,28 +83,23 @@ public class UtilityBeltHotbarRenderer {
         }
     }
 
-    private static void renderHotbarItem(MatrixStack matrices, int y, float tickDelta, PlayerEntity player, ItemStack stack, int seed) {
+    private static void renderHotbarItem(GuiGraphics graphics, int y, float tickDelta, PlayerEntity player, ItemStack stack, int seed) {
         if (!stack.isEmpty()) {
-            MatrixStack matrixStack = RenderSystem.getModelViewStack();
-            float f = (float) stack.getCooldown() - tickDelta;
+            float f = (float)stack.getCooldown() - tickDelta;
             if (f > 0.0F) {
                 float g = 1.0F + f / 5.0F;
-                matrixStack.push();
-                matrixStack.translate(4 + 8, y + 12, 0.0);
-                matrixStack.scale(1.0F / g, (g + 1.0F) / 2.0F, 1.0F);
-                matrixStack.translate(-(4 + 8), -(y + 12), 0.0);
-                RenderSystem.applyModelViewMatrix();
+                graphics.getMatrices().push();
+                graphics.getMatrices().translate(12, y + 12, 0);
+                graphics.getMatrices().scale(1.0F / g, (g + 1.0F) / 2.0F, 1);
+                graphics.getMatrices().translate(-12, -(y + 12), 0);
             }
 
-            MinecraftClient.getInstance().getItemRenderer().renderItemWithOverridesInGui(matrices, player, stack, 5, y, seed);
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
+            graphics.drawItem(player, stack, 4, y, seed);
             if (f > 0.0F) {
-                matrixStack.pop();
-                RenderSystem.applyModelViewMatrix();
+                graphics.getMatrices().pop();
             }
 
-            MinecraftClient.getInstance().getItemRenderer()
-                  .renderGuiItemDecorations(matrices, MinecraftClient.getInstance().textRenderer, stack, 4, y);
+            graphics.drawItemInSlot(MinecraftClient.getInstance().textRenderer, stack, 4, y);
         }
     }
 }

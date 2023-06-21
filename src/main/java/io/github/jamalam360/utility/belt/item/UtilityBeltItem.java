@@ -224,7 +224,7 @@ public class UtilityBeltItem extends TrinketItem {
 
     @Override
     public void onUnequip(ItemStack stack, SlotReference slot, LivingEntity entity) {
-        if (!entity.world.isClient && entity instanceof PlayerEntity player) {
+        if (!entity.getWorld().isClient && entity instanceof PlayerEntity player) {
             UtilityBeltInit.UTILITY_BELT_SELECTED.put(player.getUuid(), false);
             Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) player,
                   (buf) -> buf.writeBoolean(false));

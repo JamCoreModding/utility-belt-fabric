@@ -56,10 +56,10 @@ public class TrinketsBehaviours {
 
                 for (int i = 0; i < inv.size(); i++) {
                     if (!inv.getStack(i).isEmpty()) {
-                        ItemEntity item = EntityType.ITEM.create(entity.world);
+                        ItemEntity item = EntityType.ITEM.create(entity.getWorld());
                         item.refreshPositionAfterTeleport(entity.getPos());
                         item.setStack(inv.getStack(i));
-                        entity.world.spawnEntity(item);
+                        entity.getWorld().spawnEntity(item);
                     }
                 }
 

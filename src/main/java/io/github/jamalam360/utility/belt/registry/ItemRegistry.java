@@ -31,6 +31,7 @@ import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
+import net.minecraft.registry.RegistryKey;
 
 /**
  * @author Jamalam
@@ -42,7 +43,7 @@ public class ItemRegistry implements JamLibContentRegistry {
     public static final Item UTILITY_BELT = new UtilityBeltItem(new Item.Settings().maxCount(1));
 
     @Override
-    public ItemGroup getItemGroup(Item item) {
+    public RegistryKey<ItemGroup> getItemGroup(Item item) {
         return ItemGroups.TOOLS_AND_UTILITIES;
     }
 }

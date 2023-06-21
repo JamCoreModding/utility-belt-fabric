@@ -1,16 +1,16 @@
 [versions]
-minecraft = "1.19.4"
-quilt-mappings = "1.19.4+build.10"
+minecraft = "1.20.1"
+quilt-mappings = "1.20.1+build.1"
 fabric-loader = "0.14.21"
-fabric-api = "0.83.0+1.19.4"
+fabric-api = "0.83.1+1.20.1"
 
-jamlib = "0.6.0+1.19.4"
-tutorial-lib = "1.1.2+1.19.4"
+jamlib = "0.6.0+1.20"
+tutorial-lib = "1.1.2+1.20.x"
 mixin-extras = "0.1.1"
-trinkets = "3.6.0"
-cardinal-components = "5.1.0"
+trinkets = "3.7.0"
+cardinal-components = "5.2.1"
 
-mod-menu = "6.2.3"
+mod-menu = "7.1.0"
 
 lazy-dfu = "0.1.3"
 

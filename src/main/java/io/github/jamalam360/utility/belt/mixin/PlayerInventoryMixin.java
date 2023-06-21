@@ -163,7 +163,7 @@ public abstract class PlayerInventoryMixin {
             SimplerInventory inv = UtilityBeltItem.getInventory(belt);
 
             for (int i = 0; i < inv.size(); i++) {
-                if (!inv.getStack(i).isEmpty() && inv.getStack(i).isItemEqualIgnoreDamage(stack)) {
+                if (!inv.getStack(i).isEmpty() && ItemStack.areEqual(inv.getStack(i), stack)) {
                     cir.setReturnValue(true);
                 }
             }
@@ -229,7 +229,7 @@ public abstract class PlayerInventoryMixin {
             for (int i = 0; i < inv.size(); i++) {
                 ItemStack itemStack = inv.getStack(i);
                 if (!itemStack.isEmpty()) {
-                    itemStack.inventoryTick(this.player.world, this.player, i, selected == i);
+                    itemStack.inventoryTick(this.player.getWorld(), this.player, i, selected == i);
                 }
             }
         }

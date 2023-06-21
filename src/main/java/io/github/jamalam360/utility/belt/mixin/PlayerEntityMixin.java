@@ -45,7 +45,7 @@ public abstract class PlayerEntityMixin {
 
     @Inject(method = "remove", at = @At("HEAD"))
     private void utilitybelt$switchBackToHotbar(CallbackInfo ci) {
-        if (!((PlayerEntity) (Object) this).world.isClient) {
+        if (!((PlayerEntity) (Object) this).getWorld().isClient) {
             UtilityBeltInit.UTILITY_BELT_SELECTED.put(((PlayerEntity) (Object) this).getUuid(), false);
             Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) (Object) this,
                   (buf) -> buf.writeBoolean(false));
