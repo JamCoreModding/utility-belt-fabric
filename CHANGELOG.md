@@ -2,4 +2,7 @@
 
 ### Fixes
 
-1.19.4 release of 1.3.0, 1.3.1, and 1.3.2.
+- Fixes another crash on the dedicated server.
+
+[Full Changelog](https://github.com/JamCoreModding/utility-belt/compare/1.3.2+1.19.2...1.3.3+1.19.2)
+
