@@ -27,7 +27,6 @@ package io.github.jamalam360.utility.belt.registry;
 import io.github.jamalam360.jamlib.registry.annotation.ContentRegistry;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.screen.UtilityBeltScreenHandler;
-import net.minecraft.feature_flags.FeatureFlagBitSet;
 import net.minecraft.screen.ScreenHandlerType;
 
 /**
@@ -37,5 +36,5 @@ import net.minecraft.screen.ScreenHandlerType;
 @ContentRegistry(UtilityBeltInit.MOD_ID)
 public class ScreenHandlerRegistry {
 
-    public static final ScreenHandlerType<UtilityBeltScreenHandler> SCREEN_HANDLER = new ScreenHandlerType<>(UtilityBeltScreenHandler::new, FeatureFlagBitSet.empty());
+    public static final ScreenHandlerType<UtilityBeltScreenHandler> SCREEN_HANDLER = new ScreenHandlerType<>(UtilityBeltScreenHandler::new);
 }
