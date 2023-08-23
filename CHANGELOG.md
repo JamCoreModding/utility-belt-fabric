@@ -1,8 +1,4 @@
-## Changelog
-
-### Fixes
-
-- Fixes another crash on the dedicated server.
-
-[Full Changelog](https://github.com/JamCoreModding/utility-belt/compare/1.3.2+1.19.2...1.3.3+1.19.2)
-
+- [#30] Reset the clientside belt state when disconnecting from a world (see below)
+  - Player plays on world A, with a utility belt. They leave while swapped to the belt
+  - They join world B, without a utility belt. They will still be swapped to the belt even though they don't have one. Hotbar unusable.
+- Fix a fairly inconsequential (non-crashing) NPE with mythic metals.

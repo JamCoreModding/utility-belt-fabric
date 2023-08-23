@@ -198,6 +198,14 @@ public class UtilityBeltClientInit implements ClientModInitializer {
         ClientNetworking.setHandlers();
         JamLibClientNetworking.registerHandlers(UtilityBeltInit.MOD_ID);
 
+        ClientPlayConnectionEvents.DISCONNECT.register(((handler, client) -> {
+            // reset clientside state. if this isn't done:
+            // - player plays on world A, with a utility belt. they leave while swapped to the belt
+            // - they join world B, without a utility belt. they will still be swapped to the belt even though they don't have one. hotbar unusable.
+            UtilityBeltClientInit.hasSwappedToUtilityBelt = false;
+            UtilityBeltClientInit.utilityBeltSelectedSlot = 0;
+        }));
+
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             ClientCommandRegistrationCallback.EVENT.register((dispatcher, ctx) -> dispatcher.register(
                   ClientCommandManager.literal("utilitybelt_client")

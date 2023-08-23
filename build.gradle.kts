@@ -19,7 +19,7 @@ repositories {
         Pair("https://api.modrinth.com/maven", listOf("maven.modrinth")),
         Pair("https://maven.jamalam.tech/releases", listOf("io.github.jamalam360")),
         Pair("https://jitpack.io/", listOf("com.github.LlamaLad7")),
-        Pair("https://ladysnake.jfrog.io/artifactory/mods", listOf("dev.onyxstudios.cardinal-components-api")),
+        Pair("https://maven.ladysnake.org/releases", listOf("dev.onyxstudios.cardinal-components-api")),
         Pair("https://maven.quiltmc.org/repository/release", listOf("org.quiltmc", "org.quiltmc.unpick")),
         Pair("https://maven.quiltmc.org/repository/snapshot", listOf("org.quiltmc", "org.quiltmc.unpick")),
     )

@@ -31,6 +31,7 @@ import io.github.jamalam360.utility.belt.client.tutorial.SwitchToBeltStage.Type;
 import io.github.jamalam360.utility.belt.item.UtilityBeltItem;
 import io.github.jamalam360.utility.belt.util.SimplerInventory;
 import io.github.jamalam360.utility.belt.util.TrinketsUtil;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
@@ -39,34 +40,39 @@ import net.minecraft.util.Hand;
  * @author Jamalam
  */
 public class ClientNetworking {
-    /*
-     * Called client side
-     */
+	/*
+	 * Called client side
+	 */
 
-    public static void setHandlers() {
-        Networking.SWING_HAND
-              .setHandler((client, handler, buf, responseSender) -> client.execute(() -> client.player.swingHand(Hand.MAIN_HAND)));
-        Networking.SET_UTILITY_BELT_SELECTED_S2C.setHandler((client, handler, buf,
-              responseSender) -> UtilityBeltClientInit.hasSwappedToUtilityBelt = buf.readBoolean());
-        Networking.SET_UTILITY_BELT_SELECTED_SLOT_S2C.setHandler((client, handler, buf,
-              responseSender) -> UtilityBeltClientInit.utilityBeltSelectedSlot = buf.readInt());
-        Networking.SYNC_UTILITY_BELT_INVENTORY.setHandler((client, handler, buf, responseSender) -> {
-            NbtCompound comp = buf.readNbt();
+	public static void setHandlers() {
+		Networking.SWING_HAND
+				.setHandler((client, handler, buf, responseSender) -> client.execute(() -> {
+					// workaround for mythic metals null pointer. make sure camera has been initialized before swinging hand
+					if (MinecraftClient.getInstance().getEntityRenderDispatcher().camera != null) {
+						client.player.swingHand(Hand.MAIN_HAND);
+					}
+				}));
+		Networking.SET_UTILITY_BELT_SELECTED_S2C.setHandler((client, handler, buf,
+		                                                     responseSender) -> UtilityBeltClientInit.hasSwappedToUtilityBelt = buf.readBoolean());
+		Networking.SET_UTILITY_BELT_SELECTED_SLOT_S2C.setHandler((client, handler, buf,
+		                                                          responseSender) -> UtilityBeltClientInit.utilityBeltSelectedSlot = buf.readInt());
+		Networking.SYNC_UTILITY_BELT_INVENTORY.setHandler((client, handler, buf, responseSender) -> {
+			NbtCompound comp = buf.readNbt();
 
-            client.execute(() -> {
-                ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(client.player);
+			client.execute(() -> {
+				ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(client.player);
 
-                if (utilityBelt != null) {
-                    SimplerInventory inv = new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE);
-                    inv.readNbtList(comp.getList("Inventory", 10));
-                    UtilityBeltItem.update(utilityBelt, inv);
-                }
-            });
-        });
-        Networking.ON_MOVE_PICKAXE_TO_BELT.setHandler(((client, handler, buf, responseSender) -> client.execute(() -> {
-            if (UtilityBeltTutorial.TUTORIAL.getCurrentStage() instanceof SwitchToBeltStage stage && stage.shouldTrigger(Type.INSERT_PICKAXE)) {
-                UtilityBeltTutorial.TUTORIAL.advanceStage();
-            }
-        })));
-    }
+				if (utilityBelt != null) {
+					SimplerInventory inv = new SimplerInventory(UtilityBeltInit.UTILITY_BELT_SIZE);
+					inv.readNbtList(comp.getList("Inventory", 10));
+					UtilityBeltItem.update(utilityBelt, inv);
+				}
+			});
+		});
+		Networking.ON_MOVE_PICKAXE_TO_BELT.setHandler(((client, handler, buf, responseSender) -> client.execute(() -> {
+			if (UtilityBeltTutorial.TUTORIAL.getCurrentStage() instanceof SwitchToBeltStage stage && stage.shouldTrigger(Type.INSERT_PICKAXE)) {
+				UtilityBeltTutorial.TUTORIAL.advanceStage();
+			}
+		})));
+	}
 }
