@@ -36,6 +36,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -48,72 +49,78 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin implements Ducks.LivingEntity {
 
-    @Shadow
-    protected abstract void detectEquipmentUpdates();
+	@Unique
+	private boolean utilitybelt$equipped = false;
 
-    @Inject(method = "sendEquipmentBreakStatus", at = @At("HEAD"))
-    private void utilitybelt$updateUtilityBeltNbtOnToolBreak(EquipmentSlot slot, CallbackInfo ci) {
-        if (slot != EquipmentSlot.MAINHAND) {
-            return;
-        }
+	@Shadow
+	protected abstract void detectEquipmentUpdates();
 
-        if (((LivingEntity) (Object) this) instanceof PlayerEntity player) {
-            if (TrinketsUtil.hasUtilityBelt(player)) {
-                ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);
-                SimplerInventory inv = UtilityBeltItem.getInventory(utilityBelt);
+	@Inject(method = "sendEquipmentBreakStatus", at = @At("HEAD"))
+	private void utilitybelt$updateUtilityBeltNbtOnToolBreak(EquipmentSlot slot, CallbackInfo ci) {
+		if (!this.utilitybelt$equipped || slot != EquipmentSlot.MAINHAND) {
+			return;
+		}
 
-                if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player.getUuid(), false)) {
-                    inv.setStack(UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(), 0),
-                          ItemStack.EMPTY);
-                    UtilityBeltItem.update(utilityBelt, inv);
-                }
-            }
-        }
-    }
+		if (((LivingEntity) (Object) this) instanceof PlayerEntity player) {
+			ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);
+			SimplerInventory inv = UtilityBeltItem.getInventory(utilityBelt);
 
-    @Inject(method = "getStackInHand", at = @At("HEAD"), cancellable = true)
-    private void utilitybelt$useUtilityBeltStack(Hand hand, CallbackInfoReturnable<ItemStack> cir) {
-        if (hand == Hand.MAIN_HAND && ((LivingEntity) (Object) this) instanceof PlayerEntity player) {
-            ItemStack stack = UtilityBeltItem.getSelectedUtilityBeltStack(player);
+			if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player.getUuid(), false)) {
+				inv.setStack(UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(), 0),
+						ItemStack.EMPTY);
+				UtilityBeltItem.update(utilityBelt, inv);
+			}
+		}
+	}
 
-            if (stack != null) {
-                cir.setReturnValue(stack);
-            }
-        }
-    }
+	@Inject(method = "getStackInHand", at = @At("HEAD"), cancellable = true)
+	private void utilitybelt$useUtilityBeltStack(Hand hand, CallbackInfoReturnable<ItemStack> cir) {
+		if (this.utilitybelt$equipped && hand == Hand.MAIN_HAND && ((LivingEntity) (Object) this) instanceof PlayerEntity player) {
+			ItemStack stack = UtilityBeltItem.getSelectedUtilityBeltStack(player);
 
-    @Inject(method = "getMainHandStack", at = @At("HEAD"), cancellable = true)
-    private void utilitybelt$useUtilityBeltStack2(CallbackInfoReturnable<ItemStack> cir) {
-        if (((LivingEntity) (Object) this) instanceof PlayerEntity player) {
-            ItemStack stack = UtilityBeltItem.getSelectedUtilityBeltStack(player);
+			if (stack != null) {
+				cir.setReturnValue(stack);
+			}
+		}
+	}
 
-            if (stack != null) {
-                cir.setReturnValue(stack);
-            }
-        }
-    }
+	@Inject(method = "getMainHandStack", at = @At("HEAD"), cancellable = true)
+	private void utilitybelt$useUtilityBeltStack2(CallbackInfoReturnable<ItemStack> cir) {
+		if (this.utilitybelt$equipped && ((LivingEntity) (Object) this) instanceof PlayerEntity player) {
+			ItemStack stack = UtilityBeltItem.getSelectedUtilityBeltStack(player);
 
-    @Inject(method = "setStackInHand", at = @At("HEAD"), cancellable = true)
-    private void utilitybelt$setStackInHandUtilityBelt(Hand hand, ItemStack stack, CallbackInfo ci) {
-        if (hand == Hand.MAIN_HAND && ((LivingEntity) (Object) this) instanceof PlayerEntity player) {
-            int slot;
+			if (stack != null) {
+				cir.setReturnValue(stack);
+			}
+		}
+	}
 
-            if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player.getUuid(), false)) {
-                slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(), 0);
+	@Inject(method = "setStackInHand", at = @At("HEAD"), cancellable = true)
+	private void utilitybelt$setStackInHandUtilityBelt(Hand hand, ItemStack stack, CallbackInfo ci) {
+		if (this.utilitybelt$equipped && hand == Hand.MAIN_HAND && ((LivingEntity) (Object) this) instanceof PlayerEntity player) {
+			int slot;
 
-                if (TrinketsUtil.hasUtilityBelt(player)) {
-                    ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);
-                    SimplerInventory inv = UtilityBeltItem.getInventory(utilityBelt);
-                    inv.setStack(slot, stack);
-                    UtilityBeltItem.update(utilityBelt, inv);
-                    ci.cancel();
-                }
-            }
-        }
-    }
+			if (UtilityBeltInit.UTILITY_BELT_SELECTED.getOrDefault(player.getUuid(), false)) {
+				slot = UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.getOrDefault(player.getUuid(), 0);
 
-    @Override
-    public void updateEquipment() {
-        this.detectEquipmentUpdates();
-    }
+				if (TrinketsUtil.hasUtilityBelt(player)) {
+					ItemStack utilityBelt = TrinketsUtil.getUtilityBelt(player);
+					SimplerInventory inv = UtilityBeltItem.getInventory(utilityBelt);
+					inv.setStack(slot, stack);
+					UtilityBeltItem.update(utilityBelt, inv);
+					ci.cancel();
+				}
+			}
+		}
+	}
+
+	@Override
+	public void utilitybelt$updateEquipment() {
+		this.detectEquipmentUpdates();
+	}
+
+	@Override
+	public void utilitybelt$setUtilityBeltEquipped(boolean equipped) {
+		this.utilitybelt$equipped = equipped;
+	}
 }

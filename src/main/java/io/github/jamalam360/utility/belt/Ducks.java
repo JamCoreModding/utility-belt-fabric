@@ -31,6 +31,7 @@ public class Ducks {
 
     public interface LivingEntity {
 
-        void updateEquipment();
+        void utilitybelt$updateEquipment();
+        void utilitybelt$setUtilityBeltEquipped(boolean equipped);
     }
 }

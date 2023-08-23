@@ -27,6 +27,7 @@ package io.github.jamalam360.utility.belt.item;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketItem;
 import io.github.jamalam360.tutorial.lib.stage.EquipItemStage;
+import io.github.jamalam360.utility.belt.Ducks;
 import io.github.jamalam360.utility.belt.UtilityBeltInit;
 import io.github.jamalam360.utility.belt.registry.Networking;
 import io.github.jamalam360.utility.belt.registry.UtilityBeltTutorial;
@@ -105,6 +106,8 @@ public class UtilityBeltItem extends TrinketItem {
 
     @Override
     public void onEquip(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        ((Ducks.LivingEntity) entity).utilitybelt$setUtilityBeltEquipped(true);
+
         if (entity.getWorld().isClient && entity.getId() == MinecraftClient.getInstance().player.getId()) {
             if (UtilityBeltTutorial.TUTORIAL.getCurrentStage() instanceof EquipItemStage equipItemStage && equipItemStage.matches(stack.getItem())) {
                 UtilityBeltTutorial.TUTORIAL.advanceStage();
@@ -224,6 +227,8 @@ public class UtilityBeltItem extends TrinketItem {
 
     @Override
     public void onUnequip(ItemStack stack, SlotReference slot, LivingEntity entity) {
+        ((Ducks.LivingEntity) entity).utilitybelt$setUtilityBeltEquipped(false);
+
         if (!entity.getWorld().isClient && entity instanceof PlayerEntity player) {
             UtilityBeltInit.UTILITY_BELT_SELECTED.put(player.getUuid(), false);
             Networking.SET_UTILITY_BELT_SELECTED_S2C.send((ServerPlayerEntity) player,

@@ -68,7 +68,7 @@ public class Networking {
             server.execute(() -> {
                 if (slot >= 0 && slot < UtilityBeltInit.UTILITY_BELT_SIZE) {
                     UtilityBeltInit.UTILITY_BELT_SELECTED_SLOTS.put(player.getUuid(), slot);
-                    ((Ducks.LivingEntity) player).updateEquipment();
+                    ((Ducks.LivingEntity) player).utilitybelt$updateEquipment();
                 }
             });
         });
@@ -137,7 +137,7 @@ public class Networking {
                 }
 
                 UtilityBeltInit.UTILITY_BELT_SELECTED.put(player.getUuid(), hasSwappedToUtilityBelt);
-                ((Ducks.LivingEntity) player).updateEquipment();
+                ((Ducks.LivingEntity) player).utilitybelt$updateEquipment();
                 SWING_HAND.send(player);
             });
         });
