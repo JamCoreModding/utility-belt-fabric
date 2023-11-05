@@ -1,1 +1,1 @@
-- Attempt to optimize for BlanketCon.
+Fix a responsibly disclosed duplication exploit.

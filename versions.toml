@@ -12,8 +12,6 @@ cardinal-components = "5.2.1"
 
 mod-menu = "7.1.0"
 
-lazy-dfu = "0.1.3"
-
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 quilt-mappings = { module = "org.quiltmc:quilt-mappings", version.ref = "quilt-mappings" }
@@ -29,7 +27,6 @@ cardinal-components-item = { module = "dev.onyxstudios.cardinal-components-api:c
 
 mod-menu = { module = "com.terraformersmc:modmenu", version.ref = "mod-menu" }
 
-lazy-dfu = { module = "maven.modrinth:lazydfu", version.ref = "lazy-dfu" }
 # Dependency of trinkets
 cardinal-components-entity = { module = "dev.onyxstudios.cardinal-components-api:cardinal-components-entity", version.ref = "cardinal-components" }
 
@@ -37,4 +34,4 @@ cardinal-components-entity = { module = "dev.onyxstudios.cardinal-components-api
 fabric = ["fabric-loader", "fabric-api"]
 required = ["jamlib", "tutorial-lib", "mixin-extras", "trinkets", "cardinal-components-base", "cardinal-components-item"]
 optional = ["mod-menu"]
-runtime = ["lazy-dfu", "cardinal-components-entity"]
+runtime = ["cardinal-components-entity"]
