@@ -1,6 +1,6 @@
 plugins {
-    id("fabric-loom") version "1.2-SNAPSHOT"
-    id("io.github.juuxel.loom-quiltflower") version "1.+"
+    id("fabric-loom") version "1.3-SNAPSHOT"
+    id("io.github.juuxel.loom-vineflower") version "1.+"
     id("io.github.p03w.machete") version "1.+"
     id("org.cadixdev.licenser") version "0.6.1"
 }
