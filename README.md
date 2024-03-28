@@ -1,3 +1,9 @@
+# Why is this archived?
+
+Utility Belt is being ported (or has been ported, depending on when you read this) to multiloader. It will support all 4 major modloaders.
+
+The new repository can be found [here](https://github.com/JamCoreModding/utility-belt)
+
 # Utility Belt
 
 [![Read the Documentation](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/documentation/ghpages_vector.svg)](https://docs.jamalam.tech/utility-belt/about/)
