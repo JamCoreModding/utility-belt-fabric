@@ -33,7 +33,7 @@ jobs:
 
       - name: Get Branch Name
         id: branch-name
-        uses: tj-actions/branch-names@v5
+        uses: tj-actions/branch-names@v7.0.7
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
@@ -90,7 +90,7 @@ jobs:
 
       - name: Get Branch Name
         id: branch-name
-        uses: tj-actions/branch-names@v5
+        uses: tj-actions/branch-names@v7.0.7
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
